@@ -140,11 +140,10 @@ int main(int argc, char *argv[])
     VertexBuffer vb( positions, 8*sizeof(float) );
 
     // vertex array object
-    GLuint vertexArrayID;
-    GLCall( glGenVertexArrays( 1, &vertexArrayID ) );
-    GLCall( glBindVertexArray( vertexArrayID ) );
-    GLCall( glVertexAttribPointer( 0, 2, GL_FLOAT, GL_FALSE, 2*sizeof(float), 0 ) );
-    GLCall( glEnableVertexAttribArray( 0 ) );
+    VertexBufferLayout layout;
+    layout.push<GLfloat>(2);
+    VertexArray va;
+    va.addLayout( vb, layout );
 
     // index buffer object
     IndexBufferUI ib( indices, 6 );
@@ -173,7 +172,7 @@ int main(int argc, char *argv[])
         GLCall( glUseProgram( shader ) );
         GLCall( glUniform4f( u_color_loc, r_channel, 0.3f, 0.8f, 1.0f ) );
 
-        GLCall( glBindVertexArray( vertexArrayID ) );
+        va.bind();
         ib.bind();
 
         GLCall( glDrawElements( GL_TRIANGLES, ib.count(), GL_UNSIGNED_INT, nullptr ) );

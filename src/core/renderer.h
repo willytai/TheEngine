@@ -4,5 +4,7 @@
 #include "GLmacro.h"
 #include "vertexBuffer.h"
 #include "indexBuffer.h"
+#include "vertexBufferLayout.h"
+#include "vertexArray.h"
 
 #endif /* __RENDERER_H__ */
