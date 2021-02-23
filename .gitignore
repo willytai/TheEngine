@@ -1,0 +1,9 @@
+*.o
+*.mak
+*.ccls
+
+bin/
+lib/
+include/
+
+opengltest
