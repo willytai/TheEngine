@@ -6,5 +6,6 @@
 #include "indexBuffer.h"
 #include "vertexBufferLayout.h"
 #include "vertexArray.h"
+#include "shader.h"
 
 #endif /* __RENDERER_H__ */
