@@ -1,6 +1,7 @@
 *.o
 *.mak
 *.ccls
+*.DS_Store
 
 bin/
 lib/
@@ -8,3 +9,4 @@ include/
 
 tags
 opengltest
+imgui.ini

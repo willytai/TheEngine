@@ -12,7 +12,7 @@ VENDOR = ../vendor/spdlog/include/ \
 		 ../vendor/stb/include \
 		 ../vendor/glm
 
-PKGS    = util glad core
+PKGS    = util glad core imgui
 GLFW    = glfw
 EXTPKG  = $(GLFW)
 ALLPKGS = $(PKGS) $(EXTPKG)

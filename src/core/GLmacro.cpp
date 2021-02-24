@@ -1,11 +1,27 @@
 #include "GLmacro.h"
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wconversion"
-#pragma GCC diagnostic ignored "-Wsign-compare"
+#if defined(__clang__)
+    #pragma clang diagnostic push
+    #pragma clang diagnostic ignored "-Wconversion"
+    #pragma clang diagnostic ignored "-Wsign-compare"
+#elif defined(__GNUC__)
+    #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Wconversion"
+    #pragma GCC diagnostic ignored "-Wsign-compare"
+#else
+    #error "Compiler Not Supported!"
+#endif
+
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb/stb_image.h>
-#pragma GCC diagnostic pop
+
+#if defined(__clang__)
+    #pragma clang diagnostic pop
+#elif defined(__GNUC__)
+    #pragma GCC diagnostic pop
+#else
+    #error "Compiler Not Supported!"
+#endif
 
 const char* GLErrorStr(GLenum error) {
     switch (error) {
