@@ -37,11 +37,15 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
 
+    // enable blending
+    GLCall( glEnable( GL_BLEND ) );
+    GLCall( glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA ) );
+
     float positions[] = {
-        -0.5f, -0.5f,
-         0.5f, -0.5f,
-         0.5f,  0.5f,
-        -0.5f,  0.5f
+        -0.5f, -0.5f, 0.0f, 0.0f,
+         0.5f, -0.5f, 1.0f, 0.0f,
+         0.5f,  0.5f, 1.0f, 1.0f,
+        -0.5f,  0.5f, 0.0f, 1.0f
     };
 
     unsigned int indices[] = {
@@ -50,10 +54,11 @@ int main(int argc, char *argv[])
     };
 
     // vertex buffer object
-    VertexBuffer vb( positions, 8*sizeof(float) );
+    VertexBuffer vb( positions, 4*4*sizeof(float) );
 
     // vertex array object
     VertexBufferLayout layout;
+    layout.push<GLfloat>(2);
     layout.push<GLfloat>(2);
     VertexArray va;
     va.addLayout( vb, layout );
@@ -63,6 +68,15 @@ int main(int argc, char *argv[])
 
     // shaders
     Shader shader( "./resource/shader/vertex.glsl", "./resource/shader/fragment.glsl");
+    shader.bind();
+
+    // textures
+    Texture texture( "./resource/texture/logo.png" );
+    texture.bind();
+    shader.setUniform1i( "u_texture", 0 );
+
+    // renderer
+    Renderer renderer;
 
     va.unbind();
     vb.unbind();
@@ -73,16 +87,12 @@ int main(int argc, char *argv[])
     float intv = 0.05f;
 
     while ( !glfwWindowShouldClose(window) ) {
-        GLCall( glClearColor( 0.2f, 0.3f, 0.3f, 1.0f ) );
-        GLCall( glClear( GL_COLOR_BUFFER_BIT ) );
+        renderer.clear();
 
         shader.bind();
         shader.setUniform4f( "u_color", r_channel, 0.3f, 0.8f, 1.0f );
 
-        va.bind();
-        ib.bind();
-
-        GLCall( glDrawElements( GL_TRIANGLES, ib.count(), GL_UNSIGNED_INT, nullptr ) );
+        renderer.draw( va, ib, shader );
 
         if ( r_channel > 1.0f ) intv = -0.05f;
         else if ( r_channel < 0.0f ) intv = 0.05f;

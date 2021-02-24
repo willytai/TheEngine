@@ -18,10 +18,12 @@ public:
     void unbind() const;
 
     void setUniform4f(const char* name, float f0, float f1, float f2, float f3);
+    void setUniform1i(const char* name, int value);
 
 private:
     GLuint createShader(const char* vertexShaderFile, const char* fragmentShaderFile);
     GLuint compileShader(GLenum type, std::string& source, const char* filepath);
+    GLint  getLocation(const char* name);
 
 private:
     GLuint  _rendererID;

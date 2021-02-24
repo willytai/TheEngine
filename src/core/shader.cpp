@@ -93,18 +93,26 @@ GLuint Shader::compileShader(GLenum type, std::string& source, const char* filep
     return id;
 }
 
-void Shader::setUniform4f(const char* name, float f0, float f1, float f2, float f3) {
+GLint Shader::getLocation(const char* name) {
     GLint location;
     std::unordered_map<std::string_view, GLint>::iterator it;
     if ( (it = _uniformLocationCache.find( name )) != _uniformLocationCache.end() ) {
-        location = it->second;
+        return it->second;
     }
     else {
         GLCall( location = glGetUniformLocation( _rendererID, name ) );
         _uniformLocationCache[name] = location;
     }
-    GLCall( glUniform4f( location, f0, f1, f2, f3 ) );
     if ( location == -1 ) OPENGL_WARN( "uniform \'{}\' doesn't exist!", name );
+    return location;
+}
+
+void Shader::setUniform4f(const char* name, float f0, float f1, float f2, float f3) {
+    GLCall( glUniform4f( this->getLocation(name), f0, f1, f2, f3 ) );
+}
+
+void Shader::setUniform1i(const char* name, int value) {
+    GLCall( glUniform1i( this->getLocation(name), value ) );
 }
 
 void Shader::bind() const {
