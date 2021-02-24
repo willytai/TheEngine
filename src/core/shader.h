@@ -7,6 +7,7 @@
 #include <string>
 #include <string_view>
 #include <unordered_map>
+#include <glm/glm.hpp>
 
 class Shader
 {
@@ -19,6 +20,7 @@ public:
 
     void setUniform4f(const char* name, float f0, float f1, float f2, float f3);
     void setUniform1i(const char* name, int value);
+    void setUniformMat4f(const char* name, const glm::mat4& mat);
 
 private:
     GLuint createShader(const char* vertexShaderFile, const char* fragmentShaderFile);

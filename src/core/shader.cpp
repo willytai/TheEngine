@@ -115,6 +115,10 @@ void Shader::setUniform1i(const char* name, int value) {
     GLCall( glUniform1i( this->getLocation(name), value ) );
 }
 
+void Shader::setUniformMat4f(const char* name, const glm::mat4& mat) {
+    GLCall( glUniformMatrix4fv( this->getLocation(name), 1, GL_FALSE, &mat[0][0] ) );
+}
+
 void Shader::bind() const {
     GLCall( glUseProgram( _rendererID ) );
 }

@@ -7,7 +7,10 @@ SRCLIBDIR = lib
 DIRS      = bin include $(SRCLIBDIR)
 
 # third party packages
-VENDOR = spdlog glad stb
+VENDOR = ../vendor/spdlog/include/ \
+		 ../vendor/glad/include \
+		 ../vendor/stb/include \
+		 ../vendor/glm
 
 PKGS    = util glad core
 GLFW    = glfw
@@ -109,7 +112,7 @@ ctags:
 	do \
 		$(ECHO) "Tagging $$pkg ... "; \
 		cd src; \
-		ctags -a --languages=C,C++ ../vendor/$$pkg/include/$$pkg/*; \
+		ctags -a --languages=C,C++ $$pkg/*; \
 		cd ..; \
 	done
 	@$(ECHO) "Tagging main ... "

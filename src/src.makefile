@@ -8,7 +8,8 @@ EXTDIR = ../../include
 INCDIR = . $(EXTDIR) /usr/local/Cellar/glfw/3.3.2/include \
 		 ../../vendor/spdlog/include \
 		 ../../vendor/glad/include \
-		 ../../vendor/stb/include
+		 ../../vendor/stb/include \
+		 ../../vendor/glm
 DPNIFLAG = $(addprefix -I, $(INCDIR))
 
 LIBDIR = ../../lib /usr/local/Cellar/glfw/3.3.2/lib

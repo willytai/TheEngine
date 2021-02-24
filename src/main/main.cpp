@@ -1,6 +1,7 @@
 #define GLFW_INCLUDE_NONE
 #include "renderer.h"
 #include <GLFW/glfw3.h>
+#include <glm/gtc/matrix_transform.hpp>
 
 int main(int argc, char *argv[])
 {
@@ -66,9 +67,19 @@ int main(int argc, char *argv[])
     // index buffer object
     IndexBufferUI ib( indices, 6 );
 
+    // this shold be determined right after window creation
+    // https://en.wikipedia.org/wiki/Orthographic_projection
+    glm::mat4 projection = glm::ortho( -2.0f, 2.0f, -1.5f, 1.5f, -1.0f, 1.0f );
+    // camara (move right, object move left)
+    glm::mat4 view = glm::translate( glm::mat4(1.0f), glm::vec3( -1.0f, 0.0f, 0.0f ) );
+    // place model at the origin
+    glm::mat4 model = glm::mat4(1.0f);
+    glm::mat4 mvp = projection * view * model;
+
     // shaders
     Shader shader( "./resource/shader/vertex.glsl", "./resource/shader/fragment.glsl");
     shader.bind();
+    shader.setUniformMat4f( "u_MVP", mvp );
 
     // textures
     Texture texture( "./resource/texture/logo.png" );
