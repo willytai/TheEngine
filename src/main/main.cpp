@@ -1,4 +1,5 @@
 #define GLFW_INCLUDE_NONE
+#include "test.h"
 #include "renderer.h"
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
@@ -152,6 +153,8 @@ int main(int argc, char *argv[])
     float zrotate = glm::radians(0.0f);
     float scale = 1.0f;
 
+    test::testPool::Register();
+
     while ( !glfwWindowShouldClose(window) ) {
         renderer.clear();
 
@@ -159,7 +162,7 @@ int main(int argc, char *argv[])
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-        // place model at the origin
+        // place model matrix
         glm::mat4 model = glm::translate( glm::mat4(1.0f), translation )
                         * glm::rotate( glm::mat4(1.0f), xrotate, glm::vec3(1.0f, 0.0f, 0.0f) )
                         * glm::rotate( glm::mat4(1.0f), yrotate, glm::vec3(0.0f, 1.0f, 0.0f) )
@@ -178,19 +181,27 @@ int main(int argc, char *argv[])
         else if ( r_channel < 0.0f ) intv = 0.05f;
         r_channel += intv;
 
-        {
+        {   // since ImGui window and tests are handled after
+            // things in the vertex buffer are rendered, this window
+            // and all the tests' operations are gonna overwrite what's
+            // already on the screen (which is what I intended to design)
             ImGui::Begin("ImGui Window");
-            ImGui::SliderFloat("x_position", &translation.x, -5.0f, 5.0f);
-            ImGui::SliderFloat("y_position", &translation.y, -5.0f, 5.0f);
+            ImGui::SliderFloat( "x_position", &translation.x, -5.0f, 5.0f );
+            ImGui::SliderFloat( "y_position", &translation.y, -5.0f, 5.0f );
             ImGui::SliderFloat( "x_rotation (degree)", &xrotate, 0.0f, 90.0f );
             ImGui::SliderFloat( "y_rotation (degree)", &yrotate, 0.0f, 90.0f );
             ImGui::SliderFloat( "z_rotation (degree)", &zrotate, 0.0f, 90.0f );
             ImGui::SliderFloat( "scale", &scale, 1.0f, 10.0f );
+#ifdef BUILD_TEST
+            ImGui::NewLine();
+            ImGui::Text( "Tests" );
+            test::testPool::update();
+#endif
+            ImGui::NewLine();
             ImGui::Text("Application average %.3f ms/frame (%.1f FPS)",
                         1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
             ImGui::End();
         }
-
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData( ImGui::GetDrawData() );
 
