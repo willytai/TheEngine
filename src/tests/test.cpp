@@ -5,7 +5,8 @@ namespace test
 {
     void testPool::Register() {
 #ifdef BUILD_TEST
-        get().addTest<testClearColor>( "clear color", "clearColor" );
+        get().addTest<testClearColor> ( "clear color",  "clearColor" );
+        get().addTest<testColoredCube>( "colored cube", "coloredCube" );
 #else
         OPENGL_INFO( "Tests disabled." );
 #endif

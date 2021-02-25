@@ -1,14 +1,26 @@
 #ifndef __TEST_H__
 #define __TEST_H__
 
+#include "renderer.h"
 #include "log.h"
+#include "imgui.h"
 #include <vector>
 #include <string>
 #include <functional>
+#include <glm/gtc/matrix_transform.hpp>
+
+#define TEST_CLASS_PUBLIC(className)        \
+    public:                                 \
+        className();                        \
+        ~className();                       \
+        void onUpdate(float time) override; \
+        void onRenderer() override;         \
+        void onImGui() override;
 
 namespace test
 {
     class baseTest;
+
     class testPool
     {
         typedef std::pair<std::string, std::function<baseTest*()> > testType;
@@ -46,13 +58,11 @@ namespace test
         virtual void onImGui() {}
     };
 
-#define TEST_CLASS_PUBLIC(className)        \
-    public:                                 \
-        className() {}                      \
-        ~className() {}                     \
-        void onUpdate(float time) override; \
-        void onRenderer() override;         \
-        void onImGui() override;
+
+
+    /**************************************************
+    *                    Test Units                   *
+    **************************************************/
 
     class testClearColor : public baseTest
     {
@@ -60,6 +70,24 @@ namespace test
     private:
         float   _color[4] = { 0.2f, 0.3f, 0.3f, 1.0f };
     };
+
+    // -------------------------------------------------
+
+    class testColoredCube : public baseTest
+    {
+        TEST_CLASS_PUBLIC( testColoredCube )
+    private:
+        Shader          __shader;
+        glm::mat4       __perspective;
+        glm::vec3       __m_translation;
+        glm::vec3       __m_rotation;
+        float           __m_scale;
+        float           __camera_height;
+        VertexArray     __va;
+        IndexBufferUI*  __ib;
+    };
+
+    // -------------------------------------------------
 }
 
 #endif /* __TEST_H__ */

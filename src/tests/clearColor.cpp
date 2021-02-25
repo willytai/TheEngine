@@ -1,9 +1,15 @@
 #include "test.h"
-#include "GLmacro.h"
-#include "imgui.h"
 
 namespace test
 {
+    testClearColor::testClearColor() {
+
+    }
+
+    testClearColor::~testClearColor() {
+
+    }
+
     void testClearColor::onUpdate(float time) {
 
     }
