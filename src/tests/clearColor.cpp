@@ -23,6 +23,8 @@ namespace test
         if ( ImGui::Button( "<-" ) ) {
             testPool::reset();
         }
-        ImGui::ColorEdit4( "Color", _color );
+        else {
+            ImGui::ColorEdit4( "Color", _color );
+        }
     }
 }

@@ -97,9 +97,11 @@ namespace test
         if ( ImGui::Button( "<-" ) ) {
             testPool::reset();
         }
-        ImGui::SliderFloat3( "xyz position",  &__m_translation.x, -5.0f, 5.0f );
-        ImGui::SliderFloat3( "xyz rotation",  &__m_rotation.x,     0.0f, 10.0f );
-        ImGui::SliderFloat(  "scale",         &__m_scale,          1.0f, 5.0f );
-        ImGui::SliderFloat(  "camera height", &__camera_height,    2.0f, 10.0f );
+        else {
+            ImGui::SliderFloat3( "xyz position",  &__m_translation.x, -5.0f, 5.0f );
+            ImGui::SliderFloat3( "xyz rotation",  &__m_rotation.x,     0.0f, 10.0f );
+            ImGui::SliderFloat(  "scale",         &__m_scale,          1.0f, 5.0f );
+            ImGui::SliderFloat(  "camera height", &__camera_height,    2.0f, 10.0f );
+        }
     }
 }

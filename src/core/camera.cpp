@@ -33,7 +33,7 @@ Camera::~Camera() {
 }
 
 void Camera::onUpdate(const float& deltaTime) {
-    // update position
+    // update position & roll
     if ( glfwGetKey( _window, GLFW_KEY_W ) == GLFW_PRESS ) this->moveZ( deltaTime);
     if ( glfwGetKey( _window, GLFW_KEY_S ) == GLFW_PRESS ) this->moveZ(-deltaTime);
     if ( glfwGetKey( _window, GLFW_KEY_A ) == GLFW_PRESS ) this->moveX(-deltaTime);
@@ -97,7 +97,7 @@ void Camera::updateMatrices() {
                                      wWidth / wHeight,
                                      0.1f,
                                      100.0f
-                                    );
+                                   );
 }
 
 
