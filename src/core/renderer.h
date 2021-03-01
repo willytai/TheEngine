@@ -8,6 +8,7 @@
 #include "vertexArray.h"
 #include "shader.h"
 #include "texture.h"
+#include "camera.h"
 
 class Renderer
 {

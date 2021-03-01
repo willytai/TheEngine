@@ -2,9 +2,10 @@
 
 namespace test
 {
-    testColoredCube::testColoredCube() :
+    testColoredCube::testColoredCube(const char* name) :
         __shader( "./resource/shader/pos4d_color3d/vertex.glsl",
                   "./resource/shader/pos4d_color3d/fragment.glsl") {
+        ::test::testPool::updateWindowTitle( name );
 
         GLfloat positions[] = {
              // face of the cube
@@ -52,10 +53,7 @@ namespace test
                                           0.1f,
                                           100.0f
                                          );
-        vb.unbind();
         __va.unbind();
-        __ib->unbind();
-        __shader.unbind();
 
         __m_translation = glm::vec3( 0.0f, 0.0f, 0.0f );
         __m_rotation    = glm::vec3( 0.0f, 0.0f, 0.0f );

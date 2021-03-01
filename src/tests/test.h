@@ -7,11 +7,12 @@
 #include <vector>
 #include <string>
 #include <functional>
+#include <GLFW/glfw3.h>
 #include <glm/gtc/matrix_transform.hpp>
 
 #define TEST_CLASS_PUBLIC(className)        \
     public:                                 \
-        className();                        \
+        className(const char* name);        \
         ~className();                       \
         void onUpdate(float time) override; \
         void onRenderer() override;         \
@@ -25,17 +26,20 @@ namespace test
     {
         typedef std::pair<std::string, std::function<baseTest*()> > testType;
     public:
-        static void Register();
-        static void update();
+        static void init(GLFWwindow* window);
+        static void test(float deltaTime);
         static void reset();
+        static void updateWindowTitle(const char* name);
+        inline static GLFWwindow* getGLFWwindow() { return get()._window; }
     private:
         testPool() {}
         ~testPool() {}
         template <typename T>
         void addTest(const char* tag, const char* name) {
-            get()._list.emplace_back( tag, [](){ return new T; } );
+            get()._list.emplace_back( tag, [=](){ return new T(tag); } );
             OPENGL_INFO( "Test \'{}\' registered.", name );
         }
+        void onUpdate(const float& deltaTime);
         void onImGui();
         void onRenderer();
         static inline testPool& get() {
@@ -45,6 +49,7 @@ namespace test
     private:
         std::vector<testType>   _list;
         baseTest*               _curTest = NULL;
+        GLFWwindow*             _window  = NULL;
     };
 
     class baseTest
@@ -83,6 +88,18 @@ namespace test
         glm::vec3       __m_rotation;
         float           __m_scale;
         float           __camera_height;
+        VertexArray     __va;
+        IndexBufferUI*  __ib;
+    };
+
+    // -------------------------------------------------
+
+    class testCamera : public baseTest
+    {
+        TEST_CLASS_PUBLIC( testCamera )
+    private:
+        Camera*         __camera;
+        Shader          __shader;
         VertexArray     __va;
         IndexBufferUI*  __ib;
     };

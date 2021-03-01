@@ -3,16 +3,19 @@
 
 namespace test
 {
-    void testPool::Register() {
+    void testPool::init(GLFWwindow* window) {
 #ifdef BUILD_TEST
-        get().addTest<testClearColor> ( "clear color",  "clearColor" );
-        get().addTest<testColoredCube>( "colored cube", "coloredCube" );
+        get().addTest<testClearColor> ( "Clear Color",     "clearColor" );
+        get().addTest<testColoredCube>( "Colored Cube",    "coloredCube" );
+        get().addTest<testCamera>     ( "Camera Movement", "camera" );
+        get()._window = window;
 #else
         OPENGL_INFO( "Tests disabled." );
 #endif
     }
 
-    void testPool::update() {
+    void testPool::test(float deltaTime) {
+        get().onUpdate( deltaTime );
         get().onImGui();
         get().onRenderer();
     }
@@ -20,6 +23,15 @@ namespace test
     void testPool::reset() {
         delete get()._curTest;
         get()._curTest = NULL;
+        glfwSetWindowTitle( get()._window, "Test Window" );
+    }
+
+    void testPool::updateWindowTitle(const char* name) {
+        glfwSetWindowTitle( get()._window, name );
+    }
+
+    void testPool::onUpdate(const float& deltaTime) {
+        if ( _curTest ) _curTest->onUpdate( deltaTime );
     }
 
     void testPool::onImGui() {

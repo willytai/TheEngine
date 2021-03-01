@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
         return -1;
     }
 
-    if ( (window = glfwCreateWindow( 1280, 960, "test window", NULL, NULL )) != NULL ) {
+    if ( (window = glfwCreateWindow( 1280, 960, "Test Window", NULL, NULL )) != NULL ) {
         GLFW_INFO( "window created." );
     }
     else {
@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
 
     // renderer
     Renderer renderer;
-    test::testPool::Register();
+    test::testPool::init( window );
 
     // ImGui
     IMGUI_CHECKVERSION();
@@ -82,6 +82,7 @@ int main(int argc, char *argv[])
     ImGui_ImplGlfw_InitForOpenGL( window, true );
     ImGui_ImplOpenGL3_Init( "#version 330 core" );
 
+    double lastTime = glfwGetTime();
     while ( !glfwWindowShouldClose(window) ) {
         renderer.clear();
 
@@ -95,8 +96,11 @@ int main(int argc, char *argv[])
             // already on the screen (which is what I intended to design)
             ImGui::Begin("ImGui Window");
 #ifdef BUILD_TEST
+            double curTime = glfwGetTime();
+            float deltaTime = float(curTime - lastTime);
+            lastTime = curTime;
             ImGui::Text( "Tests" );
-            test::testPool::update();
+            test::testPool::test( deltaTime );
 #endif
             ImGui::NewLine();
             ImGui::Text("Application average %.3f ms/frame (%.1f FPS)",

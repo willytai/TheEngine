@@ -2,8 +2,8 @@
 
 namespace test
 {
-    testClearColor::testClearColor() {
-
+    testClearColor::testClearColor(const char* name) {
+        ::test::testPool::updateWindowTitle( name );
     }
 
     testClearColor::~testClearColor() {
