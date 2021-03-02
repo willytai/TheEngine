@@ -63,10 +63,10 @@ namespace test
         __shader.setUniformMat4f( "u_model", glm::mat4(1.0f) );
         __shader.setUniformMat4f( "u_view", __camera->getView() );
         __shader.setUniformMat4f( "u_projection", __camera->getPerspective() );
-        renderer.draw( __va, *__ib, __shader );
+        renderer.drawElement( __va, *__ib, __shader );
 
         __shader.setUniformMat4f( "u_model", glm::mat4(1.0f)*glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 5.0f, 0.0f)) );
-        renderer.draw( __va, *__ib, __shader );
+        renderer.drawElement( __va, *__ib, __shader );
     }
 
     void testCamera::onImGui() {

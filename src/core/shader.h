@@ -18,7 +18,10 @@ public:
     void bind() const;
     void unbind() const;
 
+    void setUniform4f(const char* name, const glm::vec4& vec);
     void setUniform4f(const char* name, float f0, float f1, float f2, float f3);
+    void setUniform3f(const char* name, const glm::vec3& vec);
+    void setUniform3f(const char* name, float f0, float f1, float f2);
     void setUniform1i(const char* name, int value);
     void setUniformMat4f(const char* name, const glm::mat4& mat);
 

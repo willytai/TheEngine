@@ -107,8 +107,20 @@ GLint Shader::getLocation(const char* name) {
     return location;
 }
 
+void Shader::setUniform4f(const char* name, const glm::vec4& vec) {
+    this->setUniform4f( name, vec[0], vec[1], vec[2], vec[3] );
+}
+
 void Shader::setUniform4f(const char* name, float f0, float f1, float f2, float f3) {
     GLCall( glUniform4f( this->getLocation(name), f0, f1, f2, f3 ) );
+}
+
+void Shader::setUniform3f(const char* name, const glm::vec3& vec) {
+    this->setUniform3f( name, vec[0], vec[1], vec[2] );
+}
+
+void Shader::setUniform3f(const char* name, float f0, float f1, float f2) {
+    GLCall( glUniform3f( this->getLocation(name), f0, f1, f2 ) );
 }
 
 void Shader::setUniform1i(const char* name, int value) {

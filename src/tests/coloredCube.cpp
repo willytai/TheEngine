@@ -90,7 +90,7 @@ namespace test
         __shader.setUniformMat4f( "u_projection", __perspective );
 
         Renderer renderer;
-        renderer.draw( __va, *__ib, __shader );
+        renderer.drawElement( __va, *__ib, __shader );
     }
 
     void testColoredCube::onImGui() {

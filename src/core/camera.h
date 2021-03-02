@@ -1,7 +1,9 @@
 #ifndef __CAMERA_H__
 #define __CAMERA_H__
 
+#ifndef GLM_FORCE_SWIZZLE
 #define GLM_FORCE_SWIZZLE
+#endif
 
 #include "GLmacro.h"
 #include "glm/glm.hpp"

@@ -1,6 +1,10 @@
 #ifndef __TEST_H__
 #define __TEST_H__
 
+#ifndef GLM_FORCE_SWIZZLE
+#define GLM_FORCE_SWIZZLE
+#endif
+
 #include "renderer.h"
 #include "log.h"
 #include "imgui.h"
@@ -98,9 +102,27 @@ namespace test
     {
         TEST_CLASS_PUBLIC( testCamera )
     private:
-        Camera*         __camera;
         Shader          __shader;
+        Camera*         __camera;
         VertexArray     __va;
+        IndexBufferUI*  __ib;
+    };
+
+    // -------------------------------------------------
+
+    class testLighting : public baseTest
+    {
+        TEST_CLASS_PUBLIC( testLighting )
+    private:
+        Shader          __shader;
+        float           __ambient;
+        glm::vec3       __lightPosOffset;
+        glm::vec3       __lightColor;
+        glm::vec3       __objPosOffset;
+        glm::vec3       __objColor;
+        Camera*         __camera;
+        VertexArray     __vaCube;
+        VertexArray     __vaLight;
         IndexBufferUI*  __ib;
     };
 

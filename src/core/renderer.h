@@ -17,7 +17,8 @@ public:
     ~Renderer();
 
     void clear() const;
-    void draw(const VertexArray& va, const IndexBufferUI& ib, const Shader& shader) const;
+    void drawElement(const VertexArray& va, const IndexBufferUI& ib, const Shader& shader) const;
+    void drawArray(const VertexArray& va, const Shader& shader, int count) const;
 
 private:
 };

@@ -8,6 +8,7 @@ namespace test
         get().addTest<testClearColor> ( "Clear Color",     "clearColor" );
         get().addTest<testColoredCube>( "Colored Cube",    "coloredCube" );
         get().addTest<testCamera>     ( "Camera Movement", "camera" );
+        get().addTest<testLighting>   ( "Lighting",        "lighting" );
         get()._window = window;
 #else
         OPENGL_INFO( "Tests disabled." );
