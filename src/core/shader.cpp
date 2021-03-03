@@ -123,6 +123,10 @@ void Shader::setUniform3f(const char* name, float f0, float f1, float f2) {
     GLCall( glUniform3f( this->getLocation(name), f0, f1, f2 ) );
 }
 
+void Shader::setUniform1f(const char *name, float value) {
+    GLCall( glUniform1f( this->getLocation(name), value ) );
+}
+
 void Shader::setUniform1i(const char* name, int value) {
     GLCall( glUniform1i( this->getLocation(name), value ) );
 }

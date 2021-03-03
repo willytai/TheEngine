@@ -31,6 +31,7 @@ public:
 
     inline const glm::mat4& getView() const { return _view; }
     inline const glm::mat4& getPerspective() const { return _perspective; }
+    inline const glm::vec3&  getPos() const { return _pos; }
 
 private:
     void moveZ(const float& deltaTime);

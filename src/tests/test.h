@@ -116,6 +116,8 @@ namespace test
     private:
         Shader          __shader;
         float           __ambient;
+        float           __specularStrength;
+        int             __shininess;
         glm::vec3       __lightPosOffset;
         glm::vec3       __lightColor;
         glm::vec3       __objPosOffset;
