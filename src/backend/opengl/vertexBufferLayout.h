@@ -1,7 +1,7 @@
 #ifndef __VERTEX_BUFFER_LAYOUT_H__
 #define __VERTEX_BUFFER_LAYOUT_H__
 
-#include "log.h"
+#include "util/log.h"
 #include "GLmacro.h"
 #include <vector>
 

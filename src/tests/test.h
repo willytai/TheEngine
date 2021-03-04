@@ -5,9 +5,11 @@
 #define GLM_FORCE_SWIZZLE
 #endif
 
-#include "renderer.h"
-#include "log.h"
-#include "imgui.h"
+#define OPENGL_BACKEND
+
+#include "backend/renderer.h"
+#include "util/log.h"
+#include "imgui/imgui.h"
 #include <vector>
 #include <string>
 #include <functional>

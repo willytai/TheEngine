@@ -1,5 +1,5 @@
-#ifndef __RENDERER_H__
-#define __RENDERER_H__
+#ifndef __GL_RENDER_H__
+#define __GL_RENDER_H__
 
 #include "GLmacro.h"
 #include "vertexBuffer.h"
@@ -23,4 +23,4 @@ public:
 private:
 };
 
-#endif /* __RENDERER_H__ */
+#endif /* __GL_RENDER_H__ */

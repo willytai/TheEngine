@@ -1,10 +1,10 @@
-CHDRS  = $(wildcard *.h)
-CPPSRC = $(wildcard *.cpp)
-CCCSRC = $(wildcard *.c)
+CHDRS  += $(wildcard *.h)
+CPPSRC += $(wildcard *.cpp)
+CCCSRC += $(wildcard *.c)
 CSRCS  = $(CPPSRC) $(CCCSRC)
 COBJS  = $(addsuffix .o, $(basename $(CSRCS)))
 
-EXTDIR = ../../include
+EXTDIR = ../../src
 INCDIR = . $(EXTDIR) /usr/local/Cellar/glfw/3.3.2/include \
 		 ../../vendor/spdlog/include \
 		 ../../vendor/glad/include \
@@ -15,7 +15,6 @@ DPNIFLAG = $(addprefix -I, $(INCDIR))
 LIBDIR = ../../lib /usr/local/Cellar/glfw/3.3.2/lib
 DPNLFLAG = $(addprefix -L, $(LIBDIR))
 
-EXTLINK = $(PKGNAME)LNK
 LIBCHECKPOINT = ../../lib/.lib.check
 
 CXX  = c++
@@ -23,16 +22,16 @@ CCC  = cc
 AR   = ar cr
 ECHO = /bin/echo
 
-CPPFLAGS = -O3 -std=c++17 $(PKGFLAG) -DNDEBUG
-CPPFLAGS = -g  -std=c++17 $(PKGFLAG)
+CPPFLAGS = -O3 -std=c++17 -DNDEBUG -DENGINE_DEBUG
+CPPFLAGS = -g  -std=c++17
 
-CFLAGS = -O3 $(PKGFLAG) -DNDEBUG
-CFLAGS = -g  $(PKGFLAG)
+CFLAGS = -O3 -DNDEBUG -DENGINE_DEBUG
+CFLAGS = -g
 
 WFLAGS = -Wall -Wextra -pedantic-errors -Wconversion
-FFLAGS =
+FFLAGS = -DBUILD_TEST
 
-top: $(EXTLINK) target
+top: target
 
 %.o: %.cpp
 	@$(ECHO) "> compiling $< ..."
@@ -48,24 +47,6 @@ depend: .depend.mak
 	@$(ECHO) Making dependencies ...
 	@$(CXX) -MM $(DPNIFLAG) $(CSRCS) > $@
 
-.PHONY: extheader
-extheader: .extheader.mak
-.extheader.mak: $(EXTHDRS)
-	@$(ECHO) Linking external header files ...
-	@rm -f $@
-	@$(ECHO) -n "$(EXTLINK):" > $@
-	@for hdr in $(EXTHDRS); \
-	do \
-		$(ECHO) -n " $(EXTDIR)/$$hdr" >> $@; \
-		rm -f $(EXTDIR)/$$hdr; \
-	done
-	@$(ECHO) >> $@
-	@for hdr in $(EXTHDRS); \
-	do \
-		$(ECHO) "$(EXTDIR)/$$hdr: $$hdr" >> $@; \
-		$(ECHO) "	@cd $(EXTDIR); ln -fs ../src/$(PKGNAME)/$$hdr ./" >> $@; \
-	done
-
 .PHONY: clean
 clean:
 	@rm -f $(COBJS)
@@ -73,7 +54,6 @@ clean:
 .PHONY: cleanall
 cleanall: clean
 	@$(ECHO) Removing dependencies ...
-	@rm .depend.mak .extheader.mak
+	@rm .depend.mak
 
 include .depend.mak
-include .extheader.mak

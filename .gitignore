@@ -9,4 +9,5 @@ include/
 
 tags
 opengltest
+engine
 imgui.ini

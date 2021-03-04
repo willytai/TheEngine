@@ -2,9 +2,8 @@ ECHO      = /bin/echo
 ifneq ($(shell uname -s), Darwin)
 	ECHO += -e
 endif
-EXEC      = opengltest
 SRCLIBDIR = lib
-DIRS      = bin include $(SRCLIBDIR)
+DIRS      = bin $(SRCLIBDIR)
 
 # third party packages
 VENDOR = ../vendor/spdlog/include/ \
@@ -12,7 +11,7 @@ VENDOR = ../vendor/spdlog/include/ \
 		 ../vendor/stb/include \
 		 ../vendor/glm
 
-PKGS    = util glad core imgui tests
+PKGS    = util glad backend imgui tests
 GLFW    = glfw
 EXTPKG  = $(GLFW)
 ALLPKGS = $(PKGS) $(EXTPKG)
@@ -24,18 +23,6 @@ GLFWLIB = $(addsuffix .a, $(addprefix lib, $(GLFW)))
 all: dir main
 
 .PHONY: dir libs main
-
-glfw: $(SRCLIBDIR)/$(GLFWLIB)
-$(SRCLIBDIR)/$(GLFWLIB):
-	@echo "Compiling glfw3 as static library ..."
-	@mkdir -p glfw-build;
-	@cd glfw-build; cmake ../vendor/glfw/ -DCMAKE_INSTALL_PREFIX=./install\
-		-DBUILD_SHARED_LIBS=OFF \
-		-DGLFW_BUILD_EXAMPLES=FALSE \
-		-DGLFW_BUILD_TESTS=FALSE \
-		-DGLFW_BUILD_DOCS=OFF \
-		-DGLFW_INSTALL=ON; make -j4
-	#@mv glfw-build/src/$(GLFWLIB) $@
 
 dir:
 	@for dir in $(DIRS); \
@@ -49,9 +36,7 @@ dir:
 
 main: libs
 	@$(ECHO) "Checking main ..."
-	@$(MAKE) -C src/main -f makefile --no-print-directory INCLIB="$(INCLIB)" EXEC=$(EXEC)
-	@ln -fs bin/$(EXEC) .
-
+	@$(MAKE) -C src/main -f makefile --no-print-directory INCLIB="$(INCLIB)"
 
 libs:
 	@for pkg in $(PKGS); \
@@ -78,8 +63,11 @@ cleanall:
 		$(ECHO) "Removing $$slib ..."; \
 		rm -rf $(SRCLIBDIR)/$$slib; \
 	done
-	@$(ECHO) "Removing $(EXEC) ..."
-	@rm -f $(EXEC) bin/$(EXEC)
+	@for exec in $(wildcard bin/*)
+	do \
+		@$(ECHO) "Removing $$exec ..."; \
+		@rm -f $$exec $(notdir $$exec); \
+	done
 
 clean:
 	@for pkg in $(PKGS); \
@@ -94,8 +82,15 @@ clean:
 		$(ECHO) "Removing $$slib ..."; \
 		rm -rf $(SRCLIBDIR)/$$slib; \
 	done
-	@$(ECHO) "Removing $(EXEC) ..."
-	@rm -f $(EXEC) bin/$(EXEC)
+	@for exec in $(notdir $(wildcard bin/*)); \
+	do \
+		rm -f $$exec; \
+	done
+	@for exec in $(wildcard bin/*); \
+	do \
+		$(ECHO) "Removing $$exec ..."; \
+		rm -f $$exec; \
+	done
 
 .PHONY: tags
 tags: ctags

@@ -1,7 +1,7 @@
 #ifndef __GL_MACRO_H__
 #define __GL_MACRO_H__
 
-#include "log.h"
+#include "util/log.h"
 #include <glad/glad.h>
 
 #define GL_ASSERT(x) \

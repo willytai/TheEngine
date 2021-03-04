@@ -1,4 +1,4 @@
-#include "renderer.h"
+#include "GLrender.h"
 
 Renderer::Renderer() {
 
