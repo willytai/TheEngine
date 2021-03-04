@@ -5,6 +5,7 @@ namespace util
     std::shared_ptr<spdlog::logger> Log::__glfwLogger;
     std::shared_ptr<spdlog::logger> Log::__openglLogger;
     std::shared_ptr<spdlog::logger> Log::__systemLogger;
+    std::shared_ptr<spdlog::logger> Log::__engineLogger;
 
     void Log::init(int verbosity) {
         switch (verbosity) {
@@ -43,5 +44,10 @@ namespace util
         __systemLogger->set_level( log_level );
         __systemLogger->trace( "logger initialized" );
         __systemLogger->flush_on( spdlog::level::debug );
+
+        __engineLogger = spdlog::stdout_color_mt( "Core" );
+        __engineLogger->set_level( log_level );
+        __engineLogger->trace( "logger initialized" );
+        __engineLogger->flush_on( spdlog::level::debug );
     }
 }

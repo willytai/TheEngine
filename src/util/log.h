@@ -22,6 +22,7 @@ namespace util
         static inline std::shared_ptr<spdlog::logger> getGLFWlogger() { return __glfwLogger; }
         static inline std::shared_ptr<spdlog::logger> getOpenGLlogger() { return __openglLogger; }
         static inline std::shared_ptr<spdlog::logger> getSystemlogger() { return __systemLogger; }
+        static inline std::shared_ptr<spdlog::logger> getEnginelogger() { return __engineLogger; }
 
     private:
         static void init(spdlog::level::level_enum log_level);
@@ -30,6 +31,7 @@ namespace util
         static std::shared_ptr<spdlog::logger>     __glfwLogger;
         static std::shared_ptr<spdlog::logger>     __openglLogger;
         static std::shared_ptr<spdlog::logger>     __systemLogger;
+        static std::shared_ptr<spdlog::logger>     __engineLogger;
     };
 }
 
@@ -50,5 +52,11 @@ namespace util
 #define SYS_WARN(...)  ::util::Log::getSystemlogger()->warn(__VA_ARGS__)
 #define SYS_INFO(...)  ::util::Log::getSystemlogger()->info(__VA_ARGS__)
 #define SYS_ERROR(...) ::util::Log::getSystemlogger()->error(__VA_ARGS__)
+
+#define CORE_TRACE(...) ::util::Log::getEnginelogger()->trace(__VA_ARGS__)
+#define CORE_DEBUG(...) ::util::Log::getEnginelogger()->debug(__VA_ARGS__)
+#define CORE_WARN(...)  ::util::Log::getEnginelogger()->warn(__VA_ARGS__)
+#define CORE_INFO(...)  ::util::Log::getEnginelogger()->info(__VA_ARGS__)
+#define CORE_ERROR(...) ::util::Log::getEnginelogger()->error(__VA_ARGS__)
 
 #endif /* __LOG_H__ */
