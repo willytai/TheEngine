@@ -18,7 +18,7 @@ class Camera
     static float     wWidth;   // window width
     static float     wHeight;  // window height
 public:
-    Camera(GLFWwindow* window);
+    Camera(GLFWwindow* window, glm::vec3 pos = glm::vec3(0.0f, 2.5f, 10.0f));
     ~Camera();
 
     void onUpdate(const float& deltaTime);

@@ -7,7 +7,7 @@ float     Camera::wWidth   = 1280.0f;
 float     Camera::wHeight  = 960.0f;
 
 
-Camera::Camera(GLFWwindow* window) :
+Camera::Camera(GLFWwindow* window, glm::vec3 pos) :
     _window(window),
     _sensitivity(5.0f),
     _movement_speed(5.0f),
@@ -17,7 +17,7 @@ Camera::Camera(GLFWwindow* window) :
     _cursorX(0.0f),
     _cursorY(0.0f),
     _pressed(false),
-    _pos(0.0f, 2.5f, 10.0f),
+    _pos(pos),
     _front(0.0f, 0.0f, -1.0f) {
 
     // set callbacks

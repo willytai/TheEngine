@@ -120,7 +120,6 @@ namespace test
         int             __shininess;
         glm::vec3       __lightPosOffset;
         glm::vec3       __lightColor;
-        glm::vec3       __objPosOffset;
         glm::vec3       __objColor;
         Camera*         __camera;
         VertexArray     __vaCube;
