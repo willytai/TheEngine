@@ -22,11 +22,11 @@ CCC  = cc
 AR   = ar cr
 ECHO = /bin/echo
 
-CPPFLAGS = -O3 -std=c++17 -DNDEBUG -DENGINE_DEBUG
-CPPFLAGS = -g  -std=c++17
+CPPFLAGS = -O3 -std=c++17 -DNDEBUG
+CPPFLAGS = -g  -std=c++17 -DENGINE_DEBUG
 
-CFLAGS = -O3 -DNDEBUG -DENGINE_DEBUG
-CFLAGS = -g
+CFLAGS = -O3 -DNDEBUG
+CFLAGS = -g -DENGINE_DEBUG
 
 WFLAGS = -Wall -Wextra -pedantic-errors -Wconversion
 FFLAGS = -DBUILD_TEST

@@ -7,7 +7,7 @@
 
 int main(int argc, char *argv[])
 {
-    engine7414::App* app = engine7414::appCreate(argc, argv);
+    Engine7414::App* app = Engine7414::appCreate(argc, argv);
     app->run();
     delete app;
     return 0;

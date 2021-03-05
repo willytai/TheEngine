@@ -1,10 +1,14 @@
 #ifndef __APP_H__
 #define __APP_H__
 
-#include "core/config.h"
+#include "core/core.h"
+#include "core/window.h"
+#include "core/event/event.h"
 #include "util/log.h"
+#include "platform/platform.h"
+#include <memory>
 
-namespace engine7414
+namespace Engine7414
 {
     class App
     {
@@ -13,6 +17,11 @@ namespace engine7414
         virtual ~App() {}
 
         void run();
+        void onEvent(Event& event);
+
+    private:
+        bool _shouldRun;
+        std::unique_ptr<Window> _window;
     };
 
     App* appCreate(int argc, char** argv);

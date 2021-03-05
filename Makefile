@@ -11,7 +11,7 @@ VENDOR = ../vendor/spdlog/include/ \
 		 ../vendor/stb/include \
 		 ../vendor/glm
 
-PKGS    = util glad backend core imgui tests
+PKGS    = util glad backend platform core imgui tests
 GLFW    = glfw
 EXTPKG  = $(GLFW)
 ALLPKGS = $(PKGS) $(EXTPKG)
