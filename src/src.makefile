@@ -22,14 +22,17 @@ CCC  = cc
 AR   = ar cr
 ECHO = /bin/echo
 
-CPPFLAGS = -O3 -std=c++17 -DNDEBUG
-CPPFLAGS = -g  -std=c++17 -DENGINE_DEBUG
+COMMONFLAGS = -DENGINE_BACKEND_OPENGL \
+			  -DBUILD_TEST
+
+CPPFLAGS = -O3 -std=c++17 $(COMMONFLAGS) -DNDEBUG
+CPPFLAGS = -g  -std=c++17 $(COMMONFLAGS) -DENGINE_DEBUG
 
 CFLAGS = -O3 -DNDEBUG
-CFLAGS = -g -DENGINE_DEBUG
+CFLAGS = -g  -DENGINE_DEBUG
 
 WFLAGS = -Wall -Wextra -pedantic-errors -Wconversion
-FFLAGS = -DBUILD_TEST
+FFLAGS =
 
 top: target
 

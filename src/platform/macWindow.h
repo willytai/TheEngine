@@ -1,5 +1,6 @@
 #ifndef __MAC_WINDOW_H__
 #define __MAC_WINDOW_H__
+#define GLFW_INCLUDE_NONE
 
 #include "core/window.h"
 #include <GLFW/glfw3.h>

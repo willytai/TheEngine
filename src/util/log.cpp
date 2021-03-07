@@ -22,7 +22,7 @@ namespace util
                 Log::init( spdlog::level::trace );
                 break;
             default:
-                Log::init( spdlog::level::debug );
+                Log::init( spdlog::level::trace );
                 break;
         }
     }

@@ -1,7 +1,7 @@
 #ifndef __MOUSE_EVENTS_H__
 #define __MOUSE_EVENTS_H__
 
-#include "core/event/event.h"
+#include "core/event/baseEvent.h"
 #include <sstream>
 
 namespace Engine7414
@@ -11,6 +11,11 @@ namespace Engine7414
     public:
         MouseMovedEvent(const float xpos, const float ypos)
             : _xpos(xpos), _ypos(ypos) {}
+
+        // x coordinate
+        inline float xPos() const { return _xpos; }
+        // y coordinate
+        inline float yPos() const { return _ypos; }
 
         std::string toString() const override {
             std::stringstream ss;
@@ -29,6 +34,11 @@ namespace Engine7414
     public:
         MouseScrolledEvent(const float xoffset, const float yoffset)
             : _xoffset(xoffset), _yoffset(yoffset) {}
+
+        // horizontal offset
+        inline float xOffset() const { return _xoffset; }
+        // virtical offset
+        inline float yOffset() const { return _yoffset; }
 
         std::string toString() const override {
             std::stringstream ss;
@@ -50,6 +60,11 @@ namespace Engine7414
     protected:
         MouseButtonEvent(const MouseCode& button, const MouseMods& mods)
             : _button(button), _mods(mods) {}
+
+        // mouse button
+        inline MouseCode button() const { return _button; }
+        // modifier bits
+        inline MouseMods mousemods() const { return _mods; }
 
         MouseCode _button; // the button (left/right)
         MouseMods _mods;   // modifier bits, indicate some other states

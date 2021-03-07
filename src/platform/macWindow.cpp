@@ -1,7 +1,8 @@
 #include "core/core.h"
+#include "core/event/event.h"
 #include "platform/macWindow.h"
 #include "util/log.h"
-#include "core/event/appEvents.h"
+#include "glad/glad.h"
 
 namespace Engine7414
 {
@@ -43,6 +44,12 @@ namespace Engine7414
         glfwSetWindowUserPointer( _glfwWindow, &_data );
         this->enableVSync();
 
+        // initialize opengl
+        if ( !gladLoadGLLoader((GLADloadproc)glfwGetProcAddress) ) {
+            OPENGL_ERROR( "Failed to initialize GLAD." );
+            CORE_ASSERT( false, "error net yet handled, aborting..." );
+        }
+
         CORE_INFO( "window \'{}\' successfully created ({}, {})", title, width, height );
 
         // GLFW callbacks
@@ -54,6 +61,9 @@ namespace Engine7414
     }
 
     void MacWindow::onUpdate() {
+        glClearColor( 1, 0, 1, 1 );
+        glClear( GL_COLOR_BUFFER_BIT );
+
         glfwSwapBuffers( _glfwWindow );
         glfwPollEvents();
     }
@@ -108,6 +118,48 @@ namespace Engine7414
                         break;
                     }
                 }
+        });
+
+        // key callback
+        glfwSetKeyCallback( _glfwWindow, [](GLFWwindow* window, int key, int scanecode, int action, int mods){
+                windowData& data = *(windowData*)glfwGetWindowUserPointer( window );
+                switch (action) {
+                    case GLFW_PRESS:
+                    {
+                        KeyPressedEvent event( key, mods, false );
+                        data.callback( event );
+                        break;
+                    }
+                    case GLFW_REPEAT:
+                    {
+                        KeyPressedEvent event( key, mods, true );
+                        data.callback( event );
+                        break;
+                    }
+                    case GLFW_RELEASE:
+                    {
+                        KeyReleasedEvent event( key, mods );
+                        data.callback( event );
+                        break;
+                    }
+                    default: CORE_WARN( "caught unknown key" );
+                }
+        });
+
+        // window resize callback
+        glfwSetWindowSizeCallback( _glfwWindow, [](GLFWwindow* window, int width, int height){
+            windowData& data = *(windowData*)glfwGetWindowUserPointer( window );
+            data.width = width;
+            data.height = height;
+            WindowResizeEvent event( width, height );
+            data.callback( event );
+        });
+
+        // window close callback
+        glfwSetWindowCloseCallback( _glfwWindow, [](GLFWwindow* window){
+            windowData& data = *(windowData*)glfwGetWindowUserPointer( window );
+            WindowCloseEvent event;
+            data.callback( event );
         });
     }
 }

@@ -100,7 +100,7 @@ ctags:
 	do \
 		$(ECHO) "Tagging $$pkg ... "; \
 		cd src; \
-		ctags -a --languages=C,C++ $$pkg/*; \
+		ctags -aR --languages=C,C++ $$pkg/*; \
 		cd ..; \
 	done
 	@for pkg in $(VENDOR); \
@@ -111,4 +111,4 @@ ctags:
 		cd ..; \
 	done
 	@$(ECHO) "Tagging main ... "
-	@cd src; ctags -a  --languages=C,C++ main/*;
+	@cd src; ctags -aR  --languages=C,C++ main/*;
