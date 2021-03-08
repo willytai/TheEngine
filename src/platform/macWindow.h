@@ -23,9 +23,10 @@ namespace Engine7414
         ~MacWindow();
 
         /* access functions */
-        inline int  getWidth()  const override { return _data.width; }
-        inline int  getHeight() const override { return _data.height; }
-        inline bool VSync()     const override { return _data.vsync; }
+        inline int   getWidth()  const override { return _data.width; }
+        inline int   getHeight() const override { return _data.height; }
+        inline bool  VSync()     const override { return _data.vsync; }
+        inline void* nativeWindow()    override { return (void*)_glfwWindow; }
 
         /* setting functions */
         void setEventCallback(const eventCallbackFn& fn) override;

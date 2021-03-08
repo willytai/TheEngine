@@ -25,8 +25,8 @@ namespace Engine7414
         inline stack_t::reverse_iterator rend() { return _layer.rend(); }
 
     private:
-        stack_t             _layer;
-        stack_t::iterator   _layerInsert_it;
+        stack_t         _layer;
+        unsigned int    _insertID;
     };
 }
 

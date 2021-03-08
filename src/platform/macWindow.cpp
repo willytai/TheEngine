@@ -61,9 +61,6 @@ namespace Engine7414
     }
 
     void MacWindow::onUpdate() {
-        glClearColor( 1, 0, 1, 1 );
-        glClear( GL_COLOR_BUFFER_BIT );
-
         glfwSwapBuffers( _glfwWindow );
         glfwPollEvents();
     }

@@ -3,7 +3,7 @@
 namespace Engine7414
 {
     LayerStack::LayerStack() {
-        _layerInsert_it = _layer.end();
+        _insertID = 0;
     }
 
     LayerStack::~LayerStack() {
@@ -11,26 +11,30 @@ namespace Engine7414
     }
 
     void LayerStack::pushLayer(Layer* layer) {
-        _layerInsert_it = _layer.emplace( _layerInsert_it, layer );
-        _layerInsert_it++;
+        _layer.emplace( _layer.begin()+_insertID, layer );
+        _insertID++;
+        layer->onAttach();
     }
 
     void LayerStack::pushOverlay(Layer* layer) {
         _layer.emplace_back( layer );
+        layer->onAttach();
     }
 
     void LayerStack::popLayer(Layer* layer) {
-        auto it = std::find( _layer.begin(), _layerInsert_it, layer );
-        if ( it != _layerInsert_it ) {
+        auto it = std::find( _layer.begin(), _layer.begin()+_insertID, layer );
+        if ( it != _layer.begin()+_insertID) {
             _layer.erase( it );
-            _layerInsert_it--;
+            _insertID--;
+            layer->onDetach();
         }
     }
 
     void LayerStack::popOverlay(Layer* layer) {
-        auto it = std::find( _layerInsert_it, _layer.end(), layer );
+        auto it = std::find( _layer.begin()+_insertID, _layer.end(), layer );
         if ( it != _layer.end() ) {
             _layer.erase( it );
+            layer->onDetach();
         }
     }
 }

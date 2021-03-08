@@ -9,24 +9,44 @@ Engine7414::App* Engine7414::appCreate(int argc, char** argv) {
 
 namespace Engine7414
 {
+    // to make sure that only one application exists
+    App* App::appInstancePtr = NULL;
+
     App::App(int verbosity) :
         _shouldRun(true),
         _minimized(false)
     {
+        if ( appInstancePtr ) {
+            CORE_ASSERT( false, "Application already exists! You cannot create another one!" );
+        }
+        else appInstancePtr = this;
+
+        // initialize logger
         util::Log::init( verbosity );
         CORE_INFO( "engine initializing" );
+
+        // default window
         _window = std::unique_ptr<Window>(Window::create( "Engine7414", 1280, 960, true ));
         _window->setEventCallback( CORE_BIND_EVENT_FN(App::onEvent) );
+
+        // ImGui layer
+        this->pushOverlay( _imguiLayer = new ImGuiLayer );
     }
+
+    App::~App() {}
 
     void App::run() {
         CORE_INFO( "engine started" );
         while ( _shouldRun ) {
             if ( !_minimized ) {
-                // Everything else goes in here!!!
-                for (auto& layer : _layerStack) {
+                for (auto* layer : _layerStack) {
                     layer->onUpdate();
                 }
+                _imguiLayer->begin();
+                for (auto* layer : _layerStack) {
+                    layer->onImGui();
+                }
+                _imguiLayer->end();
             }
             _window->onUpdate();
         }

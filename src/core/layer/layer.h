@@ -15,6 +15,7 @@ namespace Engine7414
         virtual void onAttach() {};
         virtual void onDetach() {};
         virtual void onUpdate() {};
+        virtual void onImGui() {};
         virtual void onEvent(Event& event) {};
 
         inline const char* name() const { return _debug_name.c_str(); }

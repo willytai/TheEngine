@@ -21,6 +21,7 @@ namespace Engine7414
         virtual int getWidth() const = 0;
         virtual int getHeight() const = 0;
         virtual bool VSync() const = 0;
+        virtual void* nativeWindow() = 0;
         virtual const char* title() const { return _title.c_str(); }
 
         /* setting functions */
