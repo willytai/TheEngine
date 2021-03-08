@@ -9,6 +9,8 @@ DIRS      = bin $(SRCLIBDIR)
 VENDOR = ../vendor/spdlog/include/ \
 		 ../vendor/glad/include \
 		 ../vendor/stb/include \
+		 ../vendor/imgui/backends \
+		 ../vendor/imgui \
 		 ../vendor/glm
 
 PKGS    = util glad backend platform core imgui tests
