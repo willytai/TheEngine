@@ -1,5 +1,6 @@
 #include "core/core.h"
 #include "core/event/event.h"
+#include "backend/OpenGL/GLcontext.h"
 #include "platform/macWindow.h"
 #include "util/log.h"
 #include "glad/glad.h"
@@ -24,8 +25,8 @@ namespace Engine7414
 
         if ( !__glfwInitialized__ ) {
             if ( glfwInit() ) {
-                glfwWindowHint( GLFW_CONTEXT_VERSION_MAJOR, 3 );
-                glfwWindowHint( GLFW_CONTEXT_VERSION_MINOR, 3 );
+                glfwWindowHint( GLFW_CONTEXT_VERSION_MAJOR, 4 );
+                glfwWindowHint( GLFW_CONTEXT_VERSION_MINOR, 1 );
                 glfwWindowHint( GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE );
                 glfwWindowHint( GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE );
             }
@@ -40,15 +41,10 @@ namespace Engine7414
             GLFW_ERROR( "unable to create window!" );
             CORE_ASSERT( false, "glfw failed to create window, error not yet handled, aborting..." );
         }
-        glfwMakeContextCurrent( _glfwWindow );
-        glfwSetWindowUserPointer( _glfwWindow, &_data );
-        this->enableVSync();
 
-        // initialize opengl
-        if ( !gladLoadGLLoader((GLADloadproc)glfwGetProcAddress) ) {
-            OPENGL_ERROR( "Failed to initialize GLAD." );
-            CORE_ASSERT( false, "error net yet handled, aborting..." );
-        }
+        glfwSetWindowUserPointer( _glfwWindow, &_data );
+        this->createContext();
+        this->enableVSync();
 
         CORE_INFO( "window \'{}\' successfully created ({}, {})", title, width, height );
 
@@ -61,8 +57,8 @@ namespace Engine7414
     }
 
     void MacWindow::onUpdate() {
-        glfwSwapBuffers( _glfwWindow );
         glfwPollEvents();
+        _context->swapBuffers();
     }
 
     void MacWindow::setEventCallback(const eventCallbackFn& fn) {
@@ -77,6 +73,15 @@ namespace Engine7414
     void MacWindow::disbaleVSync() {
         glfwSwapInterval( 0 );
         _data.vsync = false;
+    }
+
+    void MacWindow::createContext() {
+        #ifdef ENGINE_BACKEND_OPENGL
+            _context = new OpenGLContext( _glfwWindow );
+        #else
+            #error Engine7414 only supports OpenGL backend currently!
+        #endif
+            _context->init();
     }
 
     void MacWindow::shutdown() {

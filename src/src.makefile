@@ -50,7 +50,7 @@ top: target
 depend: .depend.mak
 .depend.mak: $(CHDRS) $(CSRCS)
 	@$(ECHO) Making dependencies ...
-	@$(CXX) -MM $(DPNIFLAG) $(CSRCS) > $@
+	@$(CXX) -MM $(DPNIFLAG) $(COMMONFLAGS) $(CSRCS) > $@
 
 .PHONY: clean
 clean:

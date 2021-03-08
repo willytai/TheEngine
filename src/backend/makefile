@@ -1,6 +1,6 @@
-CHDRS  += $(wildcard opengl/*.h)
-CPPSRC += $(wildcard opengl/*.cpp)
-CCCSRC += $(wildcard opengl/*.c)
+CHDRS  += $(wildcard OpenGL/*.h)
+CPPSRC += $(wildcard OpenGL/*.cpp)
+CCCSRC += $(wildcard OpenGL/*.c)
 
 include ../src.makefile
 include ../lib.makefile

@@ -5,7 +5,7 @@
 
 bin/
 lib/
-include/
+misc/
 
 tags
 opengltest

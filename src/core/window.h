@@ -2,6 +2,7 @@
 #define __WINDOW_H__
 
 #include "core/event/event.h"
+#include "core/renderer/context.h"
 #include <functional>
 #include <string>
 
@@ -14,8 +15,8 @@ namespace Engine7414
         typedef std::function<void(Event&)> eventCallbackFn;
 
     public:
-        Window(const char* title) : _title(title) {}
-        virtual ~Window() {}
+        Window(const char* title) : _title(title), _context(NULL) {}
+        virtual ~Window() { if ( _context ) delete _context; }
 
         /* access functions */
         virtual int getWidth() const = 0;
@@ -35,8 +36,9 @@ namespace Engine7414
         /* Implemented per platfrom */
         static Window* create(const char* title, int width, int height, bool vsync=true);
 
-    private:
+    protected:
         std::string _title;
+        Context*    _context;
     };
 }
 

@@ -37,6 +37,7 @@ namespace Engine7414
         void onUpdate() override;
 
     private:
+        void createContext();
         void shutdown();
         void setCallbacks();
 

@@ -2,7 +2,7 @@
 #define __RENDERER_H__
 
 #ifdef OPENGL_BACKEND
-    #include "opengl/GLrender.h"
+    #include "backend/OpenGL/GLrender.h"
 #else
     #error the engine currently only supports OpenGL backend!
 #endif

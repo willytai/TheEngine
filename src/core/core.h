@@ -1,15 +1,12 @@
 #ifndef __CORE_H__
 #define __CORE_H__
 
-#ifndef ENGINE_BACKEND_OPENGL
-    #error Engine7414 only supports OpenGL backend currently!
-#endif
-
+#include "config.h"
 #include "util/log.h"
-#include <cassert>
+#include <signal.h>
 
 #ifdef ENGINE_DEBUG
-    #define CORE_ASSERT(x, msg) if (!(x)) { CORE_ERROR( msg ); assert(false); }
+    #define CORE_ASSERT(x, msg) if (!(x)) { CORE_ERROR( msg ); raise(SIGTRAP); }
 #else
     #define CORE_ASSERT(x, msg)
 #endif

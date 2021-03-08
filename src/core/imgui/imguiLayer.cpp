@@ -42,7 +42,18 @@ namespace Engine7414
         io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
         io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
+        // a better font type/size
+        io.Fonts->AddFontFromFileTTF( "misc/fontawesome/otfs/Brands-Regular-400.otf", 18.0f );
+
         ImGui::StyleColorsDark();
+
+        // When viewports are enabled we tweak WindowRounding/WindowBg
+        // so platform windows can look identical to regular ones.
+        ImGuiStyle& style = ImGui::GetStyle();
+        if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
+            style.WindowRounding = 0.0f;
+            style.Colors[ImGuiCol_WindowBg].w = 1.0f;
+        }
 
         ImGui_ImplGlfw_InitForOpenGL( (GLFWwindow*)App::getWindow()->nativeWindow(), true );
         ImGui_ImplOpenGL3_Init( "#version 410 core" );

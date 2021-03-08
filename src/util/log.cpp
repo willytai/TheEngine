@@ -6,6 +6,7 @@ namespace util
     std::shared_ptr<spdlog::logger> Log::__openglLogger;
     std::shared_ptr<spdlog::logger> Log::__systemLogger;
     std::shared_ptr<spdlog::logger> Log::__engineLogger;
+    std::shared_ptr<spdlog::logger> Log::__backendLogger;
 
     void Log::init(int verbosity) {
         switch (verbosity) {
@@ -49,5 +50,10 @@ namespace util
         __engineLogger->set_level( log_level );
         __engineLogger->trace( "logger initialized" );
         __engineLogger->flush_on( spdlog::level::debug );
+
+        __backendLogger = spdlog::stdout_color_mt( "Backend" );
+        __backendLogger->set_level( log_level );
+        __backendLogger->trace( "logger initialized" );
+        __backendLogger->flush_on( spdlog::level::debug );
     }
 }

@@ -24,6 +24,7 @@ namespace util
         static inline std::shared_ptr<spdlog::logger> getOpenGLlogger() { return __openglLogger; }
         static inline std::shared_ptr<spdlog::logger> getSystemlogger() { return __systemLogger; }
         static inline std::shared_ptr<spdlog::logger> getEnginelogger() { return __engineLogger; }
+        static inline std::shared_ptr<spdlog::logger> getBackendlogger() { return __backendLogger; }
 
     private:
         static void init(spdlog::level::level_enum log_level);
@@ -33,6 +34,7 @@ namespace util
         static std::shared_ptr<spdlog::logger>     __openglLogger;
         static std::shared_ptr<spdlog::logger>     __systemLogger;
         static std::shared_ptr<spdlog::logger>     __engineLogger;
+        static std::shared_ptr<spdlog::logger>     __backendLogger;
     };
 }
 
@@ -59,5 +61,11 @@ namespace util
 #define CORE_WARN(...)  ::util::Log::getEnginelogger()->warn(__VA_ARGS__)
 #define CORE_INFO(...)  ::util::Log::getEnginelogger()->info(__VA_ARGS__)
 #define CORE_ERROR(...) ::util::Log::getEnginelogger()->error(__VA_ARGS__)
+
+#define BACKEND_TRACE(...) ::util::Log::getBackendlogger()->trace(__VA_ARGS__)
+#define BACKEND_DEBUG(...) ::util::Log::getBackendlogger()->debug(__VA_ARGS__)
+#define BACKEND_WARN(...)  ::util::Log::getBackendlogger()->warn(__VA_ARGS__)
+#define BACKEND_INFO(...)  ::util::Log::getBackendlogger()->info(__VA_ARGS__)
+#define BACKEND_ERROR(...) ::util::Log::getBackendlogger()->error(__VA_ARGS__)
 
 #endif /* __LOG_H__ */
