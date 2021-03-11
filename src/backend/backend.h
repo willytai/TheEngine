@@ -5,9 +5,20 @@
 #include <signal.h>
 
 #ifdef ENGINE_DEBUG
-    #define BACKEND_ASSERT(x, msg) if (!(x)) { BACKEND_ERROR( msg ); raise(SIGTRAP); }
+    #define BACKEND_ASSERT(x, ...) if (!(x)) { BACKEND_ERROR( __VA_ARGS__ ); raise(SIGTRAP); }
 #else
     #define BACKEND_ASSERT(x, msg)
 #endif
+
+#define STRINGIFY(str) #str
+
+namespace Engine7414
+{
+    enum class RendererBackend : uint8_t
+    {
+        None,
+        OpenGL
+    };
+}
 
 #endif /* __BACKEND_H__ */

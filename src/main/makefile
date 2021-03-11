@@ -5,7 +5,7 @@ CPPSRC += $(wildcard opengltest/*.cpp)
 include ../src.makefile
 
 BINDIR = ../../bin
-TARGET = $(BINDIR)/engine \
+TARGET = $(BINDIR)/engine #\
 		 $(BINDIR)/opengltest
 
 target: $(TARGET)

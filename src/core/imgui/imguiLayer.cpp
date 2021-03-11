@@ -43,7 +43,7 @@ namespace Engine7414
         io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
         // a better font type/size
-        io.Fonts->AddFontFromFileTTF( "misc/fontawesome/otfs/Brands-Regular-400.otf", 18.0f );
+        io.Fonts->AddFontFromFileTTF( "misc/fontawesome/otfs/Brands-Regular-400.otf", 16.0f );
 
         ImGui::StyleColorsDark();
 

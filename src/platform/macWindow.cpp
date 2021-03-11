@@ -7,8 +7,8 @@
 
 namespace Engine7414
 {
-    Window* Window::create(const char* title, int width, int height, bool vsync) {
-        MacWindow* window = new MacWindow( title, width, height );
+    Window* Window::create(const char* title, int width, int height, const RendererBackend& backend, bool vsync) {
+        MacWindow* window = new MacWindow( title, width, height, backend );
         if ( vsync ) window->enableVSync();
         else         window->disbaleVSync();
         return window;
@@ -16,7 +16,7 @@ namespace Engine7414
 
     bool MacWindow::__glfwInitialized__ = false;
 
-    MacWindow::MacWindow(const char* title, int width, int height) :
+    MacWindow::MacWindow(const char* title, int width, int height, const RendererBackend& backend) :
         Window( title ),
         _glfwWindow(NULL)
     {
@@ -43,7 +43,7 @@ namespace Engine7414
         }
 
         glfwSetWindowUserPointer( _glfwWindow, &_data );
-        this->createContext();
+        this->createContext( backend );
         this->enableVSync();
 
         CORE_INFO( "window \'{}\' successfully created ({}, {})", title, width, height );
@@ -75,13 +75,12 @@ namespace Engine7414
         _data.vsync = false;
     }
 
-    void MacWindow::createContext() {
-        #ifdef ENGINE_BACKEND_OPENGL
-            _context = new OpenGLContext( _glfwWindow );
-        #else
-            #error Engine7414 only supports OpenGL backend currently!
-        #endif
-            _context->init();
+    void MacWindow::createContext(const RendererBackend& backend) {
+        switch (backend) {
+            case RendererBackend::OpenGL: _context = new OpenGLContext( _glfwWindow ); break;
+            default: CORE_ASSERT( false, "Unsupported Backend" );
+        }
+        _context->init();
     }
 
     void MacWindow::shutdown() {

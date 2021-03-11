@@ -19,7 +19,7 @@ namespace Engine7414
     {
         static bool __glfwInitialized__;
     public:
-        MacWindow(const char* title, int width, int height);
+        MacWindow(const char* title, int width, int height, const RendererBackend& backend);
         ~MacWindow();
 
         /* access functions */
@@ -37,7 +37,7 @@ namespace Engine7414
         void onUpdate() override;
 
     private:
-        void createContext();
+        void createContext(const RendererBackend& backend);
         void shutdown();
         void setCallbacks();
 

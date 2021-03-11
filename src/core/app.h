@@ -8,6 +8,7 @@
 #include "core/imgui/imguiLayer.h"
 #include "util/log.h"
 #include "platform/platform.h"
+#include "backend/backend.h"
 #include <memory>
 
 namespace Engine7414
@@ -16,7 +17,7 @@ namespace Engine7414
     {
         static App* appInstancePtr;
     public:
-        App(int verbosity = -1);
+        App(RendererBackend backend, int verbosity = -1);
         virtual ~App();
 
         void run();

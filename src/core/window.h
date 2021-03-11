@@ -3,6 +3,7 @@
 
 #include "core/event/event.h"
 #include "core/renderer/context.h"
+#include "backend/backend.h"
 #include <functional>
 #include <string>
 
@@ -34,7 +35,7 @@ namespace Engine7414
         virtual void onUpdate() = 0;
 
         /* Implemented per platfrom */
-        static Window* create(const char* title, int width, int height, bool vsync=true);
+        static Window* create(const char* title, int width, int height, const RendererBackend& backend, bool vsync=true);
 
     protected:
         std::string _title;

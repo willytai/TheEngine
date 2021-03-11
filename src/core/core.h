@@ -6,7 +6,7 @@
 #include <signal.h>
 
 #ifdef ENGINE_DEBUG
-    #define CORE_ASSERT(x, msg) if (!(x)) { CORE_ERROR( msg ); raise(SIGTRAP); }
+    #define CORE_ASSERT(x, ...) if (!(x)) { CORE_ERROR( __VA_ARGS__ ); raise(SIGTRAP); }
 #else
     #define CORE_ASSERT(x, msg)
 #endif

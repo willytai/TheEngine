@@ -10,5 +10,9 @@ CHDRS  += $(wildcard imgui/*.h)
 CPPSRC += $(wildcard imgui/*.cpp)
 CCCSRC += $(wildcard imgui/*.c)
 
+CHDRS  += $(wildcard renderer/*.h)
+CPPSRC += $(wildcard renderer/*.cpp)
+CCCSRC += $(wildcard renderer/*.c)
+
 include ../src.makefile
 include ../lib.makefile
