@@ -3,6 +3,11 @@
 #include "core/event/event.h"
 #include "core/imgui/imguiLayer.h"
 
+#include "core/renderer/buffer.h"
+#include "core/renderer/shader.h"
+#include "core/renderer/vertexArray.h"
+#include "core/renderer/renderer.h"
+
 // --------------- entry point ---------------
 #include "core/entry.h"
 // -------------------------------------------

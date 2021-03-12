@@ -1,5 +1,5 @@
 CPPSRC += $(wildcard engine/*.cpp)
-CPPSRC += $(wildcard opengltest/*.cpp)
+#CPPSRC += $(wildcard opengltest/*.cpp)
 
 
 include ../src.makefile

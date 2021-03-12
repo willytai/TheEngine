@@ -1,11 +1,5 @@
 #include "core/app.h"
-
-#include "core/renderer/buffer.h"
-#include "core/renderer/shader.h"
-#include "core/renderer/vertexArray.h"
 #include "core/renderer/renderer.h"
-#include "backend/OpenGL/GLmacro.h"
-#include "glad/glad.h"
 
 #ifdef DEFAULT_CREATE_APP
 Engine7414::App* Engine7414::appCreate(int argc, char** argv) {
@@ -46,25 +40,6 @@ namespace Engine7414
     App::~App() {}
 
     void App::run() {
-        float vertices[] = {
-            -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f,
-             0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,
-             0.0f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f
-        };
-        uint8_t indices[] = { 0, 1, 2 };
-        auto vb = VertexBuffer::create( vertices, 18*sizeof(float) );
-        vb->setLayout({
-            { BufferDataType::Float, 3 },
-            { BufferDataType::Float, 3 }
-        });
-        auto va = VertexArray::create();
-        va->addVertexBuffer( vb );
-        auto ib = IndexBufferUI8::create( indices, 3 );
-        auto shader = Shader::create( "./resource/shader/basic/vertex.glsl",
-                                      "./resource/shader/basic/fragment.glsl" );
-        va->setIndexBuffer( ib );
-        shader->bind();
-
         CORE_INFO( "engine started" );
         while ( _shouldRun ) {
             if ( !_minimized ) {
@@ -77,9 +52,6 @@ namespace Engine7414
                 }
                 _imguiLayer->end();
             }
-            Renderer::beginScene();
-            Renderer::submit(va);
-            Renderer::endScene();
             _window->onUpdate();
         }
         this->shutdown();

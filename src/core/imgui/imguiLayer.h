@@ -2,6 +2,7 @@
 #define __IMGUI_LAYER_H__
 
 #include "core/layer/layer.h"
+#include "imgui/imgui.h"
 
 namespace Engine7414
 {
