@@ -7,6 +7,7 @@
 #include "core/renderer/shader.h"
 #include "core/renderer/vertexArray.h"
 #include "core/renderer/renderer.h"
+#include "core/renderer/camera.h"
 
 // --------------- entry point ---------------
 #include "core/entry.h"
