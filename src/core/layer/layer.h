@@ -4,6 +4,16 @@
 #include "core/event/event.h"
 #include <string>
 
+#if defined(__clang__)
+    #pragma clang diagnostic push
+    #pragma clang diagnostic ignored "-Wunused-parameter"
+#elif defined(__GNUC__)
+    #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Wunused-parameter"
+#else
+    #error "Compiler Not Supported!"
+#endif
+
 namespace Engine7414
 {
     class Layer
@@ -24,5 +34,13 @@ namespace Engine7414
         std::string _debug_name;
     };
 }
+
+#if defined(__clang__)
+    #pragma clang diagnostic pop
+#elif defined(__GNUC__)
+    #pragma GCC diagnostic pop
+#else
+    #error "Compiler Not Supported!"
+#endif
 
 #endif /* __LAYER_H__ */
