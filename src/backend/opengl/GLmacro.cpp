@@ -23,6 +23,7 @@
     #error "Compiler Not Supported!"
 #endif
 
+#ifdef __APPLE__
 const char* GLErrorStr(GLenum error) {
     switch (error) {
         case GL_INVALID_ENUM: return "GL_INVALID_ENUM";
@@ -46,3 +47,4 @@ bool GLLogCall(const char* function, const char* file, int line) {
     }
     return true;
 }
+#endif

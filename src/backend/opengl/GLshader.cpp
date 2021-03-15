@@ -89,6 +89,7 @@ namespace Engine7414
             char* msg = (char*)alloca( (unsigned)length*sizeof(char) );
             GLCall( glGetShaderInfoLog( id, length, &length, msg ) );
             OPENGL_ERROR( "Failed to compile {} shader!", (type==GL_VERTEX_SHADER?"vertex":"fragment") );
+            if ( msg[length-1] == '\n' ) msg[length-1] = '\0';
             OPENGL_ERROR( "{}", msg );
 
             GLCall( glDeleteShader( id ) );
