@@ -19,8 +19,8 @@ namespace Engine7414
         GLShader(const char* vertexShaderFile, const char* fragmentShaderFile);
         ~GLShader();
 
-        void bind() const;
-        void unbind() const;
+        void bind() const override;
+        void unbind() const override;
 
         void setUniform1i(const char* name, int value);
         void setUniform1f(const char* name, float value);
@@ -28,7 +28,7 @@ namespace Engine7414
         void setUniform3f(const char* name, float f0, float f1, float f2);
         void setUniform4f(const char* name, const glm::vec4& vec);
         void setUniform4f(const char* name, float f0, float f1, float f2, float f3);
-        void setUniformMat4f(const char* name, const glm::mat4& mat);
+        void setMat4f(const char* name, const glm::mat4& value) override;
 
     private:
         GLuint createShader(const char* vertexShaderFile, const char* fragmentShaderFile);

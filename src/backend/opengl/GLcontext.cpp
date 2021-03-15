@@ -21,6 +21,9 @@ namespace Engine7414
         BACKEND_INFO( "\tVersion: {} ({}.{})", glGetString( GL_VERSION ), GLVersion.major, GLVersion.minor );
         BACKEND_INFO( "\tRenderer: {}", glGetString( GL_RENDERER ) );
         BACKEND_INFO( "\tGLSL Version: {}", glGetString( GL_SHADING_LANGUAGE_VERSION ) );
+        BACKEND_INFO( "\tz-buffer: Enabled (default)" );
+
+        glEnable( GL_DEPTH_TEST );
     }
 
     void OpenGLContext::swapBuffers() {

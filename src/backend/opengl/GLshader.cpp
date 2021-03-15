@@ -135,8 +135,8 @@ namespace Engine7414
         GLCall( glUniform1i( this->getLocation(name), value ) );
     }
 
-    void GLShader::setUniformMat4f(const char* name, const glm::mat4& mat) {
-        GLCall( glUniformMatrix4fv( this->getLocation(name), 1, GL_FALSE, &mat[0][0] ) );
+    void GLShader::setMat4f(const char* name, const glm::mat4& value) {
+        GLCall( glUniformMatrix4fv( this->getLocation(name), 1, GL_FALSE, &value[0][0] ) );
     }
 
     void GLShader::bind() const {
