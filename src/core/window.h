@@ -35,6 +35,7 @@ namespace Engine7414
         virtual void onUpdate() = 0;
 
         /* Implemented per platfrom */
+        /* Will automatically bind the created window with the input handler class */
         static Window* create(const char* title, int width, int height, const RendererBackend& backend, bool vsync=true);
 
     protected:

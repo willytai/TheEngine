@@ -2,6 +2,7 @@
 #define __KEY_EVENTS_H__
 
 #include "core/event/baseEvent.h"
+#include "core/input/codes.h"
 #include <sstream>
 
 namespace Engine7414
@@ -9,25 +10,22 @@ namespace Engine7414
     class KeyEvent : public Event
     {
     protected:
-        typedef int KeyCode;
-        typedef int KeyMods;
-    protected:
-        KeyEvent(const KeyCode& code, const KeyMods& mods)
+        KeyEvent(const KeyCode_t& code, const Mod_t& mods)
             : _code(code), _mods(mods) {}
 
         // key code
-        inline KeyCode keycode() const { return _code; }
+        inline KeyCode_t key() const { return _code; }
         // modifier bits
-        inline KeyMods keymods() const { return _mods; }
+        inline Mod_t mods() const { return _mods; }
 
-        KeyCode _code;
-        KeyMods _mods;
+        KeyCode_t _code;
+        Mod_t     _mods;
     };
 
     class KeyPressedEvent : public KeyEvent
     {
     public:
-        KeyPressedEvent(KeyCode code, KeyMods mods, bool repeat)
+        KeyPressedEvent(KeyCode_t code, Mod_t mods, bool repeat)
             : KeyEvent( code, mods ), _repeat(repeat) {}
 
         // a repeat key press event or not
@@ -47,7 +45,7 @@ namespace Engine7414
     class KeyReleasedEvent : public KeyEvent
     {
     public:
-        KeyReleasedEvent(KeyCode code, KeyMods mods)
+        KeyReleasedEvent(KeyCode_t code, Mod_t mods)
             : KeyEvent( code, mods ) {}
 
         std::string toString() const override {

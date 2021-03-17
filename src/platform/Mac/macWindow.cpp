@@ -1,7 +1,8 @@
 #include "core/core.h"
 #include "core/event/event.h"
+#include "core/input/input.h"
 #include "backend/OpenGL/GLcontext.h"
-#include "platform/macWindow.h"
+#include "platform/Mac/macWindow.h"
 #include "util/log.h"
 #include "glad/glad.h"
 
@@ -11,6 +12,7 @@ namespace Engine7414
         MacWindow* window = new MacWindow( title, width, height, backend );
         if ( vsync ) window->enableVSync();
         else         window->disbaleVSync();
+        Input::bindWindow( window );
         return window;
     }
 
@@ -42,6 +44,7 @@ namespace Engine7414
             CORE_ASSERT( false, "glfw failed to create window, error not yet handled, aborting..." );
         }
 
+        glfwSetInputMode( _glfwWindow, GLFW_LOCK_KEY_MODS, GLFW_TRUE ); // enable modifier key flags
         glfwSetWindowUserPointer( _glfwWindow, &_data );
         this->createContext( backend );
         this->enableVSync();

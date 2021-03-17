@@ -2,6 +2,7 @@
 #define __MOUSE_EVENTS_H__
 
 #include "core/event/baseEvent.h"
+#include "core/input/codes.h"
 #include <sstream>
 
 namespace Engine7414
@@ -55,25 +56,22 @@ namespace Engine7414
     class MouseButtonEvent : public Event
     {
     protected:
-        typedef int MouseCode;
-        typedef int MouseMods;
-    protected:
-        MouseButtonEvent(const MouseCode& button, const MouseMods& mods)
+        MouseButtonEvent(const MouseCode_t& button, const Mod_t& mods)
             : _button(button), _mods(mods) {}
 
         // mouse button
-        inline MouseCode button() const { return _button; }
+        inline MouseCode_t button() const { return _button; }
         // modifier bits
-        inline MouseMods mousemods() const { return _mods; }
+        inline Mod_t mods() const { return _mods; }
 
-        MouseCode _button; // the button (left/right)
-        MouseMods _mods;   // modifier bits, indicate some other states
+        MouseCode_t _button; // the button (left/right/middle)
+        Mod_t       _mods;   // modifier bits, indicate some other states
     };
 
     class MouseButtonPressedEvent : public MouseButtonEvent
     {
     public:
-        MouseButtonPressedEvent(const MouseCode button, const MouseMods mods)
+        MouseButtonPressedEvent(const MouseCode_t button, const Mod_t mods)
             : MouseButtonEvent( button, mods ) {}
 
         EVENT_CLASS( MouseButtonPressed );
@@ -82,7 +80,7 @@ namespace Engine7414
     class MouseButtonReleasedEvent : public MouseButtonEvent
     {
     public:
-        MouseButtonReleasedEvent(const MouseCode button, const MouseMods mods)
+        MouseButtonReleasedEvent(const MouseCode_t button, const Mod_t mods)
             : MouseButtonEvent( button, mods ) {}
 
         EVENT_CLASS( MouseButtonReleased );

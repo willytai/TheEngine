@@ -14,5 +14,9 @@ CHDRS  += $(wildcard renderer/*.h)
 CPPSRC += $(wildcard renderer/*.cpp)
 CCCSRC += $(wildcard renderer/*.c)
 
+CHDRS  += $(wildcard input/*.h)
+CPPSRC += $(wildcard input/*.cpp)
+CCCSRC += $(wildcard input/*.c)
+
 include ../src.makefile
 include ../lib.makefile

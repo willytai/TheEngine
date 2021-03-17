@@ -6,7 +6,7 @@
 // Mac + OpenGL for now
 
 #ifdef __APPLE__
-    #include "macWindow.h"
+    #include "Mac/macWindow.h"
 #else
     #error Engine7414 currently supports Mac only!
 #endif
