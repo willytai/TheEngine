@@ -47,7 +47,7 @@ public:
                                               "./resource/shader/basic/fragment.glsl" );
 
     }
-    void onUpdate() override {
+    void onUpdate(const Engine7414::TimeStep& deltaTime) override {
         Engine7414::Renderer::beginScene( _camera );
         Engine7414::Renderer::submit( _shader, _vertexArray );
         Engine7414::Renderer::endScene();

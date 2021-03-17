@@ -2,6 +2,7 @@
 #define __LAYER_H__
 
 #include "core/event/event.h"
+#include "core/util/timeStep.h"
 #include <string>
 
 #if defined(__clang__)
@@ -24,7 +25,7 @@ namespace Engine7414
 
         virtual void onAttach() {};
         virtual void onDetach() {};
-        virtual void onUpdate() {};
+        virtual void onUpdate(const TimeStep& deltaTime) {};
         virtual void onImGui() {};
         virtual void onEvent(Event& event) {};
 

@@ -2,7 +2,7 @@
 #define __MAC_WINDOW_H__
 #define GLFW_INCLUDE_NONE
 
-#include "core/window.h"
+#include "core/window/window.h"
 #include <GLFW/glfw3.h>
 
 namespace Engine7414

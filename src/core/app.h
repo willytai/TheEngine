@@ -2,11 +2,12 @@
 #define __APP_H__
 
 #include "core/core.h"
-#include "core/window.h"
+#include "core/window/window.h"
 #include "core/event/event.h"
 #include "core/layer/layerStack.h"
 #include "core/imgui/imguiLayer.h"
-#include "util/log.h"
+#include "core/util/log.h"
+#include "core/util/stopwatch.h"
 #include "platform/platform.h"
 #include "backend/backend.h"
 #include <memory>
@@ -36,6 +37,7 @@ namespace Engine7414
     private:
         bool                    _shouldRun;
         bool                    _minimized;
+        StopWatch               _stopWatch;
         ImGuiLayer*             _imguiLayer;
         LayerStack              _layerStack;
         std::unique_ptr<Window> _window;

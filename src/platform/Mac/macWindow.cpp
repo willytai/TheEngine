@@ -1,9 +1,9 @@
 #include "core/core.h"
 #include "core/event/event.h"
 #include "core/input/input.h"
+#include "core/util/log.h"
 #include "backend/OpenGL/GLcontext.h"
 #include "platform/Mac/macWindow.h"
-#include "util/log.h"
 #include "glad/glad.h"
 
 namespace Engine7414

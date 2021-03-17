@@ -1,8 +1,8 @@
 #ifndef __INPUT_H__
 #define __INPUT_H__
 
-#include "core/window.h"
 #include "core/core.h"
+#include "core/window/window.h"
 #include "core/input/codes.h"
 
 namespace Engine7414

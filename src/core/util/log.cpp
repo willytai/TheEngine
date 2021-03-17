@@ -1,6 +1,6 @@
-#include "log.h"
+#include "core/util/log.h"
 
-namespace util
+namespace Engine7414
 {
     std::shared_ptr<spdlog::logger> Log::__glfwLogger;
     std::shared_ptr<spdlog::logger> Log::__openglLogger;

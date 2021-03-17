@@ -1,5 +1,4 @@
 #include "GLcontext.h"
-#include "util/log.h"
 #include "glad/glad.h"
 #include "backend/backend.h"
 

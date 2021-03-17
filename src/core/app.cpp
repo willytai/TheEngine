@@ -23,7 +23,7 @@ namespace Engine7414
         else appInstancePtr = this;
 
         // initialize logger
-        util::Log::init( verbosity );
+        Log::init( verbosity );
         CORE_INFO( "engine initializing" );
 
         // initialize renderer
@@ -41,18 +41,24 @@ namespace Engine7414
 
     void App::run() {
         CORE_INFO( "engine started" );
+        _stopWatch.reset();
+
         while ( _shouldRun ) {
             if ( !_minimized ) {
+                TimeStep deltaTime = _stopWatch.deltaTime();
+
                 for (auto* layer : _layerStack) {
-                    layer->onUpdate();
+                    layer->onUpdate( deltaTime );
                 }
+
                 _imguiLayer->begin();
                 for (auto* layer : _layerStack) {
                     layer->onImGui();
                 }
                 _imguiLayer->end();
+
+                _window->onUpdate();
             }
-            _window->onUpdate();
         }
         this->shutdown();
     }
