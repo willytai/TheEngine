@@ -20,39 +20,49 @@ namespace Engine7414
     // this is a camera for 3D rendering (perspective projection)
     class Camera
     {
+        static float FOV_MIN;
+        static float FOV_MAX;
     public:
         Camera(float FovDeg, float aspect, float nearClip = 0.1f, float farClip = 100.0f);
         ~Camera();
 
         void setPosition(const glm::vec4& pos);
-        void setFOV(float deltaFovDeg);
-        void setYaw(float deltaYawDeg);
-        void setPitch(float deltaPitchDeg);
+        void setFOV(float fov);
         void setAspect(float aspect);
         void setAspect(float width, float height);
+        void setYaw(float YawDeg);
+        void setPitch(float PitchDeg);
+
+        void changeFOV(float deltaFovDeg);
+        void moveX(float dist);
+        void moveY(float dist);
+        void moveZ(float dist);
+        void rotateY(float deltaYawDeg);
+        void rotateX(float deltaPitchDeg);
 
         inline const Rotation&  rotation() const { return __rotation; }
         inline const glm::vec4& position() const { return __position; }
         inline const glm::mat4& projection() const { return __m_projection; }
         inline const glm::mat4& view() const { return __m_view; }
-        inline const glm::mat4& projXview() const {
-            if ( __updateProjViewCache ) __m_ProjViewCache = __m_projection*__m_view;
-            return __m_ProjViewCache;
-        }
+
+        // the stuff that the renderer needs
+        const glm::mat4& projXview() const;
 
     private:
-        void updateViewMatrix();
-        void updateProjMatrix();
+        void updateViewMatrix() const;
+        void updateProjMatrix() const;
 
     private:
-        glm::mat4   __m_projection;
-        glm::mat4   __m_view;
         glm::vec4   __position;
         glm::vec4   __front;
         Rotation    __rotation;
 
         // simply a cache for further optimization
-        bool                __updateProjViewCache;
+        // these matrices are guaranteed to re-calculated at most once in each frame
+        mutable bool        __updateProj;
+        mutable bool        __updateView;
+        mutable glm::mat4   __m_projection;
+        mutable glm::mat4   __m_view;
         mutable glm::mat4   __m_ProjViewCache;
 
         // cache of the camera's parameters

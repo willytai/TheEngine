@@ -45,9 +45,34 @@ public:
         _vertexArray->setModelMat( glm::translate( glm::mat4(1.0f), glm::vec3(0.0f, 2.0f, -10.0f) ) );
         _shader = Engine7414::Shader::create( "./resource/shader/basic/vertex.glsl",
                                               "./resource/shader/basic/fragment.glsl" );
-
     }
+
     void onUpdate(const Engine7414::TimeStep& deltaTime) override {
+        if ( Engine7414::Input::keyPressed(Engine7414::Key::UP) ) {
+            _camera.moveZ( -1.0f * deltaTime );
+        }
+        else if ( Engine7414::Input::keyPressed(Engine7414::Key::DOWN) ) {
+            _camera.moveZ(  1.0f * deltaTime );
+        }
+        if ( Engine7414::Input::keyPressed(Engine7414::Key::RIGHT) ) {
+            _camera.moveX( -1.0f * deltaTime );
+        }
+        else if ( Engine7414::Input::keyPressed(Engine7414::Key::LEFT) ) {
+            _camera.moveX(  1.0f * deltaTime );
+        }
+        if ( Engine7414::Input::keyPressed(Engine7414::Key::A) ) {
+            _camera.rotateX( -10.0f * deltaTime );
+        }
+        else if ( Engine7414::Input::keyPressed(Engine7414::Key::S) ) {
+            _camera.rotateX(  10.0f * deltaTime );
+        }
+        if ( Engine7414::Input::keyPressed(Engine7414::Key::Q) ) {
+            _camera.rotateY( -10.0f * deltaTime );
+        }
+        else if ( Engine7414::Input::keyPressed(Engine7414::Key::W) ) {
+            _camera.rotateY(  10.0f * deltaTime );
+        }
+
         Engine7414::Renderer::beginScene( _camera );
         Engine7414::Renderer::submit( _shader, _vertexArray );
         Engine7414::Renderer::endScene();

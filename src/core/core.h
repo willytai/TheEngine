@@ -12,5 +12,7 @@
 #endif
 
 #define CORE_BIND_EVENT_FN(fn) std::bind(&fn, this, std::placeholders::_1)
+#define CLIP_BETWEEN(target, minValue, maxValue) target = std::max(target, minValue); \
+                                                 target = std::min(target, maxValue)
 
 #endif /* __CORE_H__ */

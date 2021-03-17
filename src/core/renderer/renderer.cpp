@@ -9,7 +9,7 @@ namespace Engine7414
         CORE_INFO( "Renderer Backend: {}", STRINGIFY(OpenGL) );
     }
 
-    void Renderer::beginScene(const Camera& camera,const glm::vec4& color) {
+    void Renderer::beginScene(const Camera& camera, const glm::vec4& color) {
         RenderCommands::clear( color );
         __data__.ProjViewMat = camera.projXview();
     }

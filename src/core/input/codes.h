@@ -10,7 +10,7 @@ namespace Engine7414
     typedef uint8_t  MouseCode_t;
     typedef uint8_t  Mod_t;        // modifier key flags (only 6 different kinds of modifier keys)
 
-    enum class Key : KeyCode_t
+    enum Key : KeyCode_t
     {
         /* from GLFW/glfw3.h */
 
@@ -146,7 +146,7 @@ namespace Engine7414
         MENU             = 348,
     };
 
-    enum class Mouse : MouseCode_t
+    enum Mouse : MouseCode_t
     {
         /* from GLFW/glfw3.h */
 
