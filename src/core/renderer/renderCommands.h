@@ -8,7 +8,7 @@ namespace Engine7414
 {
     class RenderCommands
     {
-        static RenderAPI* __backend__;
+        static Scoped<RenderAPI> __backend__;
     public:
         static void setBackend(RendererBackend backend);
         static RendererBackend getBackend();

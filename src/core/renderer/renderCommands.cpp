@@ -3,12 +3,11 @@
 
 namespace Engine7414
 {
-    RenderAPI* RenderCommands::__backend__ = NULL;
+    Scoped<RenderAPI> RenderCommands::__backend__;
 
     void RenderCommands::setBackend(RendererBackend backend) {
-        if ( __backend__ ) delete __backend__;
         switch (backend) {
-            case RendererBackend::OpenGL: __backend__ = new GLRenderAPI; break;
+            case RendererBackend::OpenGL: __backend__.reset( new GLRenderAPI ); break;
             default: CORE_ASSERT( false, "Unsupported Backend" );
         }
     }

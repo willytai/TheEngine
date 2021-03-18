@@ -21,7 +21,10 @@ namespace Engine7414
         virtual bool mouseButtonPressedImpl(const MouseCode_t& button) const = 0;
 
     protected:
-        static Window* __activeWindow__; // this holds a weak reference to the active window (Scoped ptr)
+        // this holds the raw pointer of the active window (Scoped ptr)
+        // it's safe since Input's method will only be called when the application is active
+        // probably better to Scoped/Ref it, but I won't bother
+        static Window* __activeWindow__;
     private:
         static Input* __instance__;
     };
