@@ -7,7 +7,7 @@ namespace Engine7414
     {
     public:
         Context() {}
-        virtual ~Context() {}
+        virtual ~Context() = default;
 
         virtual void init() = 0;
         virtual void swapBuffers() = 0;

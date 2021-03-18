@@ -21,7 +21,7 @@ namespace Engine7414
         virtual bool mouseButtonPressedImpl(const MouseCode_t& button) const = 0;
 
     protected:
-        static Window* __activeWindow__;
+        static Window* __activeWindow__; // this holds a weak reference to the active window (Scoped ptr)
     private:
         static Input* __instance__;
     };

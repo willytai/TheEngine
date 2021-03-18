@@ -32,15 +32,14 @@ namespace Engine7414
         bool onWindowClose(WindowCloseEvent& e);
         bool onWindowResize(WindowResizeEvent& e);
         bool onWindowIconify(WindowIconifyEvent& e);
-        void shutdown();
 
     private:
-        bool                    _shouldRun;
-        bool                    _minimized;
-        StopWatch               _stopWatch;
-        ImGuiLayer*             _imguiLayer;
-        LayerStack              _layerStack;
-        std::unique_ptr<Window> _window;
+        bool            _shouldRun;
+        bool            _minimized;
+        StopWatch       _stopWatch;
+        ImGuiLayer*     _imguiLayer;
+        LayerStack      _layerStack;
+        Scoped<Window>  _window;
     };
 
     App* appCreate(int argc, char** argv);

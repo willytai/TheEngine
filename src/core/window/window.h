@@ -1,6 +1,7 @@
 #ifndef __WINDOW_H__
 #define __WINDOW_H__
 
+#include "core/core.h"
 #include "core/event/event.h"
 #include "core/renderer/context.h"
 #include "backend/backend.h"
@@ -9,6 +10,15 @@
 
 namespace Engine7414
 {
+    struct WindowProps
+    {
+        const char*     title;
+        int             width;
+        int             height;
+        RendererBackend rendererBackend;
+        bool            vsync = true;
+    };
+
     /* An interface class */
     class Window
     {
@@ -16,8 +26,8 @@ namespace Engine7414
         typedef std::function<void(Event&)> eventCallbackFn;
 
     public:
-        Window(const char* title) : _title(title), _context(NULL) {}
-        virtual ~Window() { if ( _context ) delete _context; }
+        Window(const char* title) : _title(title) {}
+        virtual ~Window() = default;
 
         /* access functions */
         virtual int getWidth() const = 0;
@@ -36,11 +46,11 @@ namespace Engine7414
 
         /* Implemented per platfrom */
         /* Will automatically bind the created window with the input handler class */
-        static Window* create(const char* title, int width, int height, const RendererBackend& backend, bool vsync=true);
+        static Scoped<Window> create(const WindowProps& props);
 
     protected:
-        std::string _title;
-        Context*    _context;
+        std::string     _title;
+        Scoped<Context> _context;
     };
 }
 

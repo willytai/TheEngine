@@ -30,7 +30,7 @@ namespace Engine7414
         Renderer::init( backend );
 
         // default window
-        _window = std::unique_ptr<Window>(Window::create( "Engine7414", 1280, 960, backend, true ));
+        _window = Window::create({ "Engine7414", 1280, 960, backend, true });
         _window->setEventCallback( CORE_BIND_EVENT_FN(App::onEvent) );
 
         // ImGui layer
@@ -60,7 +60,6 @@ namespace Engine7414
                 _window->onUpdate();
             }
         }
-        this->shutdown();
     }
 
     void App::onEvent(Event& event) {
@@ -96,9 +95,5 @@ namespace Engine7414
     bool App::onWindowIconify(WindowIconifyEvent& e) {
         _minimized = true;
         return false;
-    }
-
-    void App::shutdown() {
-        glfwTerminate();
     }
 }

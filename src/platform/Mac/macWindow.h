@@ -19,7 +19,7 @@ namespace Engine7414
     {
         static bool __glfwInitialized__;
     public:
-        MacWindow(const char* title, int width, int height, const RendererBackend& backend);
+        MacWindow(const WindowProps& props);
         ~MacWindow();
 
         /* access functions */

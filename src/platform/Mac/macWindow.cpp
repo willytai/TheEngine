@@ -8,22 +8,18 @@
 
 namespace Engine7414
 {
-    Window* Window::create(const char* title, int width, int height, const RendererBackend& backend, bool vsync) {
-        MacWindow* window = new MacWindow( title, width, height, backend );
-        if ( vsync ) window->enableVSync();
-        else         window->disbaleVSync();
-        Input::bindWindow( window );
-        return window;
-    }
-
     bool MacWindow::__glfwInitialized__ = false;
 
-    MacWindow::MacWindow(const char* title, int width, int height, const RendererBackend& backend) :
-        Window( title ),
+    static void GLFWErrorCallback(int error, const char* description) {
+        CORE_ASSERT( false, "GLFW Error ({}): {}", error, description );
+    }
+
+    MacWindow::MacWindow(const WindowProps& props) :
+        Window( props.title ),
         _glfwWindow(NULL)
     {
-        _data.width = width;
-        _data.height = height;
+        _data.width = props.width;
+        _data.height = props.height;
 
         if ( !__glfwInitialized__ ) {
             if ( glfwInit() ) {
@@ -31,6 +27,7 @@ namespace Engine7414
                 glfwWindowHint( GLFW_CONTEXT_VERSION_MINOR, 1 );
                 glfwWindowHint( GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE );
                 glfwWindowHint( GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE );
+                glfwSetErrorCallback( GLFWErrorCallback );
             }
             else {
                 GLFW_ERROR( "glfw falied to initialize!" );
@@ -39,20 +36,25 @@ namespace Engine7414
             __glfwInitialized__ = true;
         }
 
-        if ( (_glfwWindow = glfwCreateWindow( width, height, title, NULL, NULL )) == NULL ) {
+        if ( (_glfwWindow = glfwCreateWindow( props.width, props.height, props.title, NULL, NULL )) == NULL ) {
             GLFW_ERROR( "unable to create window!" );
             CORE_ASSERT( false, "glfw failed to create window, error not yet handled, aborting..." );
         }
 
         glfwSetInputMode( _glfwWindow, GLFW_LOCK_KEY_MODS, GLFW_TRUE ); // enable modifier key flags
         glfwSetWindowUserPointer( _glfwWindow, &_data );
-        this->createContext( backend );
-        this->enableVSync();
+        this->createContext( props.rendererBackend );
 
-        CORE_INFO( "window \'{}\' successfully created ({}, {})", title, width, height );
+        if ( props.vsync ) this->enableVSync();
+        else               this->disbaleVSync();
+
+        CORE_INFO( "window \'{}\' successfully created ({}, {})", props.title, props.width, props.height );
 
         // GLFW callbacks
         this->setCallbacks();
+
+        // bind the window to the input handler on construction
+        Input::bindWindow( this );
     }
 
     MacWindow::~MacWindow() {
@@ -80,7 +82,7 @@ namespace Engine7414
 
     void MacWindow::createContext(const RendererBackend& backend) {
         switch (backend) {
-            case RendererBackend::OpenGL: _context = new OpenGLContext( _glfwWindow ); break;
+            case RendererBackend::OpenGL: _context = CreateScoped<OpenGLContext>( _glfwWindow ); break;
             default: CORE_ASSERT( false, "Unsupported Backend" );
         }
         _context->init();
@@ -88,6 +90,7 @@ namespace Engine7414
 
     void MacWindow::shutdown() {
         glfwDestroyWindow( _glfwWindow );
+        glfwTerminate();
     }
 
     void MacWindow::setCallbacks() {
@@ -111,13 +114,13 @@ namespace Engine7414
                 switch (action) {
                     case GLFW_PRESS:
                     {
-                        MouseButtonPressedEvent event( button, mods );
+                        MouseButtonPressedEvent event( (MouseCode_t)button, (Mod_t)mods );
                         data.callback( event );
                         break;
                     }
                     case GLFW_RELEASE:
                     {
-                        MouseButtonReleasedEvent event( button, mods );
+                        MouseButtonReleasedEvent event( (MouseCode_t)button, (Mod_t)mods );
                         data.callback( event );
                         break;
                     }
@@ -130,19 +133,19 @@ namespace Engine7414
                 switch (action) {
                     case GLFW_PRESS:
                     {
-                        KeyPressedEvent event( key, mods, false );
+                        KeyPressedEvent event( (KeyCode_t)key, (Mod_t)mods, false );
                         data.callback( event );
                         break;
                     }
                     case GLFW_REPEAT:
                     {
-                        KeyPressedEvent event( key, mods, true );
+                        KeyPressedEvent event( (KeyCode_t)key, (Mod_t)mods, true );
                         data.callback( event );
                         break;
                     }
                     case GLFW_RELEASE:
                     {
-                        KeyReleasedEvent event( key, mods );
+                        KeyReleasedEvent event( (KeyCode_t)key, (Mod_t)mods );
                         data.callback( event );
                         break;
                     }
