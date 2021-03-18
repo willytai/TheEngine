@@ -14,19 +14,19 @@ namespace Engine7414
 
         virtual void bind() const = 0;
         virtual void unbind() const = 0;
-        virtual void addVertexBuffer(const VertexBuffer* vertexBuffer) = 0;
-        virtual void setIndexBuffer(const IndexBuffer* indexBuffer) = 0;
+        virtual void addVertexBuffer(const Ref<VertexBuffer>& vertexBuffer) = 0;
+        virtual void setIndexBuffer(const Ref<IndexBuffer>& indexBuffer) = 0;
+        inline  void setModelMat(const glm::mat4& mat) { _modelMat = mat; }
 
-        inline void setModelMat(const glm::mat4& mat) { _modelMat = mat; }
-        inline const std::vector<const VertexBuffer*>& getVertexBuffers() const { return _vertexBuffers; }
-        inline const IndexBuffer* getIndexBuffer() const { return _indexBuffer; }
+        inline const std::vector<Ref<VertexBuffer> >& getVertexBuffers() const { return _vertexBuffers; }
+        inline const Ref<IndexBuffer>& getIndexBuffer() const { return _indexBuffer; }
         inline const glm::mat4& getModelMat() const { return _modelMat; }
 
-        static VertexArray* create();
+        static Ref<VertexArray> create();
     protected:
         glm::mat4                         _modelMat;
-        std::vector<const VertexBuffer*>  _vertexBuffers;
-        const IndexBuffer*                _indexBuffer;
+        std::vector<Ref<VertexBuffer> >   _vertexBuffers;
+        Ref<IndexBuffer>                  _indexBuffer;
     };
 }
 

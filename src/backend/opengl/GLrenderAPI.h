@@ -14,7 +14,7 @@ namespace Engine7414
         ~GLRenderAPI() {}
         void clear() const override;
         void setClearColor(const glm::vec4& color) const override;
-        void drawElement(const VertexArray* vertexArray) const override;
+        void drawElement(const Ref<VertexArray>& vertexArray) const override;
         RendererBackend backend() const override { return RendererBackend::OpenGL; }
     };
 }

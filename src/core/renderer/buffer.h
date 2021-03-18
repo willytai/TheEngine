@@ -75,7 +75,7 @@ namespace Engine7414
     {
     public:
         VertexBuffer() {}
-        virtual ~VertexBuffer() {}
+        virtual ~VertexBuffer() = default;
 
         virtual void bind() const = 0;
         virtual void unbind() const = 0;
@@ -83,7 +83,7 @@ namespace Engine7414
         inline void setLayout(const BufferLayout& layout) { _layout = layout; }
         inline const BufferLayout& layout() const { return _layout; }
 
-        static VertexBuffer* create(const void* vertices, size_t size);
+        static Ref<VertexBuffer> create(const void* vertices, size_t size);
 
     private:
         BufferLayout    _layout;
@@ -96,9 +96,13 @@ namespace Engine7414
     class IndexBuffer
     {
     public:
+        virtual ~IndexBuffer() = default;
+
         virtual void bind() const = 0;
         virtual void unbind() const = 0;
+
         virtual BufferDataType type() const = 0;
+
         inline int count() const { return (int)_count; }
     protected:
         uint32_t _count;
@@ -115,7 +119,7 @@ namespace Engine7414
         virtual void bind() const override = 0; \
         virtual void unbind() const override = 0; \
         BufferDataType type() const override { return TypeEnum; } \
-        static ClassName* create(const Type* indices, uint32_t count); \
+        static Ref<ClassName> create(const Type* indices, uint32_t count); \
     }
 
     IndexBufferBaseClass( IndexBufferUI8,  uint8_t, BufferDataType::uInt8 );

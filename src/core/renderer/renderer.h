@@ -18,7 +18,7 @@ namespace Engine7414
         static sceneData __data__;
     public:
         static void beginScene(const Camera& camera, const glm::vec4& color = {0.0f, 0.0f, 0.0f, 1.0f});
-        static void submit(Shader* shader, const VertexArray* vertexArray);
+        static void submit(const Ref<Shader>& shader, const Ref<VertexArray>& vertexArray);
         static void endScene();
 
         static void init(RendererBackend backend);

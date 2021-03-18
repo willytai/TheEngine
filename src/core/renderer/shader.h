@@ -1,6 +1,7 @@
 #ifndef __SHADER_H__
 #define __SHADER_H__
 
+#include "core/core.h"
 #include "glm/glm.hpp"
 
 namespace Engine7414
@@ -16,7 +17,7 @@ namespace Engine7414
         virtual void unbind() const = 0;
         virtual void setMat4f(const char* name, const glm::mat4& value) = 0;
 
-        static Shader* create(const char* vShaderPath, const char* fShaderPath);
+        static Ref<Shader> create(const char* vShaderPath, const char* fShaderPath);
 
     protected:
         const char* _vertex_shader_path;

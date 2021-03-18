@@ -13,7 +13,7 @@ namespace Engine7414
         virtual ~RenderAPI() {}
         virtual void clear() const = 0;
         virtual void setClearColor(const glm::vec4& color) const = 0;
-        virtual void drawElement(const VertexArray* vertexArray) const = 0;
+        virtual void drawElement(const Ref<VertexArray>& vertexArray) const = 0;
         virtual RendererBackend backend() const = 0;
     };
 }

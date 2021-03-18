@@ -4,9 +4,9 @@
 
 namespace Engine7414
 {
-    VertexArray* VertexArray::create() {
+    Ref<VertexArray> VertexArray::create() {
         switch (Renderer::backend()) {
-            case RendererBackend::OpenGL: return new GLVertexArray;
+            case RendererBackend::OpenGL: return CreateRef<GLVertexArray>();
             default: CORE_ASSERT( false, "Unsupported Backend" );
         }
         return NULL;

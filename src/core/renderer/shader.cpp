@@ -4,9 +4,9 @@
 
 namespace Engine7414
 {
-    Shader* Shader::create(const char* vShaderPath, const char* fShaderPath) {
+    Ref<Shader> Shader::create(const char* vShaderPath, const char* fShaderPath) {
         switch (Renderer::backend()) {
-            case RendererBackend::OpenGL: return new GLShader( vShaderPath, fShaderPath );
+            case RendererBackend::OpenGL: return CreateRef<GLShader>( vShaderPath, fShaderPath );
             default: CORE_ASSERT( false, "Unsupported Backend" );
         }
         return NULL;

@@ -5,18 +5,18 @@
 
 namespace Engine7414
 {
-    VertexBuffer* VertexBuffer::create(const void* vertices, size_t size) {
+    Ref<VertexBuffer> VertexBuffer::create(const void* vertices, size_t size) {
         switch (Renderer::backend()) {
-            case RendererBackend::OpenGL : return new GLVertexBuffer( vertices, size );
+            case RendererBackend::OpenGL : return CreateRef<GLVertexBuffer>( vertices, size );
             default: CORE_ASSERT( false, "Unsupported Backend" );
         }
         return NULL;
     }
 
 #define IndexBufferBaseClassImpl( ClassName, Type ) \
-    ClassName* ClassName::create(const Type* indices, uint32_t count) { \
+    Ref<ClassName> ClassName::create(const Type* indices, uint32_t count) { \
         switch (Renderer::backend()) { \
-            case RendererBackend::OpenGL : return new GL##ClassName( indices, count ); \
+            case RendererBackend::OpenGL : return CreateRef<GL##ClassName>( indices, count ); \
             default: CORE_ASSERT( false, "Unsupported Backend" ); \
         } \
         return NULL; \

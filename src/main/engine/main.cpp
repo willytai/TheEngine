@@ -84,10 +84,10 @@ public:
     }
 
 private:
-    Engine7414::IndexBuffer*  _indexBuffer;
-    Engine7414::VertexArray*  _vertexArray;
-    Engine7414::VertexBuffer* _vertexBuffer;
-    Engine7414::Shader*       _shader;
+    Engine7414::Ref<Engine7414::IndexBuffer> _indexBuffer;
+    Engine7414::Ref<Engine7414::VertexArray>  _vertexArray;
+    Engine7414::Ref<Engine7414::VertexBuffer> _vertexBuffer;
+    Engine7414::Ref<Engine7414::Shader>       _shader;
     Engine7414::Camera        _camera;
 };
 

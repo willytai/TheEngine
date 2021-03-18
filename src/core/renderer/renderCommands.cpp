@@ -26,7 +26,7 @@ namespace Engine7414
         __backend__->clear();
     }
 
-    void RenderCommands::drawElement(const VertexArray* vertexArray) {
+    void RenderCommands::drawElement(const Ref<VertexArray>& vertexArray) {
         __backend__->drawElement( vertexArray );
     }
 }
