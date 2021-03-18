@@ -2,6 +2,7 @@
 *.mak
 *.ccls
 *.DS_Store
+check.txt
 
 bin/
 lib/

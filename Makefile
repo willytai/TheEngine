@@ -1,7 +1,4 @@
-ECHO      = /bin/echo
-ifneq ($(shell uname -s), Darwin)
-	ECHO += -e
-endif
+ECHO      = /usr/local/bin/gecho -e
 SRCLIBDIR = lib
 DIRS      = bin $(SRCLIBDIR)
 
@@ -49,7 +46,7 @@ libs:
 
 .PHONY: cppcheck
 cppcheck:
-	@cppcheck . --enable=all --std=c++14 2> check.txt
+	@cppcheck ./src --enable=all --std=c++14 2> check.txt
 	@$(ECHO) "\033[33mcppcheck finished, see results in ./check.txt\033[30m"
 
 cleanall:
