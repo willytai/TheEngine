@@ -69,6 +69,25 @@ namespace Engine7414
         // z-buffer
         glEnable( GL_DEPTH_TEST );
         BACKEND_INFO( "\tz-buffer: Enabled (default)" );
+
+#if defined(_WIN64) && defined(ENGINE_DEBUG)
+        int flags; glGetIntegerv(GL_CONTEXT_FLAGS, &flags);
+        if (flags & GL_CONTEXT_FLAG_DEBUG_BIT)
+        {
+            glEnable(GL_DEBUG_OUTPUT);
+            glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+            glDebugMessageCallback(glDebugOutput, 0);
+            glDebugMessageControl(GL_DEBUG_SOURCE_API,
+                GL_DEBUG_TYPE_ERROR,
+                GL_DEBUG_SEVERITY_HIGH,
+                0, nullptr, GL_TRUE);
+            BACKEND_INFO("\tDebug Context: Enabled (default)");
+        }
+#elif defined(ENGINE_DEBUG)
+        BACKEND_INFO("\tDebug Context: Disabled (debug context not supported on your platform)");
+#else
+        BACKEND_INFO("\tDebug Context: Disabled (release mode)");
+#endif
     }
 
     void OpenGLContext::swapBuffers() {

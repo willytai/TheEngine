@@ -7,8 +7,10 @@
 
 #ifdef __APPLE__
     #include "Mac/macWindow.h"
+#elif _WIN64
+    #include "Windows/windowsWindow.h"
 #else
-    #error Engine7414 currently supports Mac only!
+    #error Engine7414 currently supports Mac and 64-bit Windows only!
 #endif
 
 #endif /* __PLATFORM_H__ */

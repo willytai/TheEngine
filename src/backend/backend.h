@@ -2,12 +2,16 @@
 #define __BACKEND_H__
 
 #include "core/util/log.h"
-#include <signal.h>
 
 #ifdef ENGINE_DEBUG
-    #define BACKEND_ASSERT(x, ...) if (!(x)) { BACKEND_ERROR( __VA_ARGS__ ); raise(SIGTRAP); }
+    #ifdef _WIN64
+        #define BACKEND_ASSERT(x, ...) if (!(x)) { CORE_ERROR( __VA_ARGS__ ); __debugbreak(); }
+    #else
+        #include <signal.h>
+        #define BACKEND_ASSERT(x, ...) if (!(x)) { CORE_ERROR( __VA_ARGS__ ); raise(SIGTRAP); }
+    #endif
 #else
-    #define BACKEND_ASSERT(x, msg)
+    #define BACKEND_ASSERT(x, ...)
 #endif
 
 #define STRINGIFY(str) #str

@@ -1,7 +1,12 @@
 #ifndef __LOG_H__
 #define __LOG_H__
 
-#ifdef NDEBUG
+#ifdef _MSC_VER
+    #pragma warning(push)
+    #pragma warning(disable:4819)
+#endif
+
+#ifndef ENGINE_DEBUG
     #define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_INFO
 #else
     #define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_TRACE
@@ -10,6 +15,10 @@
 #include <spdlog/spdlog.h>
 #include <spdlog/fmt/ostr.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
+
+#ifdef _MSC_VER
+    #pragma warning(pop)
+#endif
 
 namespace Engine7414
 {

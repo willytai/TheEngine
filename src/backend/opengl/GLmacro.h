@@ -1,6 +1,7 @@
 #ifndef __GL_MACRO_H__
 #define __GL_MACRO_H__
 
+#include "backend/backend.h"
 #include "core/util/log.h"
 #include <glad/glad.h>
 
