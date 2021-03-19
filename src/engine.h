@@ -2,6 +2,7 @@
 #include "core/layer/layer.h"
 #include "core/event/event.h"
 #include "core/imgui/imguiLayer.h"
+#include "core/util/font.h"
 
 #include "core/input/input.h"
 

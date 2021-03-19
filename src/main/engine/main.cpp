@@ -103,5 +103,8 @@ public:
 };
 
 #ifndef DEFAULT_CREATE_APP
-Engine7414::App* Engine7414::appCreate(int argc, char** argv) { return new sandbox(Engine7414::RendererBackend::OpenGL); }
+Engine7414::App* Engine7414::appCreate(int argc, char** argv) {
+    // a better font type/size
+    Engine7414::FontLoader::loadFromeFile({ "./misc/fontawesome/otfs/Brands-Regular-400.otf", 16.0f });
+    return new sandbox(Engine7414::RendererBackend::OpenGL); }
 #endif

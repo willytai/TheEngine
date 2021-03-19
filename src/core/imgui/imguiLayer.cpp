@@ -1,3 +1,4 @@
+#include "core/util/font.h"
 #include "core/app.h"
 #include "core/imgui/imguiLayer.h"
 #include "imgui/imgui.h"
@@ -42,8 +43,11 @@ namespace Engine7414
         io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
         io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
-        // a better font type/size
-        io.Fonts->AddFontFromFileTTF( "C:\\Users\\Willy\\Desktop\\TheEngine\\TheEngine\\misc\\fontawesome\\otfs\\Brands-Regular-400.otf", 16.0f );
+        // load font
+        auto loadFunc = [&io](const char* filepath, float size_pixels) {
+            io.Fonts->AddFontFromFileTTF( filepath, size_pixels );
+        };
+        FontLoader::load( loadFunc );
 
         ImGui::StyleColorsDark();
 

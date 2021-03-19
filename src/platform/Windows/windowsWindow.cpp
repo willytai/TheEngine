@@ -28,7 +28,7 @@ namespace Engine7414
                 glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
                 glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
                 glfwSetErrorCallback(GLFWErrorCallback);
-#if defined(_WIN64) && defined(ENGINE_DEBUG)
+#ifdef ENGINE_DEBUG
                 glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, true);
 #endif
             }

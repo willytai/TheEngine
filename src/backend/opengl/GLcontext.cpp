@@ -19,33 +19,33 @@ namespace Engine7414
 
         switch (source)
         {
-            case GL_DEBUG_SOURCE_API:             BACKEND_ERROR( "Source: API" );
-            case GL_DEBUG_SOURCE_WINDOW_SYSTEM:   BACKEND_ERROR( "Source: Window System" );
-            case GL_DEBUG_SOURCE_SHADER_COMPILER: BACKEND_ERROR( "Source: Shader Compiler" );
-            case GL_DEBUG_SOURCE_THIRD_PARTY:     BACKEND_ERROR( "Source: Third Party" );
-            case GL_DEBUG_SOURCE_APPLICATION:     BACKEND_ERROR( "Source: Application" );
-            case GL_DEBUG_SOURCE_OTHER:           BACKEND_ERROR( "Source: Other" );
+            case GL_DEBUG_SOURCE_API:             BACKEND_ERROR( "Source: API" ); break;
+            case GL_DEBUG_SOURCE_WINDOW_SYSTEM:   BACKEND_ERROR( "Source: Window System" ); break;
+            case GL_DEBUG_SOURCE_SHADER_COMPILER: BACKEND_ERROR( "Source: Shader Compiler" ); break;
+            case GL_DEBUG_SOURCE_THIRD_PARTY:     BACKEND_ERROR( "Source: Third Party" ); break;
+            case GL_DEBUG_SOURCE_APPLICATION:     BACKEND_ERROR( "Source: Application" ); break;
+            case GL_DEBUG_SOURCE_OTHER:           BACKEND_ERROR( "Source: Other" ); break;
         }
 
         switch (type)
         {
-            case GL_DEBUG_TYPE_ERROR:               BACKEND_ERROR( "Type: Error" );
-            case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR: BACKEND_ERROR( "Type: Deprecated Behaviour" );
-            case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:  BACKEND_ERROR( "Type: Undefined Behaviour" );
-            case GL_DEBUG_TYPE_PORTABILITY:         BACKEND_ERROR( "Type: Portability" );
-            case GL_DEBUG_TYPE_PERFORMANCE:         BACKEND_ERROR( "Type: Performance" );
-            case GL_DEBUG_TYPE_MARKER:              BACKEND_ERROR( "Type: Marker" );
-            case GL_DEBUG_TYPE_PUSH_GROUP:          BACKEND_ERROR( "Type: Push Group" );
-            case GL_DEBUG_TYPE_POP_GROUP:           BACKEND_ERROR( "Type: Pop Group" );
-            case GL_DEBUG_TYPE_OTHER:               BACKEND_ERROR( "Type: Other" );
+            case GL_DEBUG_TYPE_ERROR:               BACKEND_ERROR( "Type: Error" ); break;
+            case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR: BACKEND_ERROR( "Type: Deprecated Behaviour" ); break;
+            case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:  BACKEND_ERROR( "Type: Undefined Behaviour" ); break;
+            case GL_DEBUG_TYPE_PORTABILITY:         BACKEND_ERROR( "Type: Portability" ); break;
+            case GL_DEBUG_TYPE_PERFORMANCE:         BACKEND_ERROR( "Type: Performance" ); break;
+            case GL_DEBUG_TYPE_MARKER:              BACKEND_ERROR( "Type: Marker" ); break;
+            case GL_DEBUG_TYPE_PUSH_GROUP:          BACKEND_ERROR( "Type: Push Group" ); break;
+            case GL_DEBUG_TYPE_POP_GROUP:           BACKEND_ERROR( "Type: Pop Group" ); break;
+            case GL_DEBUG_TYPE_OTHER:               BACKEND_ERROR( "Type: Other" ); break;
         }
 
         switch (severity)
         {
-            case GL_DEBUG_SEVERITY_HIGH:         BACKEND_ERROR( "Severity: high" );
-            case GL_DEBUG_SEVERITY_MEDIUM:       BACKEND_ERROR( "Severity: medium" );
-            case GL_DEBUG_SEVERITY_LOW:          BACKEND_ERROR( "Severity: low" );
-            case GL_DEBUG_SEVERITY_NOTIFICATION: BACKEND_ERROR( "Severity: notification" );
+            case GL_DEBUG_SEVERITY_HIGH:         BACKEND_ERROR( "Severity: high" ); break;
+            case GL_DEBUG_SEVERITY_MEDIUM:       BACKEND_ERROR( "Severity: medium" ); break;
+            case GL_DEBUG_SEVERITY_LOW:          BACKEND_ERROR( "Severity: low" ); break;
+            case GL_DEBUG_SEVERITY_NOTIFICATION: BACKEND_ERROR( "Severity: notification" ); break;
         }
     }
 
