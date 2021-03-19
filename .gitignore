@@ -3,10 +3,11 @@
 *.ccls
 *.DS_Store
 check.txt
+*svgs/
+*metadata/
 
 bin/
 lib/
-misc/
 
 tags
 opengltest
