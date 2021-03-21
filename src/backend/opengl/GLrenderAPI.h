@@ -3,8 +3,6 @@
 
 #include "core/renderer/renderAPI.h"
 #include "backend/OpenGL/GLmacro.h"
-#include "texture.h"
-#include "camera.h"
 
 namespace Engine7414
 {

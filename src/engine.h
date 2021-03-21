@@ -9,6 +9,7 @@
 #include "core/renderer/buffer.h"
 #include "core/renderer/shader.h"
 #include "core/renderer/vertexArray.h"
+#include "core/renderer/texture.h"
 #include "core/renderer/renderer.h"
 #include "core/renderer/camera.h"
 

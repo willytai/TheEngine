@@ -102,59 +102,59 @@ namespace Engine7414
             windowData& data = *(windowData*)glfwGetWindowUserPointer(window);
             MouseMovedEvent event((float)xpos, (float)ypos);
             data.callback(event);
-            });
+        });
 
         // scroll callback
         glfwSetScrollCallback(_glfwWindow, [](GLFWwindow* window, double xoffset, double yoffset) {
             windowData& data = *(windowData*)glfwGetWindowUserPointer(window);
             MouseScrolledEvent event((float)xoffset, (float)yoffset);
             data.callback(event);
-            });
+        });
 
         // mouse button callback
         glfwSetMouseButtonCallback(_glfwWindow, [](GLFWwindow* window, int button, int action, int mods) {
             windowData& data = *(windowData*)glfwGetWindowUserPointer(window);
             switch (action) {
-            case GLFW_PRESS:
-            {
-                MouseButtonPressedEvent event((MouseCode_t)button, (Mod_t)mods);
-                data.callback(event);
-                break;
+                case GLFW_PRESS:
+                {
+                    MouseButtonPressedEvent event((MouseCode_t)button, (Mod_t)mods);
+                    data.callback(event);
+                    break;
+                }
+                case GLFW_RELEASE:
+                {
+                    MouseButtonReleasedEvent event((MouseCode_t)button, (Mod_t)mods);
+                    data.callback(event);
+                    break;
+                }
             }
-            case GLFW_RELEASE:
-            {
-                MouseButtonReleasedEvent event((MouseCode_t)button, (Mod_t)mods);
-                data.callback(event);
-                break;
-            }
-            }
-            });
+        });
 
         // key callback
         glfwSetKeyCallback(_glfwWindow, [](GLFWwindow* window, int key, int scanecode, int action, int mods) {
             windowData& data = *(windowData*)glfwGetWindowUserPointer(window);
             switch (action) {
-            case GLFW_PRESS:
-            {
-                KeyPressedEvent event((KeyCode_t)key, (Mod_t)mods, false);
-                data.callback(event);
-                break;
+                case GLFW_PRESS:
+                {
+                    KeyPressedEvent event((KeyCode_t)key, (Mod_t)mods, false);
+                    data.callback(event);
+                    break;
+                }
+                case GLFW_REPEAT:
+                {
+                    KeyPressedEvent event((KeyCode_t)key, (Mod_t)mods, true);
+                    data.callback(event);
+                    break;
+                }
+                case GLFW_RELEASE:
+                {
+                    KeyReleasedEvent event((KeyCode_t)key, (Mod_t)mods);
+                    data.callback(event);
+                    break;
+                }
+                default: CORE_WARN("caught unknown key");
             }
-            case GLFW_REPEAT:
-            {
-                KeyPressedEvent event((KeyCode_t)key, (Mod_t)mods, true);
-                data.callback(event);
-                break;
-            }
-            case GLFW_RELEASE:
-            {
-                KeyReleasedEvent event((KeyCode_t)key, (Mod_t)mods);
-                data.callback(event);
-                break;
-            }
-            default: CORE_WARN("caught unknown key");
-            }
-            });
+        });
 
         // window resize callback
         glfwSetWindowSizeCallback(_glfwWindow, [](GLFWwindow* window, int width, int height) {
@@ -163,13 +163,13 @@ namespace Engine7414
             data.height = height;
             WindowResizeEvent event(width, height);
             data.callback(event);
-            });
+        });
 
         // window close callback
         glfwSetWindowCloseCallback(_glfwWindow, [](GLFWwindow* window) {
             windowData& data = *(windowData*)glfwGetWindowUserPointer(window);
             WindowCloseEvent event;
             data.callback(event);
-            });
+        });
     }
 }

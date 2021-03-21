@@ -14,6 +14,10 @@
     #define BACKEND_ASSERT(x, ...)
 #endif
 
+// enabled for debug and release build
+// a soft check, doesn't abort the program
+#define BACKEND_VERIFY(x, ...) if ( !(x) ) { CORE_WARN( __VA_ARGS__); }
+
 #define STRINGIFY(str) #str
 
 namespace Engine7414
