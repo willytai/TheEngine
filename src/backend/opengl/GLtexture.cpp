@@ -18,6 +18,10 @@ namespace Engine7414
         this->init_4_5();
 #endif
 
+        // linear filtering for magnifying/minifying operations
+        GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
+        GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST));
+
         if (_data) stbi_image_free(_data);
     }
 
@@ -43,10 +47,6 @@ namespace Engine7414
         GLCall(glGenTextures(1, &_rendererID));
         GLCall(glBindTexture(GL_TEXTURE_2D, _rendererID));
 
-        // linear filtering for magnifying/minifying operations
-        GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
-        GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST));
-
         GLint  internalFormat = 0;
         GLenum dataFormat = 0;
         if ( _bpp == 4) {
@@ -64,12 +64,20 @@ namespace Engine7414
 
     void GLTexture2D::init_4_5() {
         GLCall(glCreateTextures(GL_TEXTURE_2D, 1, &_rendererID));
-        GLCall(glTextureStorage2D(_rendererID, 1, GL_RGB8, _width, _height));
 
-        // linear filtering for magnifying/minifying operations
-        GLCall(glTextureParameteri(_rendererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
-        GLCall(glTextureParameteri(_rendererID, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+        GLenum internalFormat = 0;
+        GLenum dataFormat = 0;
+        if ( _bpp == 4) {
+            internalFormat = GL_RGBA8;
+            dataFormat = GL_RGBA;
+        }
+        else if ( _bpp == 3) {
+            internalFormat = GL_RGB8;
+            dataFormat = GL_RGB;
+        }
+        BACKEND_ASSERT( internalFormat&&dataFormat, "unsupported file type when loading texture!" );
 
-        GLCall(glTextureSubImage2D(GL_TEXTURE_2D, 0, 0, 0, _width, _height, GL_RGB, GL_UNSIGNED_BYTE, _data));
+        GLCall(glTextureStorage2D(_rendererID, 1, internalFormat, _width, _height));
+        GLCall(glTextureSubImage2D(GL_TEXTURE_2D, 0, 0, 0, _width, _height, dataFormat, GL_UNSIGNED_BYTE, _data));
     }
 }
