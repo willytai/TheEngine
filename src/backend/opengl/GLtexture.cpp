@@ -34,7 +34,7 @@ namespace Engine7414
         GLCall(glActiveTexture(GL_TEXTURE0 + slot));
         GLCall(glBindTexture(GL_TEXTURE_2D, _rendererID));
 #else
-        GLCall(glBindTextureUnit(GL_TEXTURE0 + slot, _rendererID));
+        GLCall(glBindTextureUnit(slot, _rendererID));
 #endif
     }
 
@@ -78,6 +78,6 @@ namespace Engine7414
         BACKEND_ASSERT( internalFormat&&dataFormat, "unsupported file type when loading texture!" );
 
         GLCall(glTextureStorage2D(_rendererID, 1, internalFormat, _width, _height));
-        GLCall(glTextureSubImage2D(GL_TEXTURE_2D, 0, 0, 0, _width, _height, dataFormat, GL_UNSIGNED_BYTE, _data));
+        GLCall(glTextureSubImage2D(_rendererID, 0, 0, 0, _width, _height, dataFormat, GL_UNSIGNED_BYTE, _data));
     }
 }
