@@ -29,6 +29,7 @@ namespace Engine7414
         void setUniform4f(const char* name, const glm::vec4& vec);
         void setUniform4f(const char* name, float f0, float f1, float f2, float f3);
         void setMat4f(const char* name, const glm::mat4& value) override;
+        void setInt1(const char* name, const int& value) override;
 
     private:
         GLuint createShader(const char* vertexShaderFile, const char* fragmentShaderFile);

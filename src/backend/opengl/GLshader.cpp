@@ -140,6 +140,10 @@ namespace Engine7414
         GLCall( glUniformMatrix4fv( this->getLocation(name), 1, GL_FALSE, &value[0][0] ) );
     }
 
+    void GLShader::setInt1(const char* name, const int& value) {
+        GLCall( glUniform1i( this->getLocation(name), value ) );
+    }
+
     void GLShader::bind() const {
         GLCall( glUseProgram( _rendererID ) );
     }

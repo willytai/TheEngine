@@ -26,12 +26,12 @@ namespace Engine7414
         Log::init( verbosity );
         CORE_INFO( "engine initializing" );
 
-        // initialize renderer
-        Renderer::init( backend );
-
         // default window
         _window = Window::create({ "Engine7414", 1280, 960, backend, true });
         _window->setEventCallback( CORE_BIND_EVENT_FN(App::onEvent) );
+
+        // initialize renderer
+        Renderer::init( backend );
 
         // ImGui layer
         this->pushOverlay( _imguiLayer = new ImGuiLayer );

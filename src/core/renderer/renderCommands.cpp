@@ -5,11 +5,17 @@ namespace Engine7414
 {
     Scoped<RenderAPI> RenderCommands::__backend__;
 
-    void RenderCommands::setBackend(RendererBackend backend) {
+    void RenderCommands::init(RendererBackend backend) {
         switch (backend) {
-            case RendererBackend::OpenGL: __backend__.reset( new GLRenderAPI ); break;
+            case RendererBackend::OpenGL:
+            {
+                __backend__.reset( new GLRenderAPI );
+                CORE_INFO( "\tBackend:  OpenGL" );
+                break;
+            }
             default: CORE_ASSERT( false, "Unsupported Backend" );
         }
+        __backend__->init();
     }
 
     RendererBackend RenderCommands::getBackend() {

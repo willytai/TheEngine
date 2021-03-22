@@ -5,8 +5,8 @@ namespace Engine7414
     Renderer::sceneData Renderer::__data__;
 
     void Renderer::init(RendererBackend backend) {
-        RenderCommands::setBackend(backend);
-        CORE_INFO( "Renderer Backend: {}", STRINGIFY(OpenGL) );
+        CORE_INFO( "Renderer Info" );
+        RenderCommands::init(backend);
     }
 
     void Renderer::beginScene(const Camera& camera, const glm::vec4& color) {

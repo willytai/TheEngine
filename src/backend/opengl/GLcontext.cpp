@@ -66,9 +66,15 @@ namespace Engine7414
         BACKEND_INFO( "\tRenderer: {}", glGetString( GL_RENDERER ) );
         BACKEND_INFO( "\tGLSL Version: {}", glGetString( GL_SHADING_LANGUAGE_VERSION ) );
 
-        // z-buffer
-        glEnable( GL_DEPTH_TEST );
-        BACKEND_INFO( "\tz-buffer: Enabled (default)" );
+#ifdef __APPLE__
+        if ( GLVersion.major < 4 || GLVersion.minor < 1 ) {
+            BACKEND_WARN( "Engine7414 does not guarantee full functionality for OpenGL version lower than 4.1 on your OS, program might crash!" );
+        }
+#else
+        if ( GLVersion.major < 4 || GLVersion.minor < 5 ) {
+            BACKEND_WARN( "Engine7414 does not guarantee full functionality for OpenGL version lower than 4.5 on your OS, program might crash!" );
+        }
+#endif
 
 #if defined(_WIN64) && defined(ENGINE_DEBUG)
         int flags; glGetIntegerv(GL_CONTEXT_FLAGS, &flags);

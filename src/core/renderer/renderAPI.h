@@ -11,6 +11,7 @@ namespace Engine7414
     {
     public:
         virtual ~RenderAPI() {}
+        virtual void init() const = 0;
         virtual void clear() const = 0;
         virtual void setClearColor(const glm::vec4& color) const = 0;
         virtual void drawElement(const Ref<VertexArray>& vertexArray) const = 0;

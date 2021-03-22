@@ -10,9 +10,9 @@ namespace Engine7414
     {
         static Scoped<RenderAPI> __backend__;
     public:
-        static void setBackend(RendererBackend backend);
         static RendererBackend getBackend();
 
+        static void init(RendererBackend backend);
         static void clear();
         static void clear(const glm::vec4& color);
         static void drawElement(const Ref<VertexArray>& vertexArray);

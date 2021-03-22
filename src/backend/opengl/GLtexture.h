@@ -15,15 +15,19 @@ namespace Engine7414
         void bind(uint32_t slot = 0) const override;
         void unbind() const override;
 
-        inline uint32_t width() const override { return _width; }
-        inline uint32_t height() const override { return _height; }
+        inline int width() const override { return _width; }
+        inline int height() const override { return _height; }
+
+    private:
+        void init_4_1(); // for opengl 4.1 and above (OS X only supports up to OpenGL 4.1)
+        void init_4_5(); // for opengl 4.5 and above
 
     private:
         uint8_t*        _data;
         GLuint          _rendererID;
-        uint32_t        _width;
-        uint32_t        _height;
-        uint32_t        _bpp; // bytes per pixel (EX: 4 channels in png)
+        int             _width;
+        int             _height;
+        int             _bpp; // bytes per pixel (EX: 4 channels in png)
     };
 }
 #endif /* __GL_TEXTURE_H__ */
