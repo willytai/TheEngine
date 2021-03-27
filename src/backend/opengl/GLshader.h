@@ -16,7 +16,7 @@ namespace Engine7414
     class GLShader : public Shader
     {
     public:
-        GLShader(const char* vertexShaderFile, const char* fragmentShaderFile);
+        GLShader(const std::string& name, const char* shaderDir);
         ~GLShader();
 
         void bind() const override;

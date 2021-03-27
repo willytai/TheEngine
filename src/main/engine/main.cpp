@@ -44,13 +44,12 @@ public:
         _indexBuffer = Engine7414::IndexBufferUI8::create( indices, 36 );
         _vertexArray->setIndexBuffer( _indexBuffer );
         _vertexArray->setModelMat( glm::translate( glm::mat4(1.0f), glm::vec3(0.0f, 2.0f, -10.0f) ) );
-        _shader = Engine7414::Shader::create( "./resource/shader/basic/vertex.glsl",
-                                              "./resource/shader/basic/fragment.glsl" );
         _texture = Engine7414::Texture2D::create( "./resource/texture/logo.png" );
         _texture->bind();
 
-        _shader->bind();
-        _shader->setInt1( "u_textureID", 0 );
+        auto shader = Engine7414::Renderer::getShaderDict().load( "./resource/shader/texture" );
+        shader->bind();
+        shader->setInt1( "u_textureID", 0 );
     }
 
     void onUpdate(const Engine7414::TimeStep& deltaTime) override {
@@ -80,13 +79,25 @@ public:
         }
 
         Engine7414::Renderer::beginScene( _camera );
-        Engine7414::Renderer::submit( _shader, _vertexArray );
+        Engine7414::Renderer::submit( Engine7414::Renderer::getShaderDict().get("texture"), _vertexArray );
         Engine7414::Renderer::endScene();
     }
+
     void onImGui() override {
         ImGui::Begin( "Test" );
         ImGui::Text( "hellooooooooooooooooooooooo" );
         ImGui::End();
+    }
+
+    void onEvent(Engine7414::Event& event) override {
+        Engine7414::EventDispatcher dispatcher( event );
+        dispatcher.dispatch<Engine7414::WindowResizeEvent>( CORE_BIND_EVENT_FN(testLayer::onWindowResize) );
+    }
+
+private:
+    bool onWindowResize(Engine7414::WindowResizeEvent& event) {
+        _camera.setAspect( (float)event.width(), (float)event.height() );
+        return false;
     }
 
 private:

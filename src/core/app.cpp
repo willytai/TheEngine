@@ -24,7 +24,7 @@ namespace Engine7414
 
         // initialize logger
         Log::init( verbosity );
-        CORE_INFO( "engine initializing" );
+        CORE_INFO( "Engine Initializing..." );
 
         // default window
         _window = Window::create({ "Engine7414", 1280, 960, backend, true });
@@ -40,7 +40,7 @@ namespace Engine7414
     App::~App() {}
 
     void App::run() {
-        CORE_INFO( "engine started" );
+        CORE_INFO( "Engine Running!" );
         _stopWatch.reset();
 
         while ( _shouldRun ) {

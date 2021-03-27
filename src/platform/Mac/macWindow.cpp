@@ -48,7 +48,7 @@ namespace Engine7414
         if ( props.vsync ) this->enableVSync();
         else               this->disbaleVSync();
 
-        CORE_INFO( "window \'{}\' successfully created ({}, {})", props.title, props.width, props.height );
+        CORE_INFO( "Window successfully created ({1}, {2}): \'{0}\'", props.title, props.width, props.height );
 
         // GLFW callbacks
         this->setCallbacks();
