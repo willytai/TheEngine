@@ -1,11 +1,25 @@
 #include "GLshader.h"
+#include <filesystem>
 
 namespace Engine7414
 {
 
-    GLShader::GLShader(const char* vShaderPath, const char* fShaderPath)
-        : Shader(vShaderPath, fShaderPath) {
-        _rendererID = this->createShader( vShaderPath, fShaderPath );
+    GLShader::GLShader(const std::string& name, const char* shaderDir)
+        : Shader(name)
+    {
+        std::string vShaderPath, fShaderPath;
+        for (const auto& file : std::filesystem::directory_iterator( shaderDir ) ) {
+            if ( file.is_directory() ) continue;
+            auto path = file.path().string();
+            if ( path.find("vertex") != std::string::npos ) {
+                vShaderPath.swap( path );
+            }
+            else if ( path.find("fragment") != std::string::npos ) {
+                fShaderPath.swap( path );
+            }
+            else CORE_WARN( "got unrecognized file \'{}\' while loading shader", path );
+        }
+        _rendererID = this->createShader( vShaderPath.c_str(), fShaderPath.c_str() );
     }
 
     GLuint GLShader::createShader(const char* vShaderPath, const char* fShaderPath) {

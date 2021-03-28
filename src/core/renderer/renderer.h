@@ -21,6 +21,8 @@ namespace Engine7414
         static void submit(const Ref<Shader>& shader, const Ref<VertexArray>& vertexArray);
         static void endScene();
 
+        static ShaderDict& getShaderDict() { return ShaderDict::get(); }
+
         static void init(RendererBackend backend);
         static RendererBackend backend() { return RenderCommands::getBackend(); }
     };
