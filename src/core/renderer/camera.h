@@ -17,30 +17,32 @@ namespace Engine7414
         float yaw;
     };
 
-    // this is a camera for 3D rendering (perspective projection)
-    class Camera
+    union CameraParam
     {
+        struct { float fov;  float aspect; float nearClip; float farClip; };
+        struct { float left; float right;  float bottom;   float top; };
+    };
+
+    class CameraBase
+    {
+    public:
         static float FOV_MIN;
         static float FOV_MAX;
     public:
-        Camera(float FovDeg, float aspect, float nearClip = 0.1f, float farClip = 100.0f);
-        ~Camera();
+        CameraBase();
+        virtual ~CameraBase() = default;
 
-        void setPosition(const glm::vec4& pos);
-        void setFOV(float fov);
-        void setAspect(float aspect);
-        void setAspect(float width, float height);
-        void setYaw(float YawDeg);
-        void setPitch(float PitchDeg);
+        virtual const char* c_str() const = 0;
 
-        void changeFOV(float deltaFovDeg);
-        void moveX(float dist);
-        void moveY(float dist);
-        void moveZ(float dist);
-        void rotateY(float deltaYawDeg);
-        void rotateX(float deltaPitchDeg);
+        virtual void setPosition(const glm::vec4& pos);
+        virtual void setPosition(const glm::vec3& pos) = 0;
+        virtual void setAspectRatio(const float& aspect) = 0;
+        virtual void zoom(const float& level) = 0;
 
-        inline const Rotation&  rotation() const { return __rotation; }
+        void moveX(const float& dist);
+        void moveY(const float& dist);
+        void moveZ(const float& dist);
+
         inline const glm::vec4& position() const { return __position; }
         inline const glm::mat4& projection() const { return __m_projection; }
         inline const glm::mat4& view() const { return __m_view; }
@@ -49,13 +51,11 @@ namespace Engine7414
         const glm::mat4& projXview() const;
 
     private:
-        void updateViewMatrix() const;
-        void updateProjMatrix() const;
+        virtual void updateViewMatrix() const = 0;
+        virtual void updateProjMatrix() const = 0;
 
-    private:
-        glm::vec4   __position;
-        glm::vec4   __front;
-        Rotation    __rotation;
+    protected:
+        glm::vec4           __position;
 
         // simply a cache for further optimization
         // these matrices are guaranteed to re-calculated at most once in each frame
@@ -64,15 +64,69 @@ namespace Engine7414
         mutable glm::mat4   __m_projection;
         mutable glm::mat4   __m_view;
         mutable glm::mat4   __m_ProjViewCache;
+    };
+
+    // this is a camera for 3D rendering (perspective projection)
+    class Camera : public CameraBase
+    {
+    public:
+        Camera(float FovDeg, float aspect, float nearClip = 0.1f, float farClip = 100.0f);
+        ~Camera() = default;
+
+        const char* c_str() const { return "3D camera"; }
+
+        void setPosition(const glm::vec4& pos) override;
+        void setPosition(const glm::vec3& pos) override;
+        void setAspectRatio(const float& asepct) override;
+
+        void setFOV(float fov);
+        void setYaw(float YawDeg);
+        void setPitch(float PitchDeg);
+
+        void zoom(const float& fov) override;
+        void rotateY(float deltaYawDeg);
+        void rotateX(float deltaPitchDeg);
+
+        inline const Rotation&  rotation() const { return __rotation; }
+
+    private:
+        void updateViewMatrix() const override;
+        void updateProjMatrix() const override;
+
+    private:
+        glm::vec4   __front;
+        Rotation    __rotation;
 
         // cache of the camera's parameters
         // access won't be granted outside of this class
-        struct {
-            float fov;
-            float aspect;
-            float nearClip;
-            float farClip;
-        } __params;
+        CameraParam __params;
+    };
+
+    class Camera2D : public CameraBase
+    {
+    public:
+        Camera2D(float left, float right, float bottom, float top);
+        ~Camera2D() = default;
+
+        const char* c_str() const { return "2D camera"; }
+
+        void setAspectRatio(const float& aspect) override;
+
+        void setPosition(const glm::vec3& pos) override;
+        void zoom(const float& level) override;
+        void setRotation(const float& rotation);
+
+        static Ref<Camera2D> create(float left, float right, float bottom, float top);
+    private:
+        void updateViewMatrix() const override;
+        void updateProjMatrix() const override;
+
+    private:
+        float       __rotation;
+        float       __aspect;
+        // cache of the camera's parameters
+        // access won't be granted outside of this class
+        CameraParam __params;
     };
 }
 

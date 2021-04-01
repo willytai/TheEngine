@@ -9,9 +9,13 @@ namespace Engine7414
         RenderCommands::init(backend);
     }
 
-    void Renderer::beginScene(const Camera& camera, const glm::vec4& color) {
+    void Renderer::onWindowResize(WindowResizeEvent& event) {
+        RenderCommands::setViewPort(0, 0, event.width(), event.height());
+    }
+
+    void Renderer::beginScene(const Ref<CameraBase>& camera, const glm::vec4& color) {
         RenderCommands::clear( color );
-        __data__.ProjViewMat = camera.projXview();
+        __data__.ProjViewMat = camera->projXview();
     }
 
     void Renderer::submit(const Ref<Shader>& shader, const Ref<VertexArray>& vertexArray) {

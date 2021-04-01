@@ -22,6 +22,10 @@ namespace Engine7414
         return __backend__->backend();
     }
 
+    void RenderCommands::setViewPort(const uint32_t& x, const uint32_t& y, const uint32_t& width, const uint32_t& height) {
+        __backend__->setViewPort(x, y, width, height);
+    }
+
     void RenderCommands::clear() {
         __backend__->clear();
     }

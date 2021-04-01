@@ -13,6 +13,7 @@ namespace Engine7414
         static RendererBackend getBackend();
 
         static void init(RendererBackend backend);
+        static void setViewPort(const uint32_t& x, const uint32_t& y, const uint32_t& width, const uint32_t& height);
         static void clear();
         static void clear(const glm::vec4& color);
         static void drawElement(const Ref<VertexArray>& vertexArray);

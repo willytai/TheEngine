@@ -6,6 +6,7 @@
 #include "core/renderer/shader.h"
 #include "core/renderer/renderCommands.h"
 #include "core/renderer/camera.h"
+#include "core/event/event.h"
 #include "backend/backend.h"
 
 namespace Engine7414
@@ -17,7 +18,9 @@ namespace Engine7414
         };
         static sceneData __data__;
     public:
-        static void beginScene(const Camera& camera, const glm::vec4& color = {0.0f, 0.0f, 0.0f, 1.0f});
+        static void onWindowResize(WindowResizeEvent& event);
+
+        static void beginScene(const Ref<CameraBase>& camera, const glm::vec4& color = {0.0f, 0.0f, 0.0f, 1.0f});
         static void submit(const Ref<Shader>& shader, const Ref<VertexArray>& vertexArray);
         static void endScene();
 

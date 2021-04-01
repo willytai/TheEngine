@@ -49,7 +49,7 @@ namespace Engine7414
     class BufferLayout
     {
     public:
-        BufferLayout() {}
+        BufferLayout() = default;
         BufferLayout(const std::initializer_list<BufferElement>& elements)
             : _elements(elements), _stride(0) {
             for (auto& element : _elements) {

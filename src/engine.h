@@ -12,6 +12,7 @@
 #include "core/renderer/texture.h"
 #include "core/renderer/renderer.h"
 #include "core/renderer/camera.h"
+#include "core/renderer/cameraController.h"
 
 // --------------- entry point ---------------
 #include "core/entry.h"

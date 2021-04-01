@@ -44,21 +44,21 @@ namespace Engine7414
         _stopWatch.reset();
 
         while ( _shouldRun ) {
-            if ( !_minimized ) {
-                TimeStep deltaTime = _stopWatch.deltaTime();
+            TimeStep deltaTime = _stopWatch.deltaTime();
 
+            if ( !_minimized ) {
                 for (auto* layer : _layerStack) {
                     layer->onUpdate( deltaTime );
                 }
-
-                _imguiLayer->begin();
-                for (auto* layer : _layerStack) {
-                    layer->onImGui();
-                }
-                _imguiLayer->end();
-
-                _window->onUpdate();
             }
+
+            _imguiLayer->begin();
+            for (auto* layer : _layerStack) {
+                layer->onImGui();
+            }
+            _imguiLayer->end();
+
+            _window->onUpdate();
         }
     }
 
@@ -82,18 +82,23 @@ namespace Engine7414
         _layerStack.pushOverlay( layer );
     }
 
-    bool App::onWindowClose(WindowCloseEvent& e) {
+    bool App::onWindowClose(WindowCloseEvent& event) {
         _shouldRun = false;
         return true;
     }
 
-    bool App::onWindowResize(WindowResizeEvent& e) {
+    bool App::onWindowResize(WindowResizeEvent& event) {
+        if (event.width() == 0 || event.height() == 0) {
+            return (_minimized = true);
+        }
         _minimized = false;
+        Renderer::onWindowResize(event);
         return false;
     }
 
-    bool App::onWindowIconify(WindowIconifyEvent& e) {
+    bool App::onWindowIconify(WindowIconifyEvent& event) {
+        CORE_INFO("{} called", __PRETTY_FUNCTION__);
         _minimized = true;
-        return false;
+        return true;
     }
 }

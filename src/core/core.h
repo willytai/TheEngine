@@ -5,6 +5,10 @@
 #include "util/log.h"
 #include <memory>
 
+#ifdef _MSC_VER
+    #define __PRETTY_FUNCTION__ __FUNCSIG__
+#endif
+
 #ifdef ENGINE_DEBUG
     #ifdef _WIN64
         #define CORE_ASSERT(x, ...) if (!(x)) { CORE_ERROR( __VA_ARGS__ ); __debugbreak(); }

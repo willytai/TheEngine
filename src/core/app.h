@@ -29,9 +29,9 @@ namespace Engine7414
         inline static Window* getWindow() { return appInstancePtr->_window.get(); }
 
     private:
-        bool onWindowClose(WindowCloseEvent& e);
-        bool onWindowResize(WindowResizeEvent& e);
-        bool onWindowIconify(WindowIconifyEvent& e);
+        bool onWindowClose(WindowCloseEvent& event);
+        bool onWindowResize(WindowResizeEvent& event);
+        bool onWindowIconify(WindowIconifyEvent& event);
 
     private:
         bool            _shouldRun;
