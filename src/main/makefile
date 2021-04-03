@@ -10,12 +10,12 @@ TARGET = $(BINDIR)/engine #\
 
 target: $(TARGET)
 
-$(BINDIR)/engine: engine/main.o $(LIBCHECKPOINT)
+$(BINDIR)/engine: $(COBJS) $(LIBCHECKPOINT)
 	@$(ECHO) "> building: $@ ..."
-	@$(CXX) $(CFLAGS) $(WFLAGS) $(FFLAGS) $(PKGFLAG) $(DPNIFLAG) $(DPNLFLAG) $< -o $@ $(INCLIB)
+	@$(CXX) $(CFLAGS) $(WFLAGS) $(FFLAGS) $(PKGFLAG) $(DPNIFLAG) $(DPNLFLAG) $(COBJS) -o $@ $(INCLIB)
 	@cd ../../; ln -fs bin/engine .
 
-$(BINDIR)/opengltest: opengltest/main.o $(LIBCHECKPOINT)
+$(BINDIR)/opengltest: $(COBJS) $(LIBCHECKPOINT)
 	@$(ECHO) "> building: $@ ..."
-	@$(CXX) $(CFLAGS) $(WFLAGS) $(FFLAGS) $(PKGFLAG) $(DPNIFLAG) $(DPNLFLAG) $< -o $@ $(INCLIB)
+	@$(CXX) $(CFLAGS) $(WFLAGS) $(FFLAGS) $(PKGFLAG) $(DPNIFLAG) $(DPNLFLAG) $(COBJS) -o $@ $(INCLIB)
 	@cd ../../; ln -fs bin/opengltest .

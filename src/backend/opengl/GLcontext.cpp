@@ -4,6 +4,23 @@
 
 namespace Engine7414
 {
+    #if defined(__clang__)
+        #pragma clang diagnostic push
+        #pragma clang diagnostic ignored "-Wunused-parameter"
+        #if defined(__APPLE__)
+            #pragma clang diagnostic ignored "-Wunused-function"
+        #endif
+    #elif defined(__GNUC__)
+        #pragma GCC diagnostic push
+        #pragma GCC diagnostic ignored "-Wunused-parameter"
+        #if defined(__APPLE__)
+            #pragma clang diagnostic ignored "-Wunused-function"
+        #endif
+    #elif defined(_MSC_VER)
+        #pragma warning(push)
+    #else
+        #error "Compiler Not Supported!"
+    #endif
     static void APIENTRY glDebugOutput(GLenum source,
                                        GLenum type,
                                        unsigned int id,
@@ -48,6 +65,15 @@ namespace Engine7414
             case GL_DEBUG_SEVERITY_NOTIFICATION: BACKEND_ERROR( "Severity: notification" ); break;
         }
     }
+    #if defined(__clang__)
+        #pragma clang diagnostic pop
+    #elif defined(__GNUC__)
+        #pragma GCC diagnostic pop
+    #elif defined(_MSC_VER)
+        #pragma warning(pop)
+    #else
+        #error "Compiler Not Supported!"
+    #endif
 
     OpenGLContext::OpenGLContext(GLFWwindow* handle)
         : _handle(handle) {}

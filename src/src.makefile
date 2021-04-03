@@ -39,7 +39,7 @@ CPPFLAGS = -g  -std=c++17 $(COMMONFLAGS)
 CFLAGS = -O3 $(COMMONFLAGS)
 CFLAGS = -g  $(COMMONFLAGS)
 
-WFLAGS = -Wall -Wextra -pedantic-errors -Wconversion
+WFLAGS = -Wall -Wextra -pedantic-errors -Wconversion -Wno-gnu-anonymous-struct -Wno-nested-anon-types
 FFLAGS =
 
 top: target

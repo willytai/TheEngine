@@ -3,14 +3,14 @@
 
 namespace Engine7414
 {
-	static struct Renderer2D_Data  {
-		Ref<Shader>	flatColorShader;
-        Ref<Shader>	textureShader;
-		Ref<VertexArray> quadVertexArray;
-	} *__data;
+    static struct Renderer2D_Data  {
+        Ref<Shader>    flatColorShader;
+        Ref<Shader>    textureShader;
+        Ref<VertexArray> quadVertexArray;
+    } *__data;
 
-	void Renderer2D::init() {
-		__data = new Renderer2D_Data;
+    void Renderer2D::init() {
+        __data = new Renderer2D_Data;
 
         float plainSquare[] = {
             -0.5f, -0.5f, 0.0f,  0.0f, 0.0f,
@@ -34,17 +34,22 @@ namespace Engine7414
         __data->quadVertexArray->setIndexBuffer(indexBuffer);
         __data->quadVertexArray->setModelMat(glm::mat4(1.0f));
 
+#ifdef _WIN64
         __data->flatColorShader = ShaderDict::get().load("C:\\Users\\Willy\\Desktop\\TheEngine\\TheEngine\\resource\\shader\\flatColor");
         __data->textureShader = ShaderDict::get().load("C:\\Users\\Willy\\Desktop\\TheEngine\\TheEngine\\resource\\shader\\texture");
+#else
+        __data->flatColorShader = ShaderDict::get().load("./resource/shader/flatColor");
+        __data->textureShader = ShaderDict::get().load("./resource/shader/texture");
+#endif
         __data->textureShader->bind();
         __data->textureShader->setInt1("u_textureID", 0);
-	}
+    }
 
-	void Renderer2D::shutdown() {
-		delete __data;
-	}
+    void Renderer2D::shutdown() {
+        delete __data;
+    }
 
-	void Renderer2D::beginScene(const Ref<CameraBase>& camera, const glm::vec4& color) {
+    void Renderer2D::beginScene(const Ref<CameraBase>& camera, const glm::vec4& color) {
         RenderCommands::clear(color);
 
         __data->flatColorShader->bind();
@@ -54,19 +59,19 @@ namespace Engine7414
         __data->textureShader->setMat4f("u_ProjViewMat", camera->projXview());
     }
 
-	void Renderer2D::endScene() {
-    
+    void Renderer2D::endScene() {
+
     }
 
-	void Renderer2D::drawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color) {
-		 Renderer2D::drawQuad({position.x, position.y, 0.0f}, size, color);
-	}
+    void Renderer2D::drawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color) {
+         Renderer2D::drawQuad({position.x, position.y, 0.0f}, size, color);
+    }
 
     void Renderer2D::drawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<Texture2D>& texture) {
         Renderer2D::drawQuad({ position.x, position.y, 0.0f }, size, texture);
     }
 
-	void Renderer2D::drawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color) {
+    void Renderer2D::drawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color) {
         __data->flatColorShader->bind();
         __data->flatColorShader->setVec4f("u_Color", color);
 

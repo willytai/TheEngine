@@ -1,6 +1,6 @@
 #define ENGINE_INCLUDE_MAIN
 #include "engine.h"
-#include "main/engine/layer2d.h"
+#include "main/engine/layer2D.h"
 
 class testLayer : public Engine7414::Layer
 {
@@ -80,7 +80,7 @@ public:
             _camera.rotateY(  10.0f * deltaTime );
         }
 
-        Engine7414::Renderer::beginScene( _camera );
+        // Engine7414::Renderer::beginScene( _camera );
         Engine7414::Renderer::submit( Engine7414::Renderer::getShaderDict().get("texture"), _vertexArray );
         Engine7414::Renderer::endScene();
     }
@@ -98,7 +98,7 @@ public:
 
 private:
     bool onWindowResize(Engine7414::WindowResizeEvent& event) {
-        _camera.setAspect( (float)event.width(), (float)event.height() );
+        // _camera.setAspect( (float)event.width(), (float)event.height() );
         return false;
     }
 

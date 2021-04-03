@@ -161,7 +161,7 @@ namespace Engine7414
             windowData& data = *(windowData*)glfwGetWindowUserPointer(window);
             data.width = width;
             data.height = height;
-            WindowResizeEvent event(width, height);
+            WindowResizeEvent event((uint32_t)width, (uint32_t)height);
             data.callback(event);
         });
 

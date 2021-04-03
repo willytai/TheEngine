@@ -17,7 +17,7 @@ namespace Engine7414
     }
 
     void GLRenderAPI::setViewPort(const uint32_t& x, const uint32_t& y, const uint32_t& width, const uint32_t& height) const {
-        GLCall( glViewport( x, y, width, height ) );
+        GLCall( glViewport( (GLint)x, (GLint)y, (GLint)width, (GLint)height ) );
     }
 
     void GLRenderAPI::setClearColor(const glm::vec4& color) const {

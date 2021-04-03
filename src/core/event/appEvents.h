@@ -8,16 +8,16 @@ namespace Engine7414
     class WindowResizeEvent : public Event
     {
     public:
-        WindowResizeEvent(int width, int height)
+        WindowResizeEvent(uint32_t width, uint32_t height)
             : _width(width), _height(height) {}
 
-        inline int width() const { return _width; }
-        inline int height() const { return _height; }
+        inline uint32_t width() const { return _width; }
+        inline uint32_t height() const { return _height; }
 
         EVENT_CLASS( WindowResize )
     private:
-        int _width;
-        int _height;
+        uint32_t _width;
+        uint32_t _height;
     };
 
     class WindowCloseEvent : public Event

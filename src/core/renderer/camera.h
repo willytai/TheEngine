@@ -73,7 +73,7 @@ namespace Engine7414
         Camera(float FovDeg, float aspect, float nearClip = 0.1f, float farClip = 100.0f);
         ~Camera() = default;
 
-        const char* c_str() const { return "3D camera"; }
+        const char* c_str() const override { return "3D camera"; }
 
         void setPosition(const glm::vec4& pos) override;
         void setPosition(const glm::vec3& pos) override;
@@ -108,7 +108,7 @@ namespace Engine7414
         Camera2D(float left, float right, float bottom, float top);
         ~Camera2D() = default;
 
-        const char* c_str() const { return "2D camera"; }
+        const char* c_str() const override { return "2D camera"; }
 
         void setAspectRatio(const float& aspect) override;
 

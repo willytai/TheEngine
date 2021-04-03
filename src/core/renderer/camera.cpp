@@ -18,11 +18,11 @@ namespace Engine7414
     {}
 
     void CameraBase::setPosition(const glm::vec4& pos) {
-        CORE_ERROR( "{} not supported for your camera!", __FUNCSIG__ );
+        CORE_ERROR( "{} not supported for your camera!", __PRETTY_FUNCTION__ );
     }
 
     void CameraBase::setPosition(const glm::vec3& pos) {
-        CORE_ERROR("{} not supported for your camera!", __FUNCSIG__);
+        CORE_ERROR("{} not supported for your camera!", __PRETTY_FUNCTION__);
     }
 
     void CameraBase::moveX(const float& dist) {
