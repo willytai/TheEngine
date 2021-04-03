@@ -1,4 +1,6 @@
+#define ENGINE_INCLUDE_MAIN
 #include "engine.h"
+#include "main/engine/layer2d.h"
 
 class testLayer : public Engine7414::Layer
 {
@@ -115,7 +117,8 @@ class sandbox : public Engine7414::App
 public:
     sandbox(Engine7414::RendererBackend backend)
     : Engine7414::App(backend) {
-        this->pushLayer( new testLayer( "background" ) );
+        // this->pushLayer( new testLayer( "background" ) );
+        this->pushLayer(new Layer2D("Layer2D test"));
     }
     ~sandbox() {}
 };

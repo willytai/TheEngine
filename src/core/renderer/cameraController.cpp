@@ -29,16 +29,16 @@ namespace Engine7414
 
 	void CameraController::onUpdate2D(const TimeStep& deltaTime) {
         if (Engine7414::Input::keyPressed(Engine7414::Key::W)) {
-            _camera->moveY(-1.0f * deltaTime);
-        }
-        else if (Engine7414::Input::keyPressed(Engine7414::Key::S)) {
             _camera->moveY(1.0f * deltaTime);
         }
+        else if (Engine7414::Input::keyPressed(Engine7414::Key::S)) {
+            _camera->moveY(-1.0f * deltaTime);
+        }
         if (Engine7414::Input::keyPressed(Engine7414::Key::D)) {
-            _camera->moveX(-1.0f * deltaTime);
+            _camera->moveX(1.0f * deltaTime);
         }
         else if (Engine7414::Input::keyPressed(Engine7414::Key::A)) {
-            _camera->moveX(1.0f * deltaTime);
+            _camera->moveX(-1.0f * deltaTime);
         }
 	}
 
@@ -58,7 +58,7 @@ namespace Engine7414
 	}
 
 	bool CameraController::onMouseScrolled(MouseScrolledEvent& event) {
-		_zoomLevel += event.yOffset() * 0.1f;
+		_zoomLevel -= event.yOffset() * 0.1f;
 		CLIP_BETWEEN(_zoomLevel, 0.1f, std::numeric_limits<float>::max());
 		_camera->zoom(_zoomLevel);
 		return false;

@@ -8,6 +8,7 @@
 #include "core/renderer/camera.h"
 #include "core/event/event.h"
 #include "backend/backend.h"
+#include "core/renderer/renderer2D.h"
 
 namespace Engine7414
 {
@@ -18,6 +19,9 @@ namespace Engine7414
         };
         static sceneData __data__;
     public:
+        static void init(RendererBackend backend);
+        static void shutdown();
+
         static void onWindowResize(WindowResizeEvent& event);
 
         static void beginScene(const Ref<CameraBase>& camera, const glm::vec4& color = {0.0f, 0.0f, 0.0f, 1.0f});
@@ -26,7 +30,6 @@ namespace Engine7414
 
         static ShaderDict& getShaderDict() { return ShaderDict::get(); }
 
-        static void init(RendererBackend backend);
         static RendererBackend backend() { return RenderCommands::getBackend(); }
     };
 }

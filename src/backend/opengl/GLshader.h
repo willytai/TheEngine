@@ -26,8 +26,7 @@ namespace Engine7414
         void setUniform1f(const char* name, float value);
         void setUniform3f(const char* name, const glm::vec3& vec);
         void setUniform3f(const char* name, float f0, float f1, float f2);
-        void setUniform4f(const char* name, const glm::vec4& vec);
-        void setUniform4f(const char* name, float f0, float f1, float f2, float f3);
+        void setVec4f(const char* name, const glm::vec4& value) override;
         void setMat4f(const char* name, const glm::mat4& value) override;
         void setInt1(const char* name, const int& value) override;
 

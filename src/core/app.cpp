@@ -60,6 +60,8 @@ namespace Engine7414
 
             _window->onUpdate();
         }
+
+        Renderer::shutdown();
     }
 
     void App::onEvent(Event& event) {

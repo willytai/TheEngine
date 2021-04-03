@@ -15,5 +15,7 @@
 #include "core/renderer/cameraController.h"
 
 // --------------- entry point ---------------
+#ifdef ENGINE_INCLUDE_MAIN
 #include "core/entry.h"
+#endif
 // -------------------------------------------

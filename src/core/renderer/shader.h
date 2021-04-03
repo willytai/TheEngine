@@ -17,6 +17,7 @@ namespace Engine7414
         virtual void bind() const = 0;
         virtual void unbind() const = 0;
         virtual void setMat4f(const char* name, const glm::mat4& value) = 0;
+        virtual void setVec4f(const char* name, const glm::vec4& value) = 0;
         virtual void setInt1(const char* name, const int& value) = 0;
 
         static Ref<Shader> create(const std::string& name, const char* shaderPath);

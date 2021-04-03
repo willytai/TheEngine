@@ -126,12 +126,8 @@ namespace Engine7414
         return location;
     }
 
-    void GLShader::setUniform4f(const char* name, const glm::vec4& vec) {
-        this->setUniform4f( name, vec[0], vec[1], vec[2], vec[3] );
-    }
-
-    void GLShader::setUniform4f(const char* name, float f0, float f1, float f2, float f3) {
-        GLCall( glUniform4f( this->getLocation(name), f0, f1, f2, f3 ) );
+    void GLShader::setVec4f(const char* name, const glm::vec4& value) {
+        GLCall( glUniform4f( this->getLocation(name), value.r, value.g, value.b, value.a ) );
     }
 
     void GLShader::setUniform3f(const char* name, const glm::vec3& vec) {
