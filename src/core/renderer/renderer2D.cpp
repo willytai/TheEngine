@@ -4,9 +4,9 @@
 namespace Engine7414
 {
     static struct Renderer2D_Data  {
-        Ref<Shader>    flatColorShader;
-        Ref<Shader>    textureShader;
+        Ref<Shader>      textureShader;
         Ref<VertexArray> quadVertexArray;
+        Ref<Texture2D>   whiteTexture;
     } *__data;
 
     void Renderer2D::init() {
@@ -35,14 +35,15 @@ namespace Engine7414
         __data->quadVertexArray->setModelMat(glm::mat4(1.0f));
 
 #ifdef _WIN64
-        __data->flatColorShader = ShaderDict::get().load("C:\\Users\\Willy\\Desktop\\TheEngine\\TheEngine\\resource\\shader\\flatColor");
         __data->textureShader = ShaderDict::get().load("C:\\Users\\Willy\\Desktop\\TheEngine\\TheEngine\\resource\\shader\\texture");
 #else
-        __data->flatColorShader = ShaderDict::get().load("./resource/shader/flatColor");
         __data->textureShader = ShaderDict::get().load("./resource/shader/texture");
 #endif
         __data->textureShader->bind();
         __data->textureShader->setInt1("u_textureID", 0);
+
+        uint32_t white = 0xffffffff;
+        __data->whiteTexture = Texture2D::create( 1, 1, &white );
     }
 
     void Renderer2D::shutdown() {
@@ -51,9 +52,6 @@ namespace Engine7414
 
     void Renderer2D::beginScene(const Ref<CameraBase>& camera, const glm::vec4& color) {
         RenderCommands::clear(color);
-
-        __data->flatColorShader->bind();
-        __data->flatColorShader->setMat4f("u_ProjViewMat", camera->projXview());
 
         __data->textureShader->bind();
         __data->textureShader->setMat4f("u_ProjViewMat", camera->projXview());
@@ -72,22 +70,19 @@ namespace Engine7414
     }
 
     void Renderer2D::drawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color) {
-        __data->flatColorShader->bind();
-        __data->flatColorShader->setVec4f("u_Color", color);
-
-        auto transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
-        __data->flatColorShader->setMat4f("u_ModelMat", transform);
-
-        __data->quadVertexArray->bind();
-        RenderCommands::drawElement(__data->quadVertexArray);
+         Renderer2D::drawQuad( position, size, color, __data->whiteTexture );
     }
 
     void Renderer2D::drawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture) {
+         Renderer2D::drawQuad( position, size, glm::vec4(1.0f), texture );
+    }
+
+    void Renderer2D::drawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color, const Ref<Texture2D>& texture) {
         texture->bind(0);
-        __data->textureShader->bind();
+        __data->textureShader->setVec4f("u_Color", color);
 
         auto transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
-        __data->textureShader->setMat4f("u_ModelMat", transform);
+        __data->textureShader->setMat4f("u_Transform", transform);
 
         __data->quadVertexArray->bind();
         RenderCommands::drawElement(__data->quadVertexArray);

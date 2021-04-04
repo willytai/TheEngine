@@ -3,8 +3,29 @@
 
 namespace Engine7414
 {
-    GLTexture2D::GLTexture2D(const char* filepath)
-        : _data(NULL), _rendererID(0),
+    GLTexture2D::GLTexture2D(const uint32_t& width, const uint32_t& height) :
+        _data(NULL), _rendererID(0),
+        _width((int)width), _height((int)height), _bpp(4)
+    {
+        // TODO these should be parameterized
+        // linear filtering for magnifying/minifying operations
+        GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
+        GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST));
+    }
+
+    GLTexture2D::GLTexture2D(const uint32_t& width, const uint32_t& height, void* data) :
+        _data(NULL), _rendererID(0),
+        _width((int)width), _height((int)height), _bpp(4)
+    {
+        this->setData( data, width*height*4*sizeof(uint8_t) );
+
+        // linear filtering for magnifying/minifying operations
+        GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
+        GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST));
+    }
+
+    GLTexture2D::GLTexture2D(const char* filepath) :
+        _data(NULL), _rendererID(0),
         _width(0), _height(0), _bpp(0)
     {
         // load image
@@ -40,6 +61,17 @@ namespace Engine7414
 
     void GLTexture2D::unbind() const {
         GLCall(glBindTexture(GL_TEXTURE_2D, 0));
+    }
+
+    void GLTexture2D::setData(void* data, const uint32_t& size) {
+        _data = (uint8_t*)data;
+        BACKEND_ASSERT( size == (uint32_t)_width*(uint32_t)_height*(uint32_t)_bpp*sizeof(uint8_t),
+                        "{} supports entire texture only", __PRETTY_FUNCTION__ );
+#ifdef __APPLE__
+        this->init_4_1();
+#else
+        this->init_4_5();
+#endif
     }
 
     void GLTexture2D::init_4_1() {

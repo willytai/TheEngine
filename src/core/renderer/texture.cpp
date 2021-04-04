@@ -4,7 +4,23 @@
 
 namespace Engine7414
 {
-    Ref<Texture2D> Engine7414::Texture2D::create(const char* filepath) {
+    Ref<Texture2D> Texture2D::create(const uint32_t& width, const uint32_t& height) {
+        switch (Renderer::backend()) {
+            case RendererBackend::OpenGL: return CreateRef<GLTexture2D>( width, height );
+            default: CORE_ASSERT(false, "Unsupported Backend");
+        }
+        return NULL;
+    }
+
+    Ref<Texture2D> Texture2D::create(const uint32_t& width, const uint32_t& height, void* data) {
+        switch (Renderer::backend()) {
+            case RendererBackend::OpenGL: return CreateRef<GLTexture2D>( width, height, data );
+            default: CORE_ASSERT(false, "Unsupported Backend");
+        }
+        return NULL;
+    }
+
+    Ref<Texture2D> Texture2D::create(const char* filepath) {
         switch (Renderer::backend()) {
             case RendererBackend::OpenGL: return CreateRef<GLTexture2D>( filepath );
             default: CORE_ASSERT(false, "Unsupported Backend");

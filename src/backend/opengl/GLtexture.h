@@ -10,10 +10,13 @@ namespace Engine7414
     {
     public:
         GLTexture2D(const char* filepath);
+        GLTexture2D(const uint32_t& width, const uint32_t& height);
+        GLTexture2D(const uint32_t& width, const uint32_t& height, void* data);
         ~GLTexture2D();
 
         void bind(uint32_t slot = 0) const override;
         void unbind() const override;
+        void setData(void* data, const uint32_t& size) override;
 
         inline int width() const override { return _width; }
         inline int height() const override { return _height; }
