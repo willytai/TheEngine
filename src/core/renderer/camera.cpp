@@ -135,6 +135,7 @@ namespace Engine7414
         __updateProj = true;
         __params.left = aspect * __params.bottom;
         __params.right = aspect * __params.top;
+        __aspect = aspect;
     }
 
     void Camera2D::setPosition(const glm::vec3& pos) {
