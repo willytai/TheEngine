@@ -73,7 +73,8 @@ namespace Engine7414
         // this is temporary
         __data->whiteTexture->bind(0);
 
-        __data->quadVertexBuffer->setData(__data->vertexData, (__data->vertexDataPtr - __data->vertexData) * sizeof(Vertex2D));
+        __data->quadVertexBuffer->setData(__data->vertexData,
+                                          (size_t)(__data->vertexDataPtr - __data->vertexData) * sizeof(Vertex2D));
         __data->quadVertexArray->bind();
         RenderCommands::drawElement(__data->quadVertexArray, __data->curIndexCount);
     }
