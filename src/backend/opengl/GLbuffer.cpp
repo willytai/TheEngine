@@ -3,10 +3,16 @@
 namespace Engine7414
 {
 
-    GLVertexBuffer::GLVertexBuffer(const void* vertices, size_t size) {
+    GLVertexBuffer::GLVertexBuffer(size_t size) {
         GLCall( glGenBuffers( 1, &_rendererID ) );
         GLCall( glBindBuffer( GL_ARRAY_BUFFER, _rendererID ) );
-        GLCall( glBufferData( GL_ARRAY_BUFFER, (GLsizeiptr)size, vertices, GL_STATIC_DRAW ) );
+        GLCall( glBufferData( GL_ARRAY_BUFFER, (GLsizeiptr)size, NULL, GL_DYNAMIC_DRAW ) );
+    }
+
+    GLVertexBuffer::GLVertexBuffer(const void* vertices, size_t size) {
+        GLCall(glGenBuffers(1, &_rendererID));
+        GLCall(glBindBuffer(GL_ARRAY_BUFFER, _rendererID));
+        GLCall(glBufferData(GL_ARRAY_BUFFER, (GLsizeiptr)size, vertices, GL_STATIC_DRAW));
     }
 
     GLVertexBuffer::~GLVertexBuffer() {
@@ -19,6 +25,11 @@ namespace Engine7414
 
     void GLVertexBuffer::unbind() const {
         GLCall( glBindBuffer( GL_ARRAY_BUFFER, 0 ) );
+    }
+
+    void GLVertexBuffer::setData(const void* data, const size_t& size) {
+        GLCall(glBindBuffer(GL_ARRAY_BUFFER, _rendererID));
+        GLCall(glBufferSubData(GL_ARRAY_BUFFER, 0, size, data));
     }
 
 #define GLIndexBufferClassImpl( baseName, type) \

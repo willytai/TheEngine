@@ -28,8 +28,8 @@ namespace Engine7414
         GLCall( glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ) );
     }
 
-    void GLRenderAPI::drawElement(const Ref<VertexArray>& vertexArray) const {
-        GLCall( glDrawElements( GL_TRIANGLES, vertexArray->getIndexBuffer()->count(),
+    void GLRenderAPI::drawElement(const Ref<VertexArray>& vertexArray, const uint32_t& indexCount) const {
+        GLCall( glDrawElements( GL_TRIANGLES, indexCount ? indexCount : vertexArray->getIndexBuffer()->count(),
                                 toOpenGLDataType( vertexArray->getIndexBuffer()->type() ), nullptr ) );
     }
 

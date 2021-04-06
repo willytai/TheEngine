@@ -19,6 +19,7 @@ namespace Engine7414
         inline  void setModelMat(const glm::mat4& mat) { _modelMat = mat; }
 
         inline const std::vector<Ref<VertexBuffer> >& getVertexBuffers() const { return _vertexBuffers; }
+        inline const Ref<VertexBuffer>& getVertexBuffer(int index) const { return _vertexBuffers[index]; }
         inline const Ref<IndexBuffer>& getIndexBuffer() const { return _indexBuffer; }
         inline const glm::mat4& getModelMat() const { return _modelMat; }
 

@@ -35,7 +35,7 @@ namespace Engine7414
         __backend__->clear();
     }
 
-    void RenderCommands::drawElement(const Ref<VertexArray>& vertexArray) {
-        __backend__->drawElement( vertexArray );
+    void RenderCommands::drawElement(const Ref<VertexArray>& vertexArray, const uint32_t& indexCount) {
+        __backend__->drawElement( vertexArray, indexCount );
     }
 }

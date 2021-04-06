@@ -80,9 +80,12 @@ namespace Engine7414
         virtual void bind() const = 0;
         virtual void unbind() const = 0;
 
+        virtual void setData(const void* data, const size_t& size) = 0;
+
         inline void setLayout(const BufferLayout& layout) { _layout = layout; }
         inline const BufferLayout& layout() const { return _layout; }
 
+        static Ref<VertexBuffer> create(size_t size);
         static Ref<VertexBuffer> create(const void* vertices, size_t size);
 
     private:

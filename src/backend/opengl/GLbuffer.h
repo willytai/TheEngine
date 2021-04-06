@@ -10,11 +10,14 @@ namespace Engine7414
     class GLVertexBuffer : public VertexBuffer
     {
     public:
+        GLVertexBuffer(size_t size);
         GLVertexBuffer(const void* vertices, size_t size);
         ~GLVertexBuffer();
 
         void bind() const override;
         void unbind() const override;
+
+        void setData(const void* data, const size_t& size);
 
     private:
         GLuint  _rendererID;

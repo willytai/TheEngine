@@ -14,9 +14,11 @@ namespace Engine7414
         static void init();
         static void shutdown();
 
-        static void beginScene(const Ref<CameraBase>& camera, const glm::vec4& color = { 0.0f, 0.0f, 0.0f, 1.0f });
-        static void endScene();
+		static void beginScene(const Ref<CameraBase>& camera, const glm::vec4& color = { 0.0f, 0.0f, 0.0f, 1.0f });
+		static void endScene();
+		static void flush();
 
+        // position stands for the center of the quad
         static void drawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color);
         static void drawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color);
         static void drawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<Texture2D>& texture);

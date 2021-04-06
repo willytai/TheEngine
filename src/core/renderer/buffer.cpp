@@ -5,6 +5,14 @@
 
 namespace Engine7414
 {
+    Ref<VertexBuffer> VertexBuffer::create(size_t size) {
+        switch (Renderer::backend()) {
+            case RendererBackend::OpenGL: return CreateRef<GLVertexBuffer>(size);
+            default: CORE_ASSERT(false, "Unsupported Backend");
+        }
+        return NULL;
+    }
+
     Ref<VertexBuffer> VertexBuffer::create(const void* vertices, size_t size) {
         switch (Renderer::backend()) {
             case RendererBackend::OpenGL : return CreateRef<GLVertexBuffer>( vertices, size );
