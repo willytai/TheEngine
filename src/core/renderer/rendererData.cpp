@@ -8,9 +8,7 @@ namespace Engine7414
         CORE_ASSERT( maxTextureSlots > 0, "maximum texture slots not set before renderer initialization!" );
         textureSlots = new Ref<Texture2D>[(uint32_t)maxTextureSlots];
         vertexData = new Vertex2D[maxVertexCount];
-        vertexDataPtr = vertexData;
-        curIndexCount = 0;
-        curTextureID = 1; // 0 is reserved for white texture
+        this->reset();
     }
 
     RendererData2D::~RendererData2D() {
@@ -21,7 +19,7 @@ namespace Engine7414
     void RendererData2D::reset() {
         vertexDataPtr = vertexData;
         curIndexCount = 0;
-        curTextureID = 1;
+        curTextureID = 1; // 0 is reserved for white texture
     }
 
     bool RendererData2D::shouldFlush() {

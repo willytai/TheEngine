@@ -18,7 +18,10 @@ void Layer2D::onEvent(Engine7414::Event& event) {
 }
 
 void Layer2D::onImGui() {
+    auto stat = Engine7414::Renderer2D::stat();
     ImGui::Begin("Test");
+    ImGui::Text( "drawCalls: %d", stat.drawCalls );
+    ImGui::Text( "quadCount: %d", stat.quadCount );
     ImGui::ColorEdit4("color", &_color.r);
     ImGui::End();
 }

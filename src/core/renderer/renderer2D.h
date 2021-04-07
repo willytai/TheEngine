@@ -27,6 +27,14 @@ namespace Engine7414
 
         // TODO drawRotatedQuad!
 
+        struct statistics
+        {
+            uint32_t drawCalls = 0;
+            uint32_t quadCount = 0;
+            void reset() { drawCalls = quadCount = 0; }
+        };
+        static statistics stat();
+
     private:
         static void drawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color, const Ref<Texture2D>& texture);
     };

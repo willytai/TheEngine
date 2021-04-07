@@ -53,7 +53,7 @@ namespace Engine7414
 
         uint32_t white = 0xffffffff;
         __data->textureSlots[0] = Texture2D::create( 1, 1, &white );
-    
+
         // assuming imidiate upload to GPU
         delete[] indices32UI;
         delete[] samplers;
@@ -66,13 +66,13 @@ namespace Engine7414
     void Renderer2D::beginScene(const Ref<CameraBase>& camera, const glm::vec4& color) {
         RenderCommands::clear(color);
 
+        __data->stats.reset();
         __data->textureShader->bind();
         __data->textureShader->setMat4f("u_ProjViewMat", camera->projXview());
     }
 
     void Renderer2D::endScene() {
-        Renderer2D::flush();
-        __data->reset();
+        if ( __data->curIndexCount ) Renderer2D::flush();
     }
 
     void Renderer2D::flush() {
@@ -83,8 +83,13 @@ namespace Engine7414
         // upload data
         __data->quadVertexBuffer->setData(__data->vertexData,
                                           (size_t)(__data->vertexDataPtr - __data->vertexData) * sizeof(Vertex2D));
+        // draw
         __data->quadVertexArray->bind();
         RenderCommands::drawElement(__data->quadVertexArray, __data->curIndexCount);
+        // reset __data
+        __data->reset();
+        // stats
+        __data->stats.drawCalls++;
     }
 
     void Renderer2D::drawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color) {
@@ -142,7 +147,12 @@ namespace Engine7414
         __data->vertexDataPtr++;
 
         __data->curIndexCount += 6;
+        __data->stats.quadCount++;
 
         if ( __data->shouldFlush() ) Renderer2D::flush();
+    }
+
+    Renderer2D::statistics Renderer2D::stat() {
+        return __data->stats;
     }
 }

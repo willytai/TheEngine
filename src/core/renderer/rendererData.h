@@ -5,6 +5,7 @@
 #include "core/renderer/vertexArray.h"
 #include "core/renderer/buffer.h"
 #include "core/renderer/texture.h"
+#include "core/renderer/renderer.h"
 #include "glm/glm.hpp"
 
 namespace Engine7414
@@ -43,6 +44,8 @@ namespace Engine7414
 
         uint32_t    curIndexCount;
         int         curTextureID;
+
+        Renderer2D::statistics  stats;
     };
 }
 
