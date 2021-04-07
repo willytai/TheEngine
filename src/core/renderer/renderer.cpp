@@ -1,8 +1,13 @@
 #include "core/renderer/renderer.h"
+#include "core/renderer/rendererData.h"
 
 namespace Engine7414
 {
     Renderer::sceneData Renderer::__data__;
+
+    void Renderer::setMaxTextSlot(const int& maxSlot) {
+        RendererData2D::setMaxTextSlot( maxSlot );
+    }
 
     void Renderer::init(RendererBackend backend) {
         CORE_INFO( "Renderer Info" );

@@ -154,6 +154,10 @@ namespace Engine7414
         GLCall( glUniform1i( this->getLocation(name), value ) );
     }
 
+    void GLShader::setIntArray(const char* name, const int* values, const int& count) {
+        GLCall( glUniform1iv( this->getLocation(name), count, values) );
+    }
+
     void GLShader::bind() const {
         GLCall( glUseProgram( _rendererID ) );
     }

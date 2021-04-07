@@ -19,6 +19,8 @@ namespace Engine7414
         };
         static sceneData __data__;
     public:
+        static void setMaxTextSlot(const int& maxSlot);
+
         static void init(RendererBackend backend);
         static void shutdown();
 

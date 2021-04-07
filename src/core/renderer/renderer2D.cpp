@@ -15,7 +15,8 @@ namespace Engine7414
             {
                 {BufferDataType::Float, 3}, // position
                 {BufferDataType::Float, 4}, // color
-                {BufferDataType::Float, 2}  // texture coordinates
+                {BufferDataType::Float, 2}, // texture coordinates
+                {BufferDataType::Float, 1}  // texture samplerID
             }
         );
 
@@ -43,14 +44,19 @@ namespace Engine7414
 #else
         __data->textureShader = ShaderDict::get().load("./resource/shader/texture");
 #endif
+        int* samplers = new int[(uint32_t)__data->maxTextureSlots];
+        for (int i = 0; i < __data->maxTextureSlots; ++i) {
+            samplers[i] = i;
+        }
         __data->textureShader->bind();
-        __data->textureShader->setInt1("u_textureID", 0);
+        __data->textureShader->setIntArray("u_Samplers", samplers, __data->maxTextureSlots );
 
         uint32_t white = 0xffffffff;
-        __data->whiteTexture = Texture2D::create( 1, 1, &white );
+        __data->textureSlots[0] = Texture2D::create( 1, 1, &white );
     
         // assuming imidiate upload to GPU
         delete[] indices32UI;
+        delete[] samplers;
     }
 
     void Renderer2D::shutdown() {
@@ -70,9 +76,11 @@ namespace Engine7414
     }
 
     void Renderer2D::flush() {
-        // this is temporary
-        __data->whiteTexture->bind(0);
-
+        // bind all texture
+        for (int slot = 0; slot < __data->curTextureID; ++slot) {
+            __data->textureSlots[slot]->bind( (uint32_t)slot );
+        }
+        // upload data
         __data->quadVertexBuffer->setData(__data->vertexData,
                                           (size_t)(__data->vertexDataPtr - __data->vertexData) * sizeof(Vertex2D));
         __data->quadVertexArray->bind();
@@ -88,7 +96,7 @@ namespace Engine7414
     }
 
     void Renderer2D::drawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color) {
-         Renderer2D::drawQuad( position, size, color, __data->whiteTexture );
+         Renderer2D::drawQuad( position, size, color, __data->textureSlots[0] );
     }
 
     void Renderer2D::drawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture) {
@@ -96,28 +104,45 @@ namespace Engine7414
     }
 
     void Renderer2D::drawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color, const Ref<Texture2D>& texture) {
+        int textureID = -1;
+        for (int i = 0; i < __data->curTextureID; ++i) {
+            if ( texture.get() == __data->textureSlots[i].get() ) {
+                textureID = i;
+                break;
+            }
+        }
+        if ( textureID == -1 ) {
+            textureID = (int)__data->curTextureID;
+            __data->textureSlots[textureID] = texture;
+            ++__data->curTextureID;
+        }
+
         __data->vertexDataPtr->color = color;
         __data->vertexDataPtr->position = { position.x - size.x / 2.0f, position.y - size.y / 2.0f, position.z };
         __data->vertexDataPtr->texCoor = { 0.0f, 0.0f };
+        __data->vertexDataPtr->samplerID = (float)textureID;
         __data->vertexDataPtr++;
 
         __data->vertexDataPtr->color = color;
         __data->vertexDataPtr->position = { position.x + size.x / 2.0f, position.y - size.y / 2.0f, position.z };
         __data->vertexDataPtr->texCoor = { 1.0f, 0.0f };
+        __data->vertexDataPtr->samplerID = (float)textureID;
         __data->vertexDataPtr++;
 
         __data->vertexDataPtr->color = color;
         __data->vertexDataPtr->position = { position.x + size.x / 2.0f, position.y + size.y / 2.0f, position.z };
         __data->vertexDataPtr->texCoor = { 1.0f, 1.0f };
+        __data->vertexDataPtr->samplerID = (float)textureID;
         __data->vertexDataPtr++;
 
         __data->vertexDataPtr->color = color;
         __data->vertexDataPtr->position = { position.x - size.x / 2.0f, position.y + size.y / 2.0f, position.z };
         __data->vertexDataPtr->texCoor = { 0.0f, 1.0f };
+        __data->vertexDataPtr->samplerID = (float)textureID;
         __data->vertexDataPtr++;
 
         __data->curIndexCount += 6;
 
-        if (__data->curIndexCount == __data->maxIndexCount) Renderer2D::flush();
+        if ( __data->shouldFlush() ) Renderer2D::flush();
     }
 }

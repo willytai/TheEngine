@@ -6,17 +6,18 @@
 class Layer2D : public Engine7414::Layer
 {
 public:
-	Layer2D(const char* name);
+    Layer2D(const char* name);
 
-	void onAttach() override;
-	void onEvent(Engine7414::Event& event) override;
-	void onImGui() override;
-	void onUpdate(const Engine7414::TimeStep& deltaTime) override;
+    void onAttach() override;
+    void onEvent(Engine7414::Event& event) override;
+    void onImGui() override;
+    void onUpdate(const Engine7414::TimeStep& deltaTime) override;
 
 private:
-	glm::vec4						_color;
-	Engine7414::CameraController	_cameraController;
-	Engine7414::Ref<Engine7414::Texture2D>    _texture;
+    glm::vec4                        _color;
+    Engine7414::CameraController     _cameraController;
+    Engine7414::Ref<Engine7414::Texture2D>    _texture;
+    Engine7414::Ref<Engine7414::Texture2D>    _texture1;
 };
 
 #endif
