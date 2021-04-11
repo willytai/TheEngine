@@ -38,8 +38,13 @@ namespace Engine7414
 
 
         _cameraController.createCamera2D(1280.0f / 960.0f);
+#ifdef __APPLE__
         _texture = Texture2D::create("./resource/texture/instagram.png");
         _texture1 = Texture2D::create("./resource/texture/logo.png");
+#else
+        _texture = Texture2D::create("C:\\Users\\Willy\\Desktop\\TheEngine\\TheEngine\\resource\\texture\\instagram.png");
+        _texture1 = Texture2D::create("C:\\Users\\Willy\\Desktop\\TheEngine\\TheEngine\\resource\\texture\\logo.png");
+#endif
 
         FrameBufferSpec spec = { 1280, 960 };
         _framebuffer = FrameBuffer::create( spec );
