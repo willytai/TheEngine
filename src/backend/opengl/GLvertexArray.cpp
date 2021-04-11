@@ -22,7 +22,7 @@ namespace Engine7414
         for (const auto& element : layout.elements()) {
             GLCall( glVertexAttribPointer( _attrIndex, (GLint)element.count, toOpenGLDataType(element.dtype),
                                            element.normalized?GL_TRUE:GL_FALSE, (GLsizei)layout.stride(),
-                                           (const void*)element.offset ) );
+                                           (const void*)(intptr_t)element.offset ) );
             GLCall( glEnableVertexAttribArray( _attrIndex++ ) );
         }
 

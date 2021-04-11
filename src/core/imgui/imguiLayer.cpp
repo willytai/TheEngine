@@ -61,6 +61,8 @@ namespace Engine7414
 
         ImGui_ImplGlfw_InitForOpenGL( (GLFWwindow*)App::getWindow()->nativeWindow(), true );
         ImGui_ImplOpenGL3_Init( "#version 410 core" );
+
+        CORE_INFO( "ImGui Initialized" );
     }
 
     void ImGuiLayer::onDetach() {
@@ -73,7 +75,5 @@ namespace Engine7414
     }
 
     void ImGuiLayer::onImGui() {
-        static bool stat;
-        ImGui::ShowDemoWindow( &stat );
     }
 }

@@ -12,4 +12,5 @@ lib/
 tags
 opengltest
 engine
+engineEditor
 imgui.ini

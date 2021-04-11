@@ -18,7 +18,7 @@ namespace Engine7414
     {
         static App* appInstancePtr;
     public:
-        App(RendererBackend backend, int verbosity = -1);
+        App(RendererBackend backend, const char* name = NULL, int verbosity = -1);
         virtual ~App();
 
         void run();
@@ -27,6 +27,7 @@ namespace Engine7414
         void pushOverlay(Layer* layer);
 
         inline static Window* getWindow() { return appInstancePtr->_window.get(); }
+        static void close();
 
     private:
         bool onWindowClose(WindowCloseEvent& event);

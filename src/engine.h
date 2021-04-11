@@ -13,6 +13,9 @@
 #include "core/renderer/renderer.h"
 #include "core/renderer/camera.h"
 #include "core/renderer/cameraController.h"
+#include "core/renderer/frameBuffer.h"
+
+#include "editor/editorLayer.h"
 
 // --------------- entry point ---------------
 #ifdef ENGINE_INCLUDE_MAIN

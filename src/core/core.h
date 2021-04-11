@@ -12,12 +12,15 @@
 #ifdef ENGINE_DEBUG
     #ifdef _WIN64
         #define CORE_ASSERT(x, ...) if (!(x)) { CORE_ERROR( __VA_ARGS__ ); __debugbreak(); }
+        #define CORE_VERIFY(x, ...) if (!(x)) { CORE_ERROR( __VA_ARGS__ ); __debugbreak(); }
     #else
         #include <signal.h>
         #define CORE_ASSERT(x, ...) if (!(x)) { CORE_ERROR( __VA_ARGS__ ); raise(SIGTRAP); }
+        #define CORE_VERIFY(x, ...) if (!(x)) { CORE_ERROR( __VA_ARGS__ ); raise(SIGTRAP); }
     #endif
 #else
     #define CORE_ASSERT(x, ...)
+    #define CORE_VERIFY(x, ...) x
 #endif
 
 #define CORE_BIND_EVENT_FN(fn) std::bind(&fn, this, std::placeholders::_1)

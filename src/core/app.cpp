@@ -1,5 +1,6 @@
 #include "core/app.h"
 #include "core/renderer/renderer.h"
+#include "editor/editorLayer.h"
 
 #ifdef DEFAULT_CREATE_APP
 Engine7414::App* Engine7414::appCreate(int argc, char** argv) {
@@ -13,7 +14,7 @@ namespace Engine7414
     // to make sure that only one application exists
     App* App::appInstancePtr = NULL;
 
-    App::App(RendererBackend backend, int verbosity) :
+    App::App(RendererBackend backend, const char* name, int verbosity) :
         _shouldRun(true),
         _minimized(false)
     {
@@ -27,7 +28,7 @@ namespace Engine7414
         CORE_INFO( "Engine Initializing..." );
 
         // default window
-        _window = Window::create({ "Engine7414", 1280, 960, backend, true });
+        _window = Window::create({ name ? name : "Engine7414", 1280, 960, backend, true });
         _window->setEventCallback( CORE_BIND_EVENT_FN(App::onEvent) );
 
         // initialize renderer
@@ -62,6 +63,10 @@ namespace Engine7414
         }
 
         Renderer::shutdown();
+    }
+
+    void App::close() {
+        appInstancePtr->_shouldRun = false;
     }
 
     void App::onEvent(Event& event) {

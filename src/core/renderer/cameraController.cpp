@@ -52,8 +52,12 @@ namespace Engine7414
         dispatcher.dispatch<MouseScrolledEvent>(CORE_BIND_EVENT_FN(CameraController::onMouseScrolled));
     }
 
+    void CameraController::onResize(const uint32_t& width, const uint32_t& height) {
+        _camera->setAspectRatio((float)width/(float)height);
+    }
+
     bool CameraController::onWindowResize(WindowResizeEvent& event) {
-        _camera->setAspectRatio((float)event.width()/(float)event.height());
+        this->onResize((uint32_t)event.width(), (uint32_t)event.height());
         return false;
     }
 

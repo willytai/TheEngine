@@ -20,6 +20,7 @@ namespace Engine7414
 
         void onUpdate(const TimeStep& deltaTime);
         void onEvent(Event& event);
+        void onResize(const uint32_t& width, const uint32_t& height);
 
     private:
         void onUpdate2D(const TimeStep& deltaTime);
