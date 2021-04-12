@@ -8,6 +8,8 @@ namespace Engine7414
 {
     class ImGuiLayer : public Layer
     {
+        static bool __blockEvents__;
+        static ImGuiLayer* __instance__;
     public:
         ImGuiLayer();
         ~ImGuiLayer();
@@ -16,8 +18,14 @@ namespace Engine7414
         void end();
         void onAttach() override;
         void onDetach() override;
-        void onImGui() override;
         void onEvent(Event& event) override;
+
+        static inline void setBlockEvent() { __blockEvents__ = true; }
+        static inline void setNoBlockEvent() { __blockEvents__ = false; }
+
+    private:
+        void onKeyEvents(Event& event);
+        void onMouseEvents(Event& event);
     };
 }
 

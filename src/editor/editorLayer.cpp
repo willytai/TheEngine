@@ -58,16 +58,23 @@ namespace Engine7414
     }
 
     void EditorLayer::onUpdate(const TimeStep& deltaTime) {
+        if ( ViewportCollapsed ) { // call begin and end to make sure stats are reset
+            Renderer2D::beginScene(_cameraController.getCamera());
+            Renderer2D::endScene();
+            return;
+        }
+        else if ( ViewportFocused ) {
+            _cameraController.onUpdate(deltaTime);
+        }
+
         // update frame buffer if necessary
         const auto& fbspec = _framebuffer->spec();
         if ( (uint32_t)ViewportSize.x != fbspec.width || (uint32_t)ViewportSize.y != fbspec.height ) {
-            CORE_INFO( "frameBuffer resized, {}, {}", ViewportSize.x, ViewportSize.y );
             _cameraController.onResize( (uint32_t)ViewportSize.x, (uint32_t)ViewportSize.y );
             _framebuffer->resize( (uint32_t)ViewportSize.x, (uint32_t)ViewportSize.y );
         }
 
         _framebuffer->bind();
-        _cameraController.onUpdate(deltaTime);
         Renderer2D::beginScene(_cameraController.getCamera());
         Renderer2D::drawQuad({ 1.0f, 0.0f, 0.1f }, { 0.3f, 0.3f }, _texture);
         Renderer2D::drawQuad({ -1.0f, 0.0f }, { 1.0f, 1.0f }, _texture1);
@@ -127,6 +134,14 @@ namespace Engine7414
             ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
             ImGui::Begin("View Port");
             ImGui::PopStyleVar();
+
+            ViewportCollapsed = ImGui::IsWindowCollapsed();
+            ViewportFocused   = ImGui::IsWindowFocused();
+            ViewportHovered   = ImGui::IsWindowHovered();
+
+            // don't block events when the Viewport is focused
+            if ( ViewportFocused && ViewportHovered ) ImGuiLayer::setNoBlockEvent();
+            else                                      ImGuiLayer::setBlockEvent();
 
             ViewportSize = ImGui::GetContentRegionAvail();
 

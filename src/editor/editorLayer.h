@@ -25,10 +25,13 @@ namespace Engine7414
         void onEvent(Event& event) override;
 
     private:
-        ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
-        ImGuiWindowFlags   window_flags    = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
-        ImVec2             ViewportSize    = {0, 0};
-        bool               dockspaceOpen   = false;
+        ImGuiDockNodeFlags  dockspace_flags = ImGuiDockNodeFlags_None;
+        ImGuiWindowFlags    window_flags    = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
+        ImVec2              ViewportSize    = {0, 0};
+        bool                dockspaceOpen   = false;
+        bool                ViewportFocused = false;
+        bool                ViewportHovered = false;
+        bool                ViewportCollapsed = false;
 
         glm::vec4                        _color;
         CameraController     _cameraController;
