@@ -135,15 +135,14 @@ namespace Engine7414
             ImGui::Begin("View Port");
             ImGui::PopStyleVar();
 
-            ViewportCollapsed = ImGui::IsWindowCollapsed();
+            ViewportSize      = ImGui::GetContentRegionAvail();
             ViewportFocused   = ImGui::IsWindowFocused();
             ViewportHovered   = ImGui::IsWindowHovered();
+            ViewportCollapsed = ImGui::IsWindowCollapsed();
 
-            // don't block events when the Viewport is focused
+            // events should be propagated only when the viewport is focused and hovered!
             if ( ViewportFocused && ViewportHovered ) ImGuiLayer::setNoBlockEvent();
             else                                      ImGuiLayer::setBlockEvent();
-
-            ViewportSize = ImGui::GetContentRegionAvail();
 
             ImGui::Image( (void*)(intptr_t)_framebuffer->colorAttachmentID(),
                           ViewportSize, ImVec2(0, 1), ImVec2(1, 0) );
