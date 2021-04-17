@@ -11,6 +11,8 @@ namespace Engine7414
 
         virtual void init() = 0;
         virtual void swapBuffers() = 0;
+        virtual void swapInterval(int interval) = 0;
+        virtual void* device() { return 0; }
     };
 }
 

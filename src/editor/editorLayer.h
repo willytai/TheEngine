@@ -8,6 +8,8 @@
 #include "core/renderer/texture.h"
 #include "core/renderer/frameBuffer.h"
 #include "core/renderer/cameraController.h"
+#include "core/scene/scene.h"
+#include "core/scene/components.h"
 #include <glm/glm.hpp>
 
 namespace Engine7414
@@ -25,6 +27,7 @@ namespace Engine7414
         void onEvent(Event& event) override;
 
     private:
+        // ImGui Stuffs
         ImGuiDockNodeFlags  dockspace_flags = ImGuiDockNodeFlags_None;
         ImGuiWindowFlags    window_flags    = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
         ImVec2              ViewportSize    = {0, 0};
@@ -35,9 +38,11 @@ namespace Engine7414
 
         glm::vec4                        _color;
         CameraController     _cameraController;
-        Ref<Engine7414::Texture2D>    _texture;
-        Ref<Engine7414::Texture2D>    _texture1;
-        Ref<Engine7414::FrameBuffer>  _framebuffer;
+        Ref<Texture2D>    _texture;
+        Ref<Texture2D>    _texture1;
+        Ref<FrameBuffer>  _framebuffer;
+        Ref<Scene>        _activeScene;
+        entt::entity      _testEntity;
     };
 }
 

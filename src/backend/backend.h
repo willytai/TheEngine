@@ -25,7 +25,8 @@ namespace Engine7414
     enum class RendererBackend : uint8_t
     {
         None,
-        OpenGL
+        OpenGL,
+        Metal
     };
 }
 

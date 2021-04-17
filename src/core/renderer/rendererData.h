@@ -20,6 +20,8 @@ namespace Engine7414
 
     struct RendererData2D
     {
+        static glm::vec4 unitQuadVertices[4];
+        static glm::vec2 textureCoords[4];
         static int maxTextureSlots;
         static void setMaxTextSlot(const int& n) { maxTextureSlots = n; }
 

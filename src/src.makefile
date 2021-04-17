@@ -1,5 +1,6 @@
 CHDRS  += $(wildcard *.h)
 CPPSRC += $(wildcard *.cpp)
+CPPSRC += $(wildcard *.mm)
 CCCSRC += $(wildcard *.c)
 CSRCS  = $(CPPSRC) $(CCCSRC)
 COBJS  = $(addsuffix .o, $(basename $(CSRCS)))
@@ -39,18 +40,22 @@ CPPFLAGS = -g  -std=c++17 $(COMMONFLAGS)
 CFLAGS = -O3 $(COMMONFLAGS)
 CFLAGS = -g  $(COMMONFLAGS)
 
-WFLAGS = -Wall -Wextra -pedantic-errors -Wconversion -Wno-gnu-anonymous-struct -Wno-nested-anon-types
-FFLAGS =
+WFLAGS = -Wall -Wextra -pedantic-errors -Wconversion -Wno-gnu-anonymous-struct -Wno-nested-anon-types -Wformat
+FFLAGS = -framework Metal -framework MetalKit -framework Cocoa -framework IOKit -framework CoreVideo -framework QuartzCore
 
 top: target
 
 %.o: %.cpp
 	@$(ECHO) "> compiling $< ..."
-	@$(CXX) $(CPPFLAGS) $(WFLAGS) $(FFLAGS) $(DPNIFLAG) -c -o $@ $<
+	@$(CXX) $(CPPFLAGS) $(WFLAGS) $(DPNIFLAG) -c -o $@ $<
 
 %.o: %.c
 	@$(ECHO) "> compiling $< ..."
-	@$(CCC) $(CFLAGS) $(WFLAGS) $(FFLAGS) $(DPNIFLAG) -c -o $@ $<
+	@$(CCC) $(CFLAGS) $(WFLAGS) $(DPNIFLAG) -c -o $@ $<
+
+%.o: %.mm
+	@$(ECHO) "> compiling $< ..."
+	@$(CXX) $(CPPFLAGS) $(WFLAGS) $(DPNIFLAG) -ObjC++ -fobjc-weak -fobjc-arc -c -o $@ $<
 
 .PHONY: depend
 depend: .depend.mak

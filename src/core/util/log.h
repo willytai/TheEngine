@@ -70,6 +70,7 @@ namespace Engine7414
 #define CORE_WARN(...)  ::Engine7414::Log::getEnginelogger()->warn(__VA_ARGS__)
 #define CORE_INFO(...)  ::Engine7414::Log::getEnginelogger()->info(__VA_ARGS__)
 #define CORE_ERROR(...) ::Engine7414::Log::getEnginelogger()->error(__VA_ARGS__)
+#define CORE_FATAL(...) ::Engine7414::Log::getEnginelogger()->critical(__VA_ARGS__)
 
 #define BACKEND_TRACE(...) ::Engine7414::Log::getBackendlogger()->trace(__VA_ARGS__)
 #define BACKEND_DEBUG(...) ::Engine7414::Log::getBackendlogger()->debug(__VA_ARGS__)

@@ -24,6 +24,8 @@ namespace Engine7414
         static void drawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color);
         static void drawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<Texture2D>& texture);
         static void drawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture);
+        static void drawQuad(const glm::mat4& transform, const glm::vec4& color);
+        // static void drawQuad(const glm::mat4& transform, const Ref<Texture2D>& texture);
 
         // TODO drawRotatedQuad!
 
@@ -37,6 +39,7 @@ namespace Engine7414
 
     private:
         static void drawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color, const Ref<Texture2D>& texture);
+        static void drawQuad(const glm::mat4& transform, const glm::vec4& color, const Ref<Texture2D>& texture);
     };
 }
 

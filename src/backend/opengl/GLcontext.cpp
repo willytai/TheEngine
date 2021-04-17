@@ -125,4 +125,8 @@ namespace Engine7414
     void OpenGLContext::swapBuffers() {
         glfwSwapBuffers( _handle );
     }
+
+    void OpenGLContext::swapInterval(int interval) {
+        glfwSwapInterval( interval );
+    }
 }

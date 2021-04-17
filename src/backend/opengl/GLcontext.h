@@ -14,6 +14,7 @@ namespace Engine7414
 
         void init() override;
         void swapBuffers() override;
+        void swapInterval(int interval) override;
 
     private:
         GLFWwindow* _handle;

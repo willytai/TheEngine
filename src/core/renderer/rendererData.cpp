@@ -2,6 +2,21 @@
 
 namespace Engine7414
 {
+    // counter-clockwise from bottom left
+    glm::vec4 RendererData2D::unitQuadVertices[4] = {
+        { -0.5f, -0.5f, 0.0f, 1.0f },
+        {  0.5f, -0.5f, 0.0f, 1.0f },
+        {  0.5f,  0.5f, 0.0f, 1.0f },
+        { -0.5f,  0.5f, 0.0f, 1.0f }
+    };
+
+    glm::vec2 RendererData2D::textureCoords[4] = {
+        { 0.0f, 0.0f },
+        { 1.0f, 0.0f },
+        { 1.0f, 1.0f },
+        { 0.0f, 1.0f }
+    };
+
     int RendererData2D::maxTextureSlots = 0;
 
     RendererData2D::RendererData2D() {

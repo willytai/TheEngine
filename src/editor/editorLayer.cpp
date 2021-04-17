@@ -17,7 +17,7 @@ namespace Engine7414
     }
 
     void EditorLayer::onAttach() {
-        // check
+        // ImGui checks
         ImGuiIO& io = ImGui::GetIO();
         CORE_VERIFY( io.ConfigFlags & ImGuiConfigFlags_DockingEnable, "ImGui docking not enabled!" );
         dockspaceOpen = true;
@@ -48,6 +48,12 @@ namespace Engine7414
         // this is going to be corrected after the first frame is rendered
         ViewportSize = { (float)spec.width, (float)spec.height };
 
+        // scene
+        _activeScene = CreateRef<Scene>();
+        _testEntity = _activeScene->createEntity();
+        _activeScene->regEntity().emplace<TransformComponent>( _testEntity );
+        _activeScene->regEntity().emplace<SpriteRendererComponent>( _testEntity );
+
         CORE_INFO( "Editor Layer Initialized" );
     }
 
@@ -76,9 +82,10 @@ namespace Engine7414
 
         _framebuffer->bind();
         Renderer2D::beginScene(_cameraController.getCamera());
-        Renderer2D::drawQuad({ 1.0f, 0.0f, 0.1f }, { 0.3f, 0.3f }, _texture);
-        Renderer2D::drawQuad({ -1.0f, 0.0f }, { 1.0f, 1.0f }, _texture1);
-        Renderer2D::drawQuad({ 1.0f, 0.0f }, { 0.5f, 1.0f }, _color);
+        _activeScene->onUpdate( deltaTime );
+        // Renderer2D::drawQuad({ 1.0f, 0.0f, 0.1f }, { 0.3f, 0.3f }, _texture);
+        // Renderer2D::drawQuad({ -1.0f, 0.0f }, { 1.0f, 1.0f }, _texture1);
+        // Renderer2D::drawQuad({ 1.0f, 0.0f }, { 0.5f, 1.0f }, _color);
         Renderer2D::endScene();
         _framebuffer->unbind();
     }
@@ -122,9 +129,10 @@ namespace Engine7414
         {
             auto stat = Engine7414::Renderer2D::stat();
             ImGui::Begin("Test");
+            ImGui::Text( "framerate: %.0f", ImGui::GetIO().Framerate );
             ImGui::Text( "drawCalls: %d", stat.drawCalls );
             ImGui::Text( "quadCount: %d", stat.quadCount );
-            ImGui::ColorEdit4("color", &_color.r);
+            ImGui::ColorEdit4("color", &_activeScene->regEntity().get<SpriteRendererComponent>(_testEntity).color[0] );
             ImGui::End();
         }
 

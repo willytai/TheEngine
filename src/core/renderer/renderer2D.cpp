@@ -109,6 +109,16 @@ namespace Engine7414
     }
 
     void Renderer2D::drawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color, const Ref<Texture2D>& texture) {
+        auto transform = glm::translate( glm::mat4(1.0f), position ) *
+                         glm::scale( glm::mat4(1.0f), glm::vec3(size.x, size.y, 1.0f) );
+        Renderer2D::drawQuad( transform, color, texture );
+    }
+
+    void Renderer2D::drawQuad(const glm::mat4& transform, const glm::vec4& color) {
+         Renderer2D::drawQuad( transform, color, __data->textureSlots[0] );
+    }
+
+    void Renderer2D::drawQuad(const glm::mat4& transform, const glm::vec4& color, const Ref<Texture2D>& texture) {
         int textureID = -1;
         for (int i = 0; i < __data->curTextureID; ++i) {
             if ( texture.get() == __data->textureSlots[i].get() ) {
@@ -122,29 +132,13 @@ namespace Engine7414
             ++__data->curTextureID;
         }
 
-        __data->vertexDataPtr->color = color;
-        __data->vertexDataPtr->position = { position.x - size.x / 2.0f, position.y - size.y / 2.0f, position.z };
-        __data->vertexDataPtr->texCoor = { 0.0f, 0.0f };
-        __data->vertexDataPtr->samplerID = (float)textureID;
-        __data->vertexDataPtr++;
-
-        __data->vertexDataPtr->color = color;
-        __data->vertexDataPtr->position = { position.x + size.x / 2.0f, position.y - size.y / 2.0f, position.z };
-        __data->vertexDataPtr->texCoor = { 1.0f, 0.0f };
-        __data->vertexDataPtr->samplerID = (float)textureID;
-        __data->vertexDataPtr++;
-
-        __data->vertexDataPtr->color = color;
-        __data->vertexDataPtr->position = { position.x + size.x / 2.0f, position.y + size.y / 2.0f, position.z };
-        __data->vertexDataPtr->texCoor = { 1.0f, 1.0f };
-        __data->vertexDataPtr->samplerID = (float)textureID;
-        __data->vertexDataPtr++;
-
-        __data->vertexDataPtr->color = color;
-        __data->vertexDataPtr->position = { position.x - size.x / 2.0f, position.y + size.y / 2.0f, position.z };
-        __data->vertexDataPtr->texCoor = { 0.0f, 1.0f };
-        __data->vertexDataPtr->samplerID = (float)textureID;
-        __data->vertexDataPtr++;
+        for (uint32_t i = 0; i < 4; ++i) {
+            __data->vertexDataPtr->color     = color;
+            __data->vertexDataPtr->texCoor   = __data->textureCoords[i];
+            __data->vertexDataPtr->position  = transform * __data->unitQuadVertices[i];
+            __data->vertexDataPtr->samplerID = (float)textureID;
+            __data->vertexDataPtr++;
+        }
 
         __data->curIndexCount += 6;
         __data->stats.quadCount++;

@@ -3,6 +3,7 @@
 #include "core/input/input.h"
 #include "core/util/log.h"
 #include "backend/OpenGL/GLcontext.h"
+// #include "backend/Metal/MTLcontext.h"
 #include "platform/Mac/macWindow.h"
 #include "glad/glad.h"
 
@@ -21,12 +22,9 @@ namespace Engine7414
         _data.width = props.width;
         _data.height = props.height;
 
+        // glfw initialization
         if ( !__glfwInitialized__ ) {
             if ( glfwInit() ) {
-                glfwWindowHint( GLFW_CONTEXT_VERSION_MAJOR, 4 );
-                glfwWindowHint( GLFW_CONTEXT_VERSION_MINOR, 1 );
-                glfwWindowHint( GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE );
-                glfwWindowHint( GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE );
                 glfwSetErrorCallback( GLFWErrorCallback );
             }
             else {
@@ -36,15 +34,11 @@ namespace Engine7414
             __glfwInitialized__ = true;
         }
 
-        if ( (_glfwWindow = glfwCreateWindow( props.width, props.height, props.title, NULL, NULL )) == NULL ) {
-            GLFW_ERROR( "unable to create window!" );
-            CORE_ASSERT( false, "glfw failed to create window, error not yet handled, aborting..." );
-        }
-
-        glfwSetInputMode( _glfwWindow, GLFW_LOCK_KEY_MODS, GLFW_TRUE ); // enable modifier key flags
-        glfwSetWindowUserPointer( _glfwWindow, &_data );
+        // window creation should take precedence over context creation
+        this->createWindow( props );
         this->createContext( props.rendererBackend );
 
+        // vsync or not
         if ( props.vsync ) this->enableVSync();
         else               this->disbaleVSync();
 
@@ -71,18 +65,42 @@ namespace Engine7414
     }
 
     void MacWindow::enableVSync() {
-        glfwSwapInterval( 1 );
+        _context->swapInterval( 1 );
         _data.vsync = true;
     }
 
     void MacWindow::disbaleVSync() {
-        glfwSwapInterval( 0 );
+        _context->swapInterval( 0 );
         _data.vsync = false;
+    }
+
+    void MacWindow::createWindow(const WindowProps& props) {
+        if ( props.rendererBackend == RendererBackend::OpenGL ) { // glfw + OpenGL
+            glfwWindowHint( GLFW_CONTEXT_VERSION_MAJOR, 4 );
+            glfwWindowHint( GLFW_CONTEXT_VERSION_MINOR, 1 );
+            glfwWindowHint( GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE );
+            glfwWindowHint( GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE );
+        }
+        else if ( props.rendererBackend == RendererBackend::Metal ) { // glfw + Metal
+            glfwWindowHint( GLFW_CLIENT_API, GLFW_NO_API );
+        }
+        else {
+            CORE_ASSERT( false, "unsupported backend" );
+        }
+
+        if ( (_glfwWindow = glfwCreateWindow( props.width, props.height, props.title, NULL, NULL )) == NULL ) {
+            GLFW_ERROR( "unable to create window!" );
+            CORE_ASSERT( false, "glfw failed to create window, error not yet handled, aborting..." );
+        }
+
+        glfwSetInputMode( _glfwWindow, GLFW_LOCK_KEY_MODS, GLFW_TRUE ); // enable modifier key flags
+        glfwSetWindowUserPointer( _glfwWindow, &_data );
     }
 
     void MacWindow::createContext(const RendererBackend& backend) {
         switch (backend) {
             case RendererBackend::OpenGL: _context = CreateScoped<OpenGLContext>( _glfwWindow ); break;
+            // case RendererBackend::Metal:  _context = CreateScoped<MetalContext>( _glfwWindow ); break;
             default: CORE_ASSERT( false, "Unsupported Backend" );
         }
         _context->init();

@@ -15,6 +15,9 @@
 #include "core/renderer/cameraController.h"
 #include "core/renderer/frameBuffer.h"
 
+#include "core/scene/scene.h"
+#include "core/scene/components.h"
+
 #include "editor/editorLayer.h"
 
 // --------------- entry point ---------------

@@ -11,12 +11,12 @@
 
 #ifdef ENGINE_DEBUG
     #ifdef _WIN64
-        #define CORE_ASSERT(x, ...) if (!(x)) { CORE_ERROR( __VA_ARGS__ ); __debugbreak(); }
-        #define CORE_VERIFY(x, ...) if (!(x)) { CORE_ERROR( __VA_ARGS__ ); __debugbreak(); }
+        #define CORE_ASSERT(x, ...) if (!(x)) { CORE_ERROR( __VA_ARGS__ ); CORE_FATAL( "In {}, {}:{}", __PRETTY_FUNCTION__, __FILE__, __LINE__ ); __debugbreak(); }
+        #define CORE_VERIFY(x, ...) if (!(x)) { CORE_ERROR( __VA_ARGS__ ); CORE_FATAL( "In {}, {}:{}", __PRETTY_FUNCTION__, __FILE__, __LINE__ ); __debugbreak(); }
     #else
         #include <signal.h>
-        #define CORE_ASSERT(x, ...) if (!(x)) { CORE_ERROR( __VA_ARGS__ ); raise(SIGTRAP); }
-        #define CORE_VERIFY(x, ...) if (!(x)) { CORE_ERROR( __VA_ARGS__ ); raise(SIGTRAP); }
+        #define CORE_ASSERT(x, ...) if (!(x)) { CORE_ERROR( __VA_ARGS__ ); CORE_FATAL( "In {}, {}:{}", __PRETTY_FUNCTION__, __FILE__, __LINE__ ); raise(SIGTRAP); }
+        #define CORE_VERIFY(x, ...) if (!(x)) { CORE_ERROR( __VA_ARGS__ ); CORE_FATAL( "In {}, {}:{}", __PRETTY_FUNCTION__, __FILE__, __LINE__ ); raise(SIGTRAP); }
     #endif
 #else
     #define CORE_ASSERT(x, ...)

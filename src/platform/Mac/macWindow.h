@@ -27,6 +27,7 @@ namespace Engine7414
         inline int   getHeight() const override { return _data.height; }
         inline bool  VSync()     const override { return _data.vsync; }
         inline void* nativeWindow()    override { return (void*)_glfwWindow; }
+        inline void* nativeDevice()    override { return _context->device(); }
 
         /* setting functions */
         void setEventCallback(const eventCallbackFn& fn) override;
@@ -37,6 +38,7 @@ namespace Engine7414
         void onUpdate() override;
 
     private:
+        void createWindow(const WindowProps& backend);
         void createContext(const RendererBackend& backend);
         void shutdown();
         void setCallbacks();
