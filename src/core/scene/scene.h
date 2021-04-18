@@ -11,6 +11,7 @@
     #pragma GCC diagnostic ignored "-Wsign-conversion"
 #elif defined(_MSC_VER)
     #pragma warning(push)
+    #pragma warning(disable : 4819)
 #else
     #error "Compiler Not Supported!"
 #endif
@@ -29,15 +30,16 @@
 
 namespace Engine7414
 {
+    class Entity;
     class Scene
     {
+        friend class Entity;
     public:
-        Scene();
+        Scene() = default;
         ~Scene() = default;
 
         // API
-        entt::entity createEntity() { return _registry.create(); }
-        inline entt::registry& regEntity() { return _registry; }
+        Entity createEntity(const char* name = NULL);
 
         void onUpdate(const TimeStep& deltaTime);
 

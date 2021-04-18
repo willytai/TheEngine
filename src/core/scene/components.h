@@ -6,6 +6,11 @@
 
 namespace Engine7414
 {
+    struct TagComponent
+    {
+        const char* tag;
+    };
+
     struct TransformComponent
     {
         glm::vec3  translation = {0.0f, 0.0f, 0.0f};

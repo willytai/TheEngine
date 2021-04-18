@@ -16,6 +16,7 @@
 #include "core/renderer/frameBuffer.h"
 
 #include "core/scene/scene.h"
+#include "core/scene/entity.h"
 #include "core/scene/components.h"
 
 #include "editor/editorLayer.h"

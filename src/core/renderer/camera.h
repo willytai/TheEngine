@@ -58,7 +58,7 @@ namespace Engine7414
         glm::vec4           __position;
 
         // simply a cache for further optimization
-        // these matrices are guaranteed to re-calculated at most once in each frame
+        // these matrices are guaranteed to be re-calculated at most once in each frame
         mutable bool        __updateProj;
         mutable bool        __updateView;
         mutable glm::mat4   __m_projection;

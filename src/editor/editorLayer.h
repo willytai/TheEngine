@@ -9,6 +9,7 @@
 #include "core/renderer/frameBuffer.h"
 #include "core/renderer/cameraController.h"
 #include "core/scene/scene.h"
+#include "core/scene/entity.h"
 #include "core/scene/components.h"
 #include <glm/glm.hpp>
 
@@ -36,13 +37,13 @@ namespace Engine7414
         bool                ViewportHovered = false;
         bool                ViewportCollapsed = false;
 
-        glm::vec4                        _color;
-        CameraController     _cameraController;
+        glm::vec4         _color;
+        CameraController  _cameraController;
         Ref<Texture2D>    _texture;
         Ref<Texture2D>    _texture1;
         Ref<FrameBuffer>  _framebuffer;
         Ref<Scene>        _activeScene;
-        entt::entity      _testEntity;
+        Entity            _testEntity;
     };
 }
 

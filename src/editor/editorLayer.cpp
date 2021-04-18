@@ -55,9 +55,9 @@ namespace Engine7414
 
         // scene
         _activeScene = CreateRef<Scene>();
-        _testEntity = _activeScene->createEntity();
-        _activeScene->regEntity().emplace<TransformComponent>( _testEntity );
-        _activeScene->regEntity().emplace<SpriteRendererComponent>( _testEntity );
+        _testEntity = _activeScene->createEntity("ColoredSquare");
+        _testEntity.emplace<SpriteRendererComponent>();
+        _testEntity.replace<TransformComponent>(glm::vec3(1.0f, 1.0f, 0.0f), glm::vec3(0.2f, 0.2f, 1.0f));
 
         CORE_INFO( "Editor Layer Initialized" );
     }
@@ -122,22 +122,29 @@ namespace Engine7414
             {
                 // Disabling fullscreen would allow the window to be moved to the front of other windows,
                 // which we can't undo at the moment without finer window depth/z control.
-
                 if (ImGui::MenuItem("Exit")) App::close();
 
                 ImGui::EndMenu();
             }
-
             ImGui::EndMenuBar();
         }
 
+        // test window
         {
             auto stat = Engine7414::Renderer2D::stat();
             ImGui::Begin("Test");
             ImGui::Text( "framerate: %.0f", ImGui::GetIO().Framerate );
             ImGui::Text( "drawCalls: %d", stat.drawCalls );
             ImGui::Text( "quadCount: %d", stat.quadCount );
-            ImGui::ColorEdit4("color", &_activeScene->regEntity().get<SpriteRendererComponent>(_testEntity).color[0] );
+            ImGui::Separator();
+            ImGui::Text("Entities");
+            if (_testEntity) {
+                ImGui::Separator();
+                ImGui::Text("%s", _testEntity.get<TagComponent>());
+                ImGui::ColorEdit4("color", &_testEntity.get<SpriteRendererComponent>().color[0]);
+                ImGui::Separator();
+            }
+            ImGui::Separator();
             ImGui::End();
         }
 
