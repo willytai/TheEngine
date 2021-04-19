@@ -18,7 +18,10 @@ namespace Engine7414
             glm::mat4 ProjViewMat;
         };
         static sceneData __data__;
+        static bool __updateProjViewMat__;
     public:
+        static void setUpdateMatFlag();
+
         static void setMaxTextSlot(const int& maxSlot);
 
         static void init(RendererBackend backend);

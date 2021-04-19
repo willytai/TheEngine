@@ -37,13 +37,13 @@ namespace Engine7414
         bool                ViewportHovered = false;
         bool                ViewportCollapsed = false;
 
-        glm::vec4         _color;
-        CameraController  _cameraController;
         Ref<Texture2D>    _texture;
         Ref<Texture2D>    _texture1;
         Ref<FrameBuffer>  _framebuffer;
+
         Ref<Scene>        _activeScene;
         Entity            _testEntity;
+        Entity            _cameraEntity;
     };
 }
 

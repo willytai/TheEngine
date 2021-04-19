@@ -10,21 +10,21 @@ namespace Engine7414
     class CameraController
     {
     public:
-        CameraController();
+        CameraController(CameraBase::Type type);
         ~CameraController() = default;
 
-        void createCamera2D(const float& aspect);
-        void createCamera3D(const float& aspect, const float& FovDeg, const float& nearClip = 0.1f, const float& farClip = 100.0f);
+        void bind(CameraBase* camera);
 
-        inline Ref<CameraBase> getCamera() { return _camera; }
-
-        void onUpdate(const TimeStep& deltaTime);
+        void onUpdate(const TimeStep& deltaTime, glm::vec3& position);
         void onEvent(Event& event);
-        void onResize(const uint32_t& width, const uint32_t& height);
+        void onResize(const float& width, const float& height);
 
     private:
-        void onUpdate2D(const TimeStep& deltaTime);
-        void onUpdate3D(const TimeStep& deltaTime);
+        void onUpdate2D(const TimeStep& deltaTime, glm::vec3& position);
+        void onUpdate3D(const TimeStep& deltaTime, glm::vec3& position);
+        void moveX(glm::vec3& position, const float& dist);
+        void moveY(glm::vec3& position, const float& dist);
+        void moveZ(glm::vec3& position, const float& dist);
 
     private:
         bool onWindowResize(WindowResizeEvent& event);
@@ -37,9 +37,12 @@ namespace Engine7414
         // this is for orthographic camera
         float            _zoomLevel;
 
-        std::function<void(const TimeStep&)> onUpdate_func;
+        std::function<void(const TimeStep&, glm::vec3&)> onUpdate_func;
+        std::function<void()> rendererUpdate_func;
 
-        Ref<CameraBase>    _camera;
+        // holds a weak reference
+        // the owner of the camera is the CameraComponent
+        CameraBase*    _camera = nullptr;
     };
 }
 #endif

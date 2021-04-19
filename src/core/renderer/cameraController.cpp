@@ -1,49 +1,77 @@
 #include "core/renderer/cameraController.h"
+#include "core/renderer/renderer.h"
 #include "core/input/input.h"
 
 namespace Engine7414
 {
-    CameraController::CameraController()
+    CameraController::CameraController(CameraBase::Type type)
         : _translationSpeed(5.0f),
           _rotationSpeed(30.0f),
           _zoomLevel(1.0f)
 
     {
-        _camera.reset();
-        onUpdate_func = [](const TimeStep& deltaTime) { CORE_ASSERT(false, "camera not set in CameraController!"); };
+        switch (type) {
+            case CameraBase::Orthographic:
+            {
+                onUpdate_func = std::bind(&CameraController::onUpdate2D, this, std::placeholders::_1, std::placeholders::_2);
+                rendererUpdate_func = std::bind(&Renderer2D::setUpdateMatFlag);
+                break;
+            }
+            case CameraBase::Perspective:
+            {
+                onUpdate_func = std::bind(&CameraController::onUpdate3D, this, std::placeholders::_1, std::placeholders::_2);
+                rendererUpdate_func = std::bind(&Renderer::setUpdateMatFlag);
+                break;
+            }
+            default:
+            {
+                CORE_ASSERT(false, "{} Not Implemented!", __PRETTY_FUNCTION__);
+            }
+        }
     }
 
-    void CameraController::createCamera2D(const float& aspect) {
-        CORE_ASSERT(!_camera, "camera already exists!");
-        _camera = Camera2D::create(-aspect*_zoomLevel, aspect*_zoomLevel, -_zoomLevel, _zoomLevel);
-        onUpdate_func = std::bind(&CameraController::onUpdate2D, this, std::placeholders::_1);
+    void CameraController::bind(CameraBase* camera) {
+        _camera = camera;
     }
 
-    void CameraController::createCamera3D(const float& aspect, const float& FovDeg, const float& nearClip, const float& farClip) {
-        CORE_ASSERT(false, "{} Not Implemented!", __PRETTY_FUNCTION__);
+    void CameraController::onUpdate(const TimeStep& deltaTime, glm::vec3& position) {
+        if (_camera) {
+            onUpdate_func(deltaTime, position);
+        }
     }
 
-    void CameraController::onUpdate(const TimeStep& deltaTime) {
-        onUpdate_func(deltaTime);
-    }
-
-    void CameraController::onUpdate2D(const TimeStep& deltaTime) {
+    void CameraController::onUpdate2D(const TimeStep& deltaTime, glm::vec3& position) {
         if (Engine7414::Input::keyPressed(Engine7414::Key::W)) {
-            _camera->moveY(_translationSpeed * deltaTime);
+            this->moveY(position, _translationSpeed * deltaTime);
         }
         else if (Engine7414::Input::keyPressed(Engine7414::Key::S)) {
-            _camera->moveY(-_translationSpeed * deltaTime);
+            this->moveY(position, -_translationSpeed * deltaTime);
         }
         if (Engine7414::Input::keyPressed(Engine7414::Key::D)) {
-            _camera->moveX(_translationSpeed * deltaTime);
+            this->moveX(position, _translationSpeed * deltaTime);
         }
         else if (Engine7414::Input::keyPressed(Engine7414::Key::A)) {
-            _camera->moveX(-_translationSpeed * deltaTime);
+            this->moveX(position, -_translationSpeed * deltaTime);
         }
     }
 
-    void CameraController::onUpdate3D(const TimeStep& deltaTime) {
+    void CameraController::onUpdate3D(const TimeStep& deltaTime, glm::vec3& position) {
         CORE_ASSERT(false, "{} Not Implemented!", __PRETTY_FUNCTION__);
+    }
+
+    void CameraController::moveX(glm::vec3& position, const float& dist) {
+        rendererUpdate_func();
+        position.x += dist;
+    }
+
+    void CameraController::moveY(glm::vec3& position, const float& dist) {
+        rendererUpdate_func();
+        position.y += dist;
+    }
+
+    void CameraController::moveZ(glm::vec3& position, const float& dist) {
+        rendererUpdate_func();
+        position.z += dist;
     }
 
     void CameraController::onEvent(Event& event) {
@@ -52,16 +80,18 @@ namespace Engine7414
         dispatcher.dispatch<MouseScrolledEvent>(CORE_BIND_EVENT_FN(CameraController::onMouseScrolled));
     }
 
-    void CameraController::onResize(const uint32_t& width, const uint32_t& height) {
-        _camera->setAspectRatio((float)width/(float)height);
+    void CameraController::onResize(const float& width, const float& height) {
+        rendererUpdate_func();
+        _camera->setAspectRatio(width/height);
     }
 
     bool CameraController::onWindowResize(WindowResizeEvent& event) {
-        this->onResize((uint32_t)event.width(), (uint32_t)event.height());
+        this->onResize((float)event.width(), (float)event.height());
         return false;
     }
 
     bool CameraController::onMouseScrolled(MouseScrolledEvent& event) {
+        rendererUpdate_func();
         _zoomLevel -= event.yOffset() * 0.1f;
         CLIP_BETWEEN(_zoomLevel, 0.1f, std::numeric_limits<float>::max());
         _camera->zoom(_zoomLevel);

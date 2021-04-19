@@ -8,44 +8,14 @@ namespace Engine7414
     /*********************/
     /* Camera Base Class */
     /*********************/
-    CameraBase::CameraBase()
-        : __position(0.0f, 0.0f, 0.0f, 1.0f),
-          __updateProj(true),
-          __updateView(true),
-          __m_projection(glm::mat4(1.0f)),
-          __m_view(glm::mat4(1.0f)),
-          __m_ProjViewCache(glm::mat4(1.0f))
+    CameraBase::CameraBase() :
+        __updateProj(true),
+        __m_projection(glm::mat4(1.0f))
     {}
 
-    void CameraBase::setPosition(const glm::vec4& pos) {
-        CORE_ERROR( "{} not supported for your camera!", __PRETTY_FUNCTION__ );
-    }
-
-    void CameraBase::setPosition(const glm::vec3& pos) {
-        CORE_ERROR("{} not supported for your camera!", __PRETTY_FUNCTION__);
-    }
-
-    void CameraBase::moveX(const float& dist) {
-        __updateView = true;
-        __position.x += dist;
-    }
-
-    void CameraBase::moveY(const float& dist) {
-        __updateView = true;
-        __position.y += dist;
-    }
-
-    void CameraBase::moveZ(const float& dist) {
-        __updateView = true;
-        __position.z += dist;
-    }
-
-    const glm::mat4& CameraBase::projXview() const {
-        if (!__updateProj && !__updateView) return __m_ProjViewCache;
+    const glm::mat4& CameraBase::projection() const {
         if (__updateProj) this->updateProjMatrix();
-        if (__updateView) this->updateViewMatrix();
-        __m_ProjViewCache = __m_projection * __m_view;
-        return __m_ProjViewCache;
+        return __m_projection;
     }
 
     /**************************************/
@@ -62,16 +32,6 @@ namespace Engine7414
         __params.aspect = aspect;
     }
 
-    void Camera::setPosition(const glm::vec4& pos) {
-        __updateView = true;
-        __position = pos;
-    }
-
-    void Camera::setPosition(const glm::vec3& pos) {
-        __updateView = true;
-        __position = glm::vec4( pos, 1.0f );
-    }
-
     void Camera::setFOV(float fov) {
         __updateProj = true;
         __params.fov = fov;
@@ -79,11 +39,11 @@ namespace Engine7414
     }
 
     void Camera::setYaw(float YawDeg) {
-        this->rotateY( YawDeg - __rotation.yaw );
+        //this->rotateY( YawDeg - __rotation.yaw );
     }
 
     void Camera::setPitch(float PitchDeg) {
-        this->rotateX( PitchDeg - __rotation.pitch );
+        //this->rotateX( PitchDeg - __rotation.pitch );
     }
 
     void Camera::zoom(const float& fov) {
@@ -91,6 +51,7 @@ namespace Engine7414
         __params.fov = fov;
     }
 
+    /*
     void Camera::rotateY(float deltaYawDeg) {
         __updateView = true;
         __rotation.yaw += deltaYawDeg;
@@ -109,6 +70,7 @@ namespace Engine7414
                                 glm::vec3(0.0f, 1.0f, 0.0f) );
         __updateView = false;
     }
+    */
 
     void Camera::updateProjMatrix() const {
         __m_projection = glm::perspective( glm::radians(__params.fov),
@@ -121,8 +83,8 @@ namespace Engine7414
     /***************************************/
     /* 2D Camera (Orthographic Projection) */
     /***************************************/
-    Ref<Camera2D> Camera2D::create(float left, float right, float bottom, float top) {
-        return CreateRef<Camera2D>(left, right, bottom, top);
+    Scoped<Camera2D> Camera2D::create(float left, float right, float bottom, float top) {
+        return CreateScoped<Camera2D>(left, right, bottom, top);
     }
 
     Camera2D::Camera2D(float left, float right, float bottom, float top)
@@ -138,29 +100,12 @@ namespace Engine7414
         __aspect = aspect;
     }
 
-    void Camera2D::setPosition(const glm::vec3& pos) {
-        __updateView = true;
-        __position = glm::vec4(pos, 1.0f);
-    }
-
-    void Camera2D::setRotation(const float& rotation) {
-        __updateView = true;
-        __rotation = rotation;
-    }
-
     void Camera2D::zoom(const float& level) {
         __updateProj = true;
         __params.left   = -__aspect * level;
         __params.right  = __aspect * level;
         __params.bottom = -level;
         __params.top    = level;
-    }
-
-    void Camera2D::updateViewMatrix() const {
-        glm::mat4 transform = glm::translate(glm::mat4(1.0f), __position.xyz())
-                            * glm::rotate(glm::mat4(1.0f), glm::radians(__rotation), glm::vec3(0.0f, 0.0f, 1.0f));
-        __m_view = glm::inverse(transform);
-        __updateView = false;
     }
 
     void Camera2D::updateProjMatrix() const {

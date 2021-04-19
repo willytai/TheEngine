@@ -26,6 +26,11 @@ namespace Engine7414
     class CameraBase
     {
     public:
+        enum Type {
+            Orthographic,
+            Perspective
+        };
+    public:
         static float FOV_MIN;
         static float FOV_MAX;
     public:
@@ -34,36 +39,20 @@ namespace Engine7414
 
         virtual const char* c_str() const = 0;
 
-        virtual void setPosition(const glm::vec4& pos);
-        virtual void setPosition(const glm::vec3& pos) = 0;
         virtual void setAspectRatio(const float& aspect) = 0;
         virtual void zoom(const float& level) = 0;
 
-        void moveX(const float& dist);
-        void moveY(const float& dist);
-        void moveZ(const float& dist);
-
-        inline const glm::vec4& position() const { return __position; }
-        inline const glm::mat4& projection() const { return __m_projection; }
-        inline const glm::mat4& view() const { return __m_view; }
-
-        // the stuff that the renderer needs
-        const glm::mat4& projXview() const;
+        const glm::mat4& projection() const;
 
     private:
-        virtual void updateViewMatrix() const = 0;
         virtual void updateProjMatrix() const = 0;
 
     protected:
-        glm::vec4           __position;
-
+        // TODO: mutable?
         // simply a cache for further optimization
         // these matrices are guaranteed to be re-calculated at most once in each frame
         mutable bool        __updateProj;
-        mutable bool        __updateView;
         mutable glm::mat4   __m_projection;
-        mutable glm::mat4   __m_view;
-        mutable glm::mat4   __m_ProjViewCache;
     };
 
     // this is a camera for 3D rendering (perspective projection)
@@ -75,8 +64,8 @@ namespace Engine7414
 
         const char* c_str() const override { return "3D camera"; }
 
-        void setPosition(const glm::vec4& pos) override;
-        void setPosition(const glm::vec3& pos) override;
+        // void setPosition(const glm::vec4& pos) override;
+        // void setPosition(const glm::vec3& pos) override;
         void setAspectRatio(const float& asepct) override;
 
         void setFOV(float fov);
@@ -84,13 +73,12 @@ namespace Engine7414
         void setPitch(float PitchDeg);
 
         void zoom(const float& fov) override;
-        void rotateY(float deltaYawDeg);
-        void rotateX(float deltaPitchDeg);
+        // void rotateY(float deltaYawDeg);
+        // void rotateX(float deltaPitchDeg);
 
         inline const Rotation&  rotation() const { return __rotation; }
 
     private:
-        void updateViewMatrix() const override;
         void updateProjMatrix() const override;
 
     private:
@@ -109,16 +97,11 @@ namespace Engine7414
         ~Camera2D() = default;
 
         const char* c_str() const override { return "2D camera"; }
-
         void setAspectRatio(const float& aspect) override;
-
-        void setPosition(const glm::vec3& pos) override;
         void zoom(const float& level) override;
-        void setRotation(const float& rotation);
 
-        static Ref<Camera2D> create(float left, float right, float bottom, float top);
+        static Scoped<Camera2D> create(float left, float right, float bottom, float top);
     private:
-        void updateViewMatrix() const override;
         void updateProjMatrix() const override;
 
     private:

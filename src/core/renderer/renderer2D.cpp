@@ -1,3 +1,4 @@
+#include "core/renderer/renderer.h"
 #include "core/renderer/renderer2D.h"
 #include "core/renderer/renderCommands.h"
 #include "core/renderer/rendererData.h"
@@ -5,6 +6,13 @@
 namespace Engine7414
 {
     static RendererData2D* __data; // allocating on the heap for life time control
+
+    glm::mat4 Renderer2D::__ProjViewMatCache__;
+    bool Renderer2D::__updateProjViewMat__ = true;
+
+    void Renderer2D::setUpdateMatFlag() {
+        __updateProjViewMat__ = true;
+    }
 
     void Renderer2D::init() {
         __data = new RendererData2D;
@@ -63,12 +71,17 @@ namespace Engine7414
         delete __data;
     }
 
-    void Renderer2D::beginScene(const Ref<CameraBase>& camera, const glm::vec4& color) {
+    void Renderer2D::beginScene(const TransformComponent& transformComponent, const CameraBase* camera, const glm::vec4& color) {
         RenderCommands::clear(color);
-
+        if (__updateProjViewMat__) {
+            __ProjViewMatCache__ = camera->projection() *
+                                   glm::inverse(transformComponent.transform());
+            __updateProjViewMat__ = false;
+            CORE_INFO("projview recalculated");
+        }
         __data->stats.reset();
         __data->textureShader->bind();
-        __data->textureShader->setMat4f("u_ProjViewMat", camera->projXview());
+        __data->textureShader->setMat4f("u_ProjViewMat", __ProjViewMatCache__);
     }
 
     void Renderer2D::endScene() {
@@ -148,5 +161,9 @@ namespace Engine7414
 
     Renderer2D::statistics Renderer2D::stat() {
         return __data->stats;
+    }
+
+    void Renderer2D::resetStat() {
+        __data->stats.reset();
     }
 }

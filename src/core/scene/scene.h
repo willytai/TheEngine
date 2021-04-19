@@ -2,6 +2,7 @@
 #define __SCENE_H__
 
 #include "core/util/timeStep.h"
+#include "core/event/event.h"
 
 #if defined(__clang__)
     #pragma clang diagnostic push
@@ -35,13 +36,15 @@ namespace Engine7414
     {
         friend class Entity;
     public:
-        Scene() = default;
+        Scene();
         ~Scene() = default;
 
         // API
         Entity createEntity(const char* name = NULL);
 
-        void onUpdate(const TimeStep& deltaTime);
+        void onUpdate(const TimeStep& deltaTime, const bool& viewportFocused = true);
+        void onResize(const float& width, const float& height);
+        void onEvent(Event& event);
 
     private:
         entt::registry _registry;

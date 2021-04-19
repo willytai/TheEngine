@@ -6,8 +6,7 @@
 namespace Engine7414
 {
     EditorLayer::EditorLayer(const char* name) :
-        Layer(name),
-        _color({ 0.8f, 0.2f, 0.3f, 1.0f })
+        Layer(name)
     {
 
     }
@@ -37,7 +36,6 @@ namespace Engine7414
             window_flags |= ImGuiWindowFlags_NoBackground;
 
 
-        _cameraController.createCamera2D(1280.0f / 960.0f);
 #ifdef __APPLE__
         _texture = Texture2D::create("./resource/texture/instagram.png");
         _texture1 = Texture2D::create("./resource/texture/logo.png");
@@ -55,9 +53,18 @@ namespace Engine7414
 
         // scene
         _activeScene = CreateRef<Scene>();
+
+        // test entity
         _testEntity = _activeScene->createEntity("ColoredSquare");
         _testEntity.emplace<SpriteRendererComponent>();
-        _testEntity.replace<TransformComponent>(glm::vec3(1.0f, 1.0f, 0.0f), glm::vec3(0.2f, 0.2f, 1.0f));
+
+        // camera
+        _cameraEntity = _activeScene->createEntity("Scene Camera");
+        float aspect = 1280.0f / 960.0f;
+        bool active = true, controllable = true;
+        auto& cameraComponent = _cameraEntity.emplace<CameraComponent>(aspect, CameraBase::Orthographic, active, controllable);
+
+        // _cameraController.createCamera2D(1280.0f / 960.0f);
 
         CORE_INFO( "Editor Layer Initialized" );
     }
@@ -69,29 +76,24 @@ namespace Engine7414
     }
 
     void EditorLayer::onUpdate(const TimeStep& deltaTime) {
-        if ( ViewportCollapsed ) { // call begin and end to make sure stats are reset
-            Renderer2D::beginScene(_cameraController.getCamera());
-            Renderer2D::endScene();
+        if ( ViewportCollapsed ) {
+            // not really necesary (just to make sure the statistics are reset)
+            Renderer2D::resetStat();
             return;
-        }
-        else if ( ViewportFocused ) {
-            _cameraController.onUpdate(deltaTime);
         }
 
         // update frame buffer if necessary
         const auto& fbspec = _framebuffer->spec();
         if ( (uint32_t)ViewportSize.x != fbspec.width || (uint32_t)ViewportSize.y != fbspec.height ) {
-            _cameraController.onResize( (uint32_t)ViewportSize.x, (uint32_t)ViewportSize.y );
             _framebuffer->resize( (uint32_t)ViewportSize.x, (uint32_t)ViewportSize.y );
+            _activeScene->onResize(ViewportSize.x, ViewportSize.y);
         }
 
         _framebuffer->bind();
-        Renderer2D::beginScene(_cameraController.getCamera());
-        _activeScene->onUpdate( deltaTime );
+        _activeScene->onUpdate( deltaTime, ViewportFocused );
         // Renderer2D::drawQuad({ 1.0f, 0.0f, 0.1f }, { 0.3f, 0.3f }, _texture);
         // Renderer2D::drawQuad({ -1.0f, 0.0f }, { 1.0f, 1.0f }, _texture1);
         // Renderer2D::drawQuad({ 1.0f, 0.0f }, { 0.5f, 1.0f }, _color);
-        Renderer2D::endScene();
         _framebuffer->unbind();
     }
 
@@ -175,6 +177,6 @@ namespace Engine7414
     }
 
     void EditorLayer::onEvent(Event& event) {
-        _cameraController.onEvent(event);
+        _activeScene->onEvent(event);
     }
 }

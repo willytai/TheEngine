@@ -5,16 +5,21 @@
 #include "core/renderer/shader.h"
 #include "core/renderer/vertexArray.h"
 #include "core/renderer/texture.h"
+#include "core/scene/components.h"
 
 namespace Engine7414
 {
     class Renderer2D
     {
+        static glm::mat4 __ProjViewMatCache__;
+        static bool __updateProjViewMat__;
     public:
+        static void setUpdateMatFlag();
+
         static void init();
         static void shutdown();
 
-        static void beginScene(const Ref<CameraBase>& camera, const glm::vec4& color = { 0.0f, 0.0f, 0.0f, 1.0f });
+        static void beginScene(const TransformComponent& transformComponent, const CameraBase* camera,  const glm::vec4& color = { 0.0f, 0.0f, 0.0f, 1.0f });
         static void endScene();
         static void flush();
 
@@ -36,6 +41,7 @@ namespace Engine7414
             void reset() { drawCalls = quadCount = 0; }
         };
         static statistics stat();
+        static void resetStat();
 
     private:
         static void drawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color, const Ref<Texture2D>& texture);
