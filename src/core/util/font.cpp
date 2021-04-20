@@ -5,7 +5,7 @@ namespace Engine7414
 {
     std::vector<fontStat> FontLoader::__fonts__;
 
-    void  FontLoader::loadFromeFile(const fontStat& stat) {
+    void  FontLoader::loadFromFile(const fontStat& stat) {
         __fonts__.emplace_back( stat );
     }
 

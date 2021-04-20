@@ -64,8 +64,6 @@ namespace Engine7414
         bool active = true, controllable = true;
         auto& cameraComponent = _cameraEntity.emplace<CameraComponent>(aspect, CameraBase::Orthographic, active, controllable);
 
-        // _cameraController.createCamera2D(1280.0f / 960.0f);
-
         CORE_INFO( "Editor Layer Initialized" );
     }
 
@@ -142,7 +140,7 @@ namespace Engine7414
             ImGui::Text("Entities");
             if (_testEntity) {
                 ImGui::Separator();
-                ImGui::Text("%s", _testEntity.get<TagComponent>());
+                ImGui::Text("%s", _testEntity.get<TagComponent>().tag);
                 ImGui::ColorEdit4("color", &_testEntity.get<SpriteRendererComponent>().color[0]);
                 ImGui::Separator();
             }

@@ -10,7 +10,8 @@ VENDOR = ../vendor/spdlog/include/ \
 		 ../vendor/imgui \
 		 ../vendor/glm
 
-PKGS    = glad backend platform core imgui editor
+SRCPKGS = backend platform core editor
+PKGS    = glad imgui $(SRCPKGS)
 GLFW    = glfw
 EXTPKG  = $(GLFW)
 ALLPKGS = $(PKGS) $(EXTPKG)
@@ -69,7 +70,7 @@ cleanall:
 	done
 
 clean:
-	@for pkg in $(PKGS); \
+	@for pkg in $(SRCPKGS); \
 	do \
 		$(ECHO) "Cleaning $$pkg ..."; \
 		$(MAKE) -C src/$$pkg -f makefile --no-print-directory PKGNAME=$$pkg clean; \
