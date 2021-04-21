@@ -41,16 +41,16 @@ namespace Engine7414
     }
 
     void CameraController::onUpdate2D(const TimeStep& deltaTime, glm::vec3& position) {
-        if (Engine7414::Input::keyPressed(Engine7414::Key::W)) {
+        if (Input::keyPressed(Key::W)) {
             this->moveY(position, _translationSpeed * deltaTime);
         }
-        else if (Engine7414::Input::keyPressed(Engine7414::Key::S)) {
+        else if (Input::keyPressed(Key::S)) {
             this->moveY(position, -_translationSpeed * deltaTime);
         }
-        if (Engine7414::Input::keyPressed(Engine7414::Key::D)) {
+        if (Input::keyPressed(Key::D)) {
             this->moveX(position, _translationSpeed * deltaTime);
         }
-        else if (Engine7414::Input::keyPressed(Engine7414::Key::A)) {
+        else if (Input::keyPressed(Key::A)) {
             this->moveX(position, -_translationSpeed * deltaTime);
         }
     }

@@ -3,6 +3,7 @@
 
 #include "core/renderer/camera.h"
 #include "core/renderer/cameraController.h"
+#include "core/script/scriptable.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -11,7 +12,7 @@ namespace Engine7414
 {
     struct TagComponent
     {
-        const char* tag;
+        const char* name;
     };
 
     struct TransformComponent
@@ -29,6 +30,7 @@ namespace Engine7414
 
     struct CameraComponent
     {
+        // TODO remove controller
         Scoped<CameraBase>  camera;
         CameraController    controller;
 
@@ -36,6 +38,20 @@ namespace Engine7414
         bool active;
 
         CameraComponent(float aspect, CameraBase::Type type, bool active = false, bool controllable = false);
+    };
+
+    struct NativeScriptComponent
+    {
+        Scriptable*     instance = NULL;
+
+        std::function<void(Scriptable*&)> constructFn;
+        std::function<void(Scriptable*&)> destroyFn;
+
+        template <typename T>
+        void bind() {
+            constructFn = [&](Scriptable*& instance){ instance = new T(); };
+            destroyFn   = [&](Scriptable*& instance){ delete (T*)instance; instance = NULL; };
+        }
     };
 }
 

@@ -1,5 +1,7 @@
 #include "core/app.h"
 #include "core/renderer/renderer2D.h"
+#include "core/script/scriptable.h"
+#include "core/input/input.h"
 #include "editor/editorLayer.h"
 #include "imgui/imgui.h"
 
@@ -62,7 +64,43 @@ namespace Engine7414
         _cameraEntity = _activeScene->createEntity("Scene Camera");
         float aspect = 1280.0f / 960.0f;
         bool active = true, controllable = true;
-        auto& cameraComponent = _cameraEntity.emplace<CameraComponent>(aspect, CameraBase::Orthographic, active, controllable);
+        _cameraEntity.emplace<CameraComponent>(aspect, CameraBase::Orthographic, active, controllable);
+
+        _cameraMinor = _activeScene->createEntity("Minor Camera");
+        _cameraMinor.emplace<CameraComponent>(aspect, CameraBase::Orthographic, !active, controllable);
+
+        class Controller : public Scriptable
+        {
+            void onConstruct() {
+                Renderer2D::setUpdateMatFlag();
+                auto& transform = this->get<TransformComponent>();
+                transform.translation.x += float(rand() % 10 - 5) / 10.0f;
+            }
+
+            void onUpdate(const TimeStep& deltaTime) {
+                auto& transform = this->get<TransformComponent>();
+                if (Input::keyPressed(Key::W)) {
+                    Renderer2D::setUpdateMatFlag();
+                    transform.translation.y += 5.0f * deltaTime;
+                }
+                else if (Input::keyPressed(Key::S)) {
+                    Renderer2D::setUpdateMatFlag();
+                    transform.translation.y -= 5.0f * deltaTime;
+                }
+                if (Input::keyPressed(Key::D)) {
+                    Renderer2D::setUpdateMatFlag();
+                    transform.translation.x += 5.0f * deltaTime;
+                }
+                else if (Input::keyPressed(Key::A)) {
+                    Renderer2D::setUpdateMatFlag();
+                    transform.translation.x -= 5.0f * deltaTime;
+                }
+            }
+        };
+        _cameraEntity.emplace<NativeScriptComponent>().bind<Controller>();
+        _cameraMinor.emplace<NativeScriptComponent>().bind<Controller>();
+
+        _hierarchyPanel.setContext( _activeScene );
 
         CORE_INFO( "Editor Layer Initialized" );
     }
@@ -129,9 +167,11 @@ namespace Engine7414
             ImGui::EndMenuBar();
         }
 
+        _hierarchyPanel.onImGui();
+
         // test window
         {
-            auto stat = Engine7414::Renderer2D::stat();
+            auto stat = Renderer2D::stat();
             ImGui::Begin("Test");
             ImGui::Text( "framerate: %.0f", ImGui::GetIO().Framerate );
             ImGui::Text( "drawCalls: %d", stat.drawCalls );
@@ -140,11 +180,16 @@ namespace Engine7414
             ImGui::Text("Entities");
             if (_testEntity) {
                 ImGui::Separator();
-                ImGui::Text("%s", _testEntity.get<TagComponent>().tag);
+                ImGui::Text("%s", _testEntity.get<TagComponent>().name);
                 ImGui::ColorEdit4("color", &_testEntity.get<SpriteRendererComponent>().color[0]);
                 ImGui::Separator();
             }
             ImGui::Separator();
+            if (ImGui::Checkbox( "minor camera", &minor )) {
+                Renderer2D::setUpdateMatFlag();
+                _cameraEntity.get<CameraComponent>().active = !minor;
+                _cameraMinor.get<CameraComponent>().active = minor;
+            }
             ImGui::End();
         }
 

@@ -8,51 +8,62 @@
 
 namespace Engine7414
 {
-	class Entity
-	{
-	public:
-		Entity() = default;
-		Entity(entt::entity handle, Scene* scene);
+    class Entity
+    {
+    public:
+        Entity() = default;
+        Entity(entt::entity handle, Scene* scene);
 
-		operator bool() const {
-			return _handle != entt::null;
-		}
+        template<typename T, typename... Args>
+        T& emplace(Args&&... args) {
+            CORE_ASSERT(!this->has<T>(), "entity already has component");
+            return _scene->_registry.emplace<T>(_handle, std::forward<Args>(args)...);
+        }
 
-		template<typename T, typename... Args>
-		T& emplace(Args&&... args) {
-			CORE_ASSERT(!this->has<T>(), "entity already has component");
-			return _scene->_registry.emplace<T>(_handle, std::forward<Args>(args)...);
-		}
+        template<typename T>
+        T& get() {
+            CORE_ASSERT(this->has<T>(), "entity doesn't have component");
+            return _scene->_registry.get<T>(_handle);
+        }
 
-		template<typename T>
-		T& get() {
-			CORE_ASSERT(this->has<T>(), "entity doesn't have component");
-			return _scene->_registry.get<T>(_handle);
-		}
+        template<typename T>
+        const T& get() const {
+            CORE_ASSERT(this->has<T>(), "entity doesn't have component");
+            return _scene->_registry.get<T>(_handle);
+        }
 
-		template<typename T>
-		bool has() {
-			return _scene->_registry.all_of<T>(_handle);
-		}
+        template<typename T>
+        bool has() const {
+            return _scene->_registry.all_of<T>(_handle);
+        }
 
-		// in-place
-		template<typename T>
-		T& patch(std::function<void(T&)> patchFn) {
-			CORE_ASSERT(this->has<T>(), "entity doesn't have component");
-			return _scene->_registry.patch<T>(_handle, patchFn);
-		}
+        // in-place
+        template<typename T>
+        T& patch(std::function<void(T&)> patchFn) {
+            CORE_ASSERT(this->has<T>(), "entity doesn't have component");
+            return _scene->_registry.patch<T>(_handle, patchFn);
+        }
 
-		// discard the old one and constructs a new one
-		template<typename T, typename... Args>
-		T& replace(Args&&... args) {
-			CORE_ASSERT(this->has<T>(), "entity doesn't have component");
-			return _scene->_registry.replace<T>(_handle, std::forward<Args>(args)...);
-		}
+        // discard the old one and constructs a new one
+        template<typename T, typename... Args>
+        T& replace(Args&&... args) {
+            CORE_ASSERT(this->has<T>(), "entity doesn't have component");
+            return _scene->_registry.replace<T>(_handle, std::forward<Args>(args)...);
+        }
 
-	private:
-		entt::entity _handle = entt::null;
-		Scene*       _scene = NULL;
-	};
+        operator bool() const { return _handle != entt::null; }
+
+        // for ImGui (unique indexing)
+        operator intptr_t() const { return (intptr_t)_handle; }
+
+        bool operator==(const Entity& other) {
+            return _handle == other._handle && _scene == other._scene;
+        }
+
+    private:
+        entt::entity _handle = entt::null;
+        Scene*       _scene = NULL;
+    };
 }
 
 #endif

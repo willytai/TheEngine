@@ -11,6 +11,7 @@
 #include "core/scene/scene.h"
 #include "core/scene/entity.h"
 #include "core/scene/components.h"
+#include "core/panel/hierarchyPanel.h"
 #include <glm/glm.hpp>
 
 namespace Engine7414
@@ -44,6 +45,10 @@ namespace Engine7414
         Ref<Scene>        _activeScene;
         Entity            _testEntity;
         Entity            _cameraEntity;
+        Entity            _cameraMinor;
+        bool              minor = false;
+
+        HierarchyPanel    _hierarchyPanel;
     };
 }
 

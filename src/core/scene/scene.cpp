@@ -18,6 +18,18 @@ namespace Engine7414
     }
 
     void Scene::onUpdate(const TimeStep& deltaTime, const bool& viewportFocused) {
+        _registry.view<NativeScriptComponent>().each(
+            [&](auto entity, auto& script){
+                if ( !script.instance ) {
+                    script.constructFn(script.instance);
+                    // TODO this should be automatically set, otherwise it's easy to mess up
+                    script.instance->_entity = Entity{ entity, this };
+                    script.instance->onConstruct();
+                }
+                script.instance->onUpdate( deltaTime );
+            }
+        );
+
         TransformComponent* cameraTransform = nullptr;
         CameraComponent* sceneCamera = nullptr;
         // active camera position update
@@ -25,12 +37,11 @@ namespace Engine7414
             // find the active camera and call the onUpdate function from its controller if viewport is focused
             auto group = _registry.group<CameraComponent>(entt::get<TransformComponent>);
             for (auto entity : group) {
-                std::tuple<CameraComponent&, TransformComponent&> tup = group.get(entity);
-                auto& [camera, transform] = tup;
+                auto [camera, transform] = group.get(entity);
                 if (camera.active) {
-                    if (viewportFocused) {
-                        camera.controller.onUpdate(deltaTime, transform.translation);
-                    }
+                    // if (viewportFocused) {
+                    //     camera.controller.onUpdate(deltaTime, transform.translation);
+                    // }
                     cameraTransform = &transform;
                     sceneCamera = &camera;
                     break;
@@ -42,11 +53,11 @@ namespace Engine7414
         if (sceneCamera)
         {
             Renderer2D::beginScene(*cameraTransform, (*sceneCamera).camera.get());
-            auto group = _registry.group<SpriteRendererComponent>(entt::get<TransformComponent>);
-            for (auto entity : group) {
-                const auto& [sprite, transform] = group.get(entity);
-                Renderer2D::drawQuad(transform.transform(), sprite.color);
-            }
+            _registry.group<SpriteRendererComponent>(entt::get<TransformComponent>).each(
+                [](auto entity, auto& sprite, auto& transform){
+                    Renderer2D::drawQuad(transform.transform(), sprite.color);
+                }
+            );
             Renderer2D::endScene();
         }
     }
@@ -58,9 +69,10 @@ namespace Engine7414
         auto view = _registry.view<CameraComponent>();
         for (auto entity : view) {
             auto& camera = view.get<CameraComponent>(entity);
-            if (camera.active) {
+            // TODO fix this
+            // if (camera.active) {
                 camera.controller.onResize(width, height);
-            }
+            // }
         }
     }
 

@@ -32,9 +32,11 @@
 namespace Engine7414
 {
     class Entity;
+    class HierarchyPanel;
     class Scene
     {
         friend class Entity;
+        friend class HierarchyPanel;
     public:
         Scene();
         ~Scene() = default;

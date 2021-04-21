@@ -2,8 +2,8 @@
 
 namespace Engine7414
 {
-	Entity::Entity(entt::entity handle, Scene* scene) :
-		_handle(handle),
-		_scene(scene)
-	{}
+    Entity::Entity(entt::entity handle, Scene* scene) :
+        _handle(handle),
+        _scene(scene)
+    {}
 }
