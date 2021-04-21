@@ -11,7 +11,7 @@
 #include "core/scene/scene.h"
 #include "core/scene/entity.h"
 #include "core/scene/components.h"
-#include "core/panel/hierarchyPanel.h"
+#include "editor/panel/hierarchyPanel.h"
 #include <glm/glm.hpp>
 
 namespace Engine7414

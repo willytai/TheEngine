@@ -190,6 +190,7 @@ namespace Engine7414
                 _cameraEntity.get<CameraComponent>().active = !minor;
                 _cameraMinor.get<CameraComponent>().active = minor;
             }
+            ImGui::Separator();
             ImGui::End();
         }
 

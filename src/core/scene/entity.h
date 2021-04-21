@@ -11,6 +11,8 @@ namespace Engine7414
     class Entity
     {
     public:
+        static Entity Null;
+    public:
         Entity() = default;
         Entity(entt::entity handle, Scene* scene);
 

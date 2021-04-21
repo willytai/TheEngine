@@ -12,7 +12,7 @@ namespace Engine7414
 {
     struct TagComponent
     {
-        const char* name;
+        std::string name;
     };
 
     struct TransformComponent

@@ -20,6 +20,7 @@ namespace Engine7414
 
     private:
         void drawEntity(const Entity& entity);
+        void drawProperties(Entity& entity);
 
     private:
         Ref<Scene>  _context;

@@ -2,7 +2,7 @@
 #define __ENTRY_H__
 
 #ifndef DEFAULT_CREATE
-    #pragma message("compiling engine without a defulat appCreate function, make sure you've defined your own!")
+    #pragma message("compiling engine without a default appCreate function, make sure you've defined your own!")
 #endif
 
 int main(int argc, char *argv[])
