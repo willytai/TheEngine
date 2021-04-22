@@ -7,8 +7,8 @@
 
 namespace Engine7414
 {
-     bool ImGuiLayer::__blockEvents__ = true;
-     ImGuiLayer* ImGuiLayer::__instance__ = NULL;
+    bool                 ImGuiLayer::__blockEvents__ = true;
+    ImGuiLayer*          ImGuiLayer::__instance__ = NULL;
 
     ImGuiLayer::ImGuiLayer() :
         Layer("ImGuiLayer")
@@ -31,6 +31,7 @@ namespace Engine7414
     }
 
     void ImGuiLayer::end() {
+
         ImGuiIO& io = ImGui::GetIO();
         io.DisplaySize = ImVec2( (float)App::getWindow()->getWidth(), (float)App::getWindow()->getHeight() );
 
@@ -56,7 +57,7 @@ namespace Engine7414
         io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
         // load font
-        auto loadFunc = [&io](const char* filepath, float size_pixels) {
+        auto loadFunc = [&](const char* filepath, float size_pixels) {
             io.Fonts->AddFontFromFileTTF( filepath, size_pixels );
         };
         FontLoader::load( loadFunc );
@@ -127,5 +128,13 @@ namespace Engine7414
                 return ImGui::GetIO().WantCaptureMouse;
             }
         });
+    }
+
+    void ImGuiLayer::fontZoomIn() {
+        ImGui::GetIO().FontGlobalScale += 0.1f;
+    }
+
+    void ImGuiLayer::fontZoomOut() {
+        ImGui::GetIO().FontGlobalScale -= 0.1f;
     }
 }

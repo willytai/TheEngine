@@ -3,7 +3,7 @@
 #include "core/script/scriptable.h"
 #include "core/input/input.h"
 #include "editor/editorLayer.h"
-#include "imgui/imgui.h"
+#include <imgui/imgui.h>
 
 namespace Engine7414
 {
@@ -112,12 +112,6 @@ namespace Engine7414
     }
 
     void EditorLayer::onUpdate(const TimeStep& deltaTime) {
-        if ( ViewportCollapsed ) {
-            // not really necesary (just to make sure the statistics are reset)
-            Renderer2D::resetStat();
-            return;
-        }
-
         // update frame buffer if necessary
         const auto& fbspec = _framebuffer->spec();
         if ( (uint32_t)ViewportSize.x != fbspec.width || (uint32_t)ViewportSize.y != fbspec.height ) {
@@ -164,6 +158,12 @@ namespace Engine7414
 
                 ImGui::EndMenu();
             }
+            if (ImGui::BeginMenu("View")) {
+                if (ImGui::MenuItem( "Zoom In",  "cmd +" )) ImGuiLayer::fontZoomIn();
+                if (ImGui::MenuItem( "Zoom Out", "cmd -" )) ImGuiLayer::fontZoomOut();
+
+                ImGui::EndMenu();
+            }
             ImGui::EndMenuBar();
         }
 
@@ -195,15 +195,14 @@ namespace Engine7414
 
         // Viewport Window
         {
-            // Info: set to zero padding on viewport window
+            // Info: set to zero padding on viewport window and make it non-collapsable
             ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-            ImGui::Begin("View Port");
+            ImGui::Begin("View Port", NULL, ImGuiWindowFlags_NoCollapse);
             ImGui::PopStyleVar();
 
             ViewportSize      = ImGui::GetContentRegionAvail();
             ViewportFocused   = ImGui::IsWindowFocused();
             ViewportHovered   = ImGui::IsWindowHovered();
-            ViewportCollapsed = ImGui::IsWindowCollapsed();
 
             // events should be propagated only when the viewport is focused and hovered!
             if ( ViewportFocused && ViewportHovered ) ImGuiLayer::setNoBlockEvent();
@@ -214,6 +213,8 @@ namespace Engine7414
 
             ImGui::End();
         }
+
+        // ImGui::ShowDemoWindow();
 
         // end dockspace
         ImGui::End();

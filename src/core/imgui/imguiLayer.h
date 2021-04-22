@@ -2,7 +2,7 @@
 #define __IMGUI_LAYER_H__
 
 #include "core/layer/layer.h"
-#include "imgui/imgui.h"
+#include <imgui/imgui.h>
 
 namespace Engine7414
 {
@@ -22,6 +22,8 @@ namespace Engine7414
 
         static inline void setBlockEvent() { __blockEvents__ = true; }
         static inline void setNoBlockEvent() { __blockEvents__ = false; }
+        static void fontZoomIn();
+        static void fontZoomOut();
 
     private:
         void onKeyEvents(Event& event);

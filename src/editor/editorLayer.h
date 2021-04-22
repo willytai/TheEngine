@@ -36,7 +36,6 @@ namespace Engine7414
         bool                dockspaceOpen   = false;
         bool                ViewportFocused = false;
         bool                ViewportHovered = false;
-        bool                ViewportCollapsed = false;
 
         Ref<Texture2D>    _texture;
         Ref<Texture2D>    _texture1;
