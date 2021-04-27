@@ -60,7 +60,11 @@ namespace Engine7414
     void HierarchyPanel::drawProperties(Entity& entity) {
         if (entity.has<TagComponent>()) {
             auto& tag = entity.get<TagComponent>();
+#ifdef _MSC_VER
             strcpy_s<BUF_MAX>(buffer, tag.name.c_str());
+#else
+            strcpy(buffer, tag.name.c_str());
+#endif
             if (ImGui::InputText("Name", buffer, BUF_MAX)) {
                 tag.name = std::string(buffer);
             }

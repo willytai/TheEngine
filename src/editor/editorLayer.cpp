@@ -4,6 +4,7 @@
 #include "core/input/input.h"
 #include "editor/editorLayer.h"
 #include <imgui/imgui.h>
+#include <imgui/imgui_internal.h>
 
 namespace Engine7414
 {
@@ -180,7 +181,7 @@ namespace Engine7414
             ImGui::Text("Entities");
             if (_testEntity) {
                 ImGui::Separator();
-                ImGui::Text("%s", _testEntity.get<TagComponent>().name);
+                ImGui::Text("%s", _testEntity.get<TagComponent>().name.c_str());
                 ImGui::ColorEdit4("color", &_testEntity.get<SpriteRendererComponent>().color[0]);
                 ImGui::Separator();
             }
@@ -196,9 +197,15 @@ namespace Engine7414
 
         // Viewport Window
         {
+            // remove the tab bar of the view port, forces the window to stay docked if its already docked
+            static ImGuiWindowClass window_class;
+            window_class.DockNodeFlagsOverrideSet = ImGuiDockNodeFlags_NoTabBar;
+            ImGui::SetNextWindowClass( &window_class );
+
             // Info: set to zero padding on viewport window and make it non-collapsable
+            static ImGuiWindowFlags flags = ImGuiWindowFlags_NoCollapse;
             ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-            ImGui::Begin("View Port", NULL, ImGuiWindowFlags_NoCollapse);
+            ImGui::Begin("View Port", NULL, flags );
             ImGui::PopStyleVar();
 
             ViewportSize      = ImGui::GetContentRegionAvail();
