@@ -1,17 +1,25 @@
 #ifndef __MTL_CONTEXT_H__
 #define __MTL_CONTEXT_H__
 
-#include "core/renderer/context.h"
-
 #import <Metal/Metal.h>
 #import <QuartzCore/QuartzCore.h>
 
+#include "core/renderer/context.h"
+
 struct GLFWwindow;
+
+// this class stores all the non-transient objects for metal backend
+@interface GlobalContext : NSObject
+@property (nonatomic, strong) id<MTLDevice> nativeDevice;
+@property (nonatomic, strong) id<MTLCommandQueue> commandQueue;
+@property (nonatomic, strong) CAMetalLayer* swapChain;
+@end
 
 namespace Engine7414
 {
     class MetalContext : public Context
     {
+        static MetalContext* __instance__;
     public:
         MetalContext(GLFWwindow* handle);
 
@@ -19,11 +27,10 @@ namespace Engine7414
         void swapBuffers() override;
         void swapInterval(int interval) override;
 
-        id<MTLDevice> device();
-
+        static GlobalContext* getContext();
     private:
-        GLFWwindow*   _handle;
-        id<MTLDevice> _device;
+        GLFWwindow*     _handle;
+        GlobalContext*  _context;
     };
 }
 

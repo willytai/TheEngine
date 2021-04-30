@@ -20,6 +20,8 @@ public:
         ImGui::ColorEdit4( "clear color", &_clearColor[0] );
         ImGui::Text( "frame rate: %.0f", ImGui::GetIO().Framerate);
         ImGui::End();
+
+        ImGui::ShowDemoWindow();
     }
 
     void onEvent(Engine7414::Event& event) override {
