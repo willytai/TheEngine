@@ -16,6 +16,8 @@ namespace Engine7414
     class FontLoader
     {
         friend class ImGuiLayer;
+        friend class GLImGuiLayer;
+        friend class MTLImGuiLayer;
     public:
         // to make this work, make sure you load the font before the application starts (constructs)!!
         // this function actually stores the font instead of loading it directly

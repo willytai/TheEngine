@@ -2,6 +2,7 @@
 #define __IMGUI_LAYER_H__
 
 #include "core/layer/layer.h"
+#include "backend/backend.h"
 #include <imgui/imgui.h>
 
 namespace Engine7414
@@ -12,18 +13,20 @@ namespace Engine7414
         static ImGuiLayer* __instance__;
     public:
         ImGuiLayer();
-        ~ImGuiLayer();
+        virtual ~ImGuiLayer();
 
-        void begin();
-        void end();
-        void onAttach() override;
-        void onDetach() override;
+        virtual void begin() = 0;
+        virtual void end() = 0;
+        virtual void onAttach() override = 0;
+        virtual void onDetach() override = 0;
         void onEvent(Event& event) override;
 
         static inline void setBlockEvent() { __blockEvents__ = true; }
         static inline void setNoBlockEvent() { __blockEvents__ = false; }
         static void fontZoomIn();
         static void fontZoomOut();
+
+        static ImGuiLayer* create(const RendererBackend& backend);
 
     private:
         void onKeyEvents(Event& event);

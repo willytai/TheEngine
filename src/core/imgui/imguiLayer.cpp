@@ -1,12 +1,20 @@
-#include "core/util/font.h"
-#include "core/app.h"
 #include "core/imgui/imguiLayer.h"
+#include "core/imgui/GLimguiLayer.h"
+#include "core/imgui/MTLimguiLayer.h"
+#include "core/core.h"
 #include "imgui/imgui.h"
-#include "imgui/backends/imgui_impl_glfw.h"
-#include "imgui/backends/imgui_impl_opengl3.h"
 
 namespace Engine7414
 {
+    ImGuiLayer* ImGuiLayer::create(const RendererBackend& backend) {
+        switch (backend) {
+            case RendererBackend::OpenGL: return new GLImGuiLayer;
+            case RendererBackend::Metal: return new MTLImGuiLayer;
+            default: CORE_ASSERT( false, "Unsupported Backend" );
+        }
+        return NULL;
+    }
+
     bool                 ImGuiLayer::__blockEvents__ = true;
     ImGuiLayer*          ImGuiLayer::__instance__ = NULL;
 
@@ -23,66 +31,6 @@ namespace Engine7414
     }
 
     ImGuiLayer::~ImGuiLayer() {}
-
-    void ImGuiLayer::begin() {
-        ImGui_ImplOpenGL3_NewFrame();
-        ImGui_ImplGlfw_NewFrame();
-        ImGui::NewFrame();
-    }
-
-    void ImGuiLayer::end() {
-
-        ImGuiIO& io = ImGui::GetIO();
-        io.DisplaySize = ImVec2( (float)App::getWindow()->getWidth(), (float)App::getWindow()->getHeight() );
-
-        ImGui::Render();
-        ImGui_ImplOpenGL3_RenderDrawData( ImGui::GetDrawData() );
-
-        // docking stuff
-        if ( io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable ) {
-            GLFWwindow* backup_current_context = glfwGetCurrentContext();
-            ImGui::UpdatePlatformWindows();
-            ImGui::RenderPlatformWindowsDefault();
-            glfwMakeContextCurrent(backup_current_context);
-        }
-    }
-
-    void ImGuiLayer::onAttach() {
-        IMGUI_CHECKVERSION();
-        ImGui::CreateContext();
-
-        ImGuiIO& io = ImGui::GetIO();
-        io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-        io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-        io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
-
-        // load font
-        auto loadFunc = [&](const char* filepath, float size_pixels) {
-            io.Fonts->AddFontFromFileTTF( filepath, size_pixels );
-        };
-        FontLoader::load( loadFunc );
-
-        ImGui::StyleColorsDark();
-
-        // When viewports are enabled we tweak WindowRounding/WindowBg
-        // so platform windows can look identical to regular ones.
-        ImGuiStyle& style = ImGui::GetStyle();
-        if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
-            style.WindowRounding = 0.0f;
-            style.Colors[ImGuiCol_WindowBg].w = 1.0f;
-        }
-
-        ImGui_ImplGlfw_InitForOpenGL( (GLFWwindow*)App::getWindow()->nativeWindow(), true );
-        ImGui_ImplOpenGL3_Init( "#version 410 core" );
-
-        CORE_INFO( "ImGui Initialized" );
-    }
-
-    void ImGuiLayer::onDetach() {
-        ImGui_ImplOpenGL3_Shutdown();
-        ImGui_ImplGlfw_Shutdown();
-        ImGui::DestroyContext();
-    }
 
     void ImGuiLayer::onEvent(Event& event) {
         if ( __blockEvents__ ) {

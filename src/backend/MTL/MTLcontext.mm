@@ -1,8 +1,10 @@
-#include "backend/Metal/MTLcontext.h"
+#include "backend/MTL/MTLcontext.h"
 #include "backend/backend.h"
 
-#import <Metal/Metal.h>
-#import <QuartzCore/QuartzCore.h>
+#define GLFW_INCLUDE_NONE
+#define GLFW_EXPOSE_NATIVE_COCOA
+#include <GLFW/glfw3.h>
+#include <GLFW/glfw3native.h>
 
 namespace Engine7414
 {
@@ -39,8 +41,7 @@ namespace Engine7414
 
     }
 
-    void* MetalContext::device() {
-        // TODO not sure if this is correct
-        return (__bridge void*)_device;
+    id<MTLDevice> MetalContext::device() {
+        return _device;
     }
 }

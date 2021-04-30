@@ -1,4 +1,6 @@
-#include "core/app.h"
+#include "core/application/app.h"
+#include "core/application/appOpenGL.h"
+#include "core/application/appMetal.h"
 #include "core/renderer/renderer.h"
 #include "editor/editorLayer.h"
 
@@ -33,36 +35,22 @@ namespace Engine7414
 
         // initialize renderer
         Renderer::init( backend );
-
-        // ImGui layer
-        this->pushOverlay( _imguiLayer = new ImGuiLayer );
-    }
-
-    App::~App() {}
-
-    void App::run() {
-        CORE_INFO( "Engine Running!" );
-        _stopWatch.reset();
-
-        while ( _shouldRun ) {
-            TimeStep deltaTime = _stopWatch.deltaTime();
-
-            if ( !_minimized ) {
-                for (auto* layer : _layerStack) {
-                    layer->onUpdate( deltaTime );
-                }
-            }
-
-            _imguiLayer->begin();
-            for (auto* layer : _layerStack) {
-                layer->onImGui();
-            }
-            _imguiLayer->end();
-
-            _window->onUpdate();
+        switch ( backend ) {
+            case RendererBackend::OpenGL: _appBase = new AppOpenGL; break;
+            case RendererBackend::Metal:  _appBase = new AppMetal; break;
+            default: CORE_ASSERT( false, "" );
         }
 
-        Renderer::shutdown();
+        // ImGui layer
+        this->pushOverlay( _imguiLayer = ImGuiLayer::create(backend) );
+    }
+
+    App::~App() {
+        delete _appBase;
+    }
+
+    void App::run() {
+        _appBase->run(*this);
     }
 
     void App::close() {

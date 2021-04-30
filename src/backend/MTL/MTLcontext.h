@@ -1,11 +1,12 @@
 #ifndef __MTL_CONTEXT_H__
 #define __MTL_CONTEXT_H__
-#define GLFW_INCLUDE_NONE
-#define GLFW_EXPOSE_NATIVE_COCOA
 
 #include "core/renderer/context.h"
-#include <GLFW/glfw3.h>
-#include <GLFW/glfw3native.h>
+
+#import <Metal/Metal.h>
+#import <QuartzCore/QuartzCore.h>
+
+struct GLFWwindow;
 
 namespace Engine7414
 {
@@ -18,7 +19,7 @@ namespace Engine7414
         void swapBuffers() override;
         void swapInterval(int interval) override;
 
-        void* device() override;
+        id<MTLDevice> device();
 
     private:
         GLFWwindow*   _handle;

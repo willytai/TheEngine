@@ -14,11 +14,19 @@
 
 namespace Engine7414
 {
+    class AppBase;
+    class AppOpenGL;
+    class AppMetal;
+
     class App
     {
+        friend class AppOpenGL;
+        friend class AppMetal;
+
         static App* appInstancePtr;
     public:
         App(RendererBackend backend, const char* name = NULL, int verbosity = -1);
+        App(const App& other) = delete;
         virtual ~App();
 
         void run();
@@ -37,6 +45,7 @@ namespace Engine7414
     private:
         bool            _shouldRun;
         bool            _minimized;
+        AppBase*        _appBase;
         StopWatch       _stopWatch;
         ImGuiLayer*     _imguiLayer;
         LayerStack      _layerStack;

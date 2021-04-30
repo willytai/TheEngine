@@ -8,6 +8,7 @@ CCCSRC += $(wildcard layer/*.c)
 
 CHDRS  += $(wildcard imgui/*.h)
 CPPSRC += $(wildcard imgui/*.cpp)
+CPPSRC += $(wildcard imgui/*.mm)
 CCCSRC += $(wildcard imgui/*.c)
 
 CHDRS  += $(wildcard renderer/*.h)
@@ -33,6 +34,11 @@ CCCSRC += $(wildcard scene/*.c)
 CHDRS  += $(wildcard script/*.h)
 CPPSRC += $(wildcard script/*.cpp)
 CCCSRC += $(wildcard script/*.c)
+
+CHDRS  += $(wildcard application/*.h)
+CPPSRC += $(wildcard application/*.cpp)
+CPPSRC += $(wildcard application/*.mm)
+CCCSRC += $(wildcard application/*.c)
 
 include ../src.makefile
 include ../lib.makefile

@@ -1,5 +1,6 @@
 #include "core/renderer/renderCommands.h"
 #include "backend/OpenGL/GLrenderAPI.h"
+#include "backend/MTL/MTLrenderAPI.h"
 
 namespace Engine7414
 {
@@ -11,6 +12,12 @@ namespace Engine7414
             {
                 __backend__.reset( new GLRenderAPI );
                 CORE_INFO( "\tBackend:  OpenGL" );
+                break;
+            }
+            case RendererBackend::Metal:
+            {
+                __backend__.reset( new MTLRenderAPI );
+                CORE_INFO( "\tBackend:  Metal" );
                 break;
             }
             default: CORE_ASSERT( false, "Unsupported Backend" );

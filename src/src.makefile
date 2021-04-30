@@ -20,7 +20,7 @@ DPNLFLAG = $(addprefix -L, $(LIBDIR))
 
 LIBCHECKPOINT = ../../lib/.lib.check
 
-CXX  = c++
+CXX  = clang++
 CCC  = cc
 AR   = ar cr
 ECHO = /bin/echo
@@ -47,7 +47,7 @@ top: target
 
 %.o: %.cpp
 	@$(ECHO) "> compiling $< ..."
-	@$(CXX) $(CPPFLAGS) $(WFLAGS) $(DPNIFLAG) -c -o $@ $<
+	@$(CXX) $(CPPFLAGS) $(WFLAGS) $(DPNIFLAG) -ObjC++ -fobjc-weak -fobjc-arc -c -o $@ $<
 
 %.o: %.c
 	@$(ECHO) "> compiling $< ..."

@@ -11,6 +11,7 @@ public:
     }
 
     void onUpdate(const Engine7414::TimeStep& deltaTime) override {
+        Engine7414::RenderCommands::clear();
     }
 
     void onImGui() override {
@@ -44,5 +45,5 @@ public:
 Engine7414::App* Engine7414::appCreate(int argc, char** argv) {
     // a better font type/size
     Engine7414::FontLoader::loadFromFile({ "./misc/fontawesome/otfs/Brands-Regular-400.otf", 16.0f });
-    return new sandbox(Engine7414::RendererBackend::OpenGL); }
+    return new sandbox(Engine7414::RendererBackend::Metal); }
 #endif

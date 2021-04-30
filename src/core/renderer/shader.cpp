@@ -1,12 +1,14 @@
 #include "core/renderer/shader.h"
 #include "core/renderer/renderer.h"
 #include "backend/OpenGL/GLshader.h"
+#include "backend/MTL/MTLshader.h"
 
 namespace Engine7414
 {
     Ref<Shader> Shader::create(const std::string& name, const char* shaderPath) {
         switch (Renderer::backend()) {
             case RendererBackend::OpenGL: return CreateRef<GLShader>( name, shaderPath );
+            case RendererBackend::Metal: return CreateRef<MTLShader>( name, shaderPath );
             default: CORE_ASSERT( false, "Unsupported Backend" );
         }
         return NULL;
