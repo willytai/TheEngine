@@ -73,8 +73,9 @@ namespace Engine7414
 
     void Renderer2D::beginScene(const TransformComponent& transformComponent, const CameraBase* camera, const glm::vec4& color) {
         RenderCommands::clear(color);
+        auto& cameraProjection = camera->projection();
         if (__updateProjViewMat__) {
-            __ProjViewMatCache__ = camera->projection() *
+            __ProjViewMatCache__ = cameraProjection *
                                    glm::inverse(transformComponent.transform());
             __updateProjViewMat__ = false;
             CORE_INFO("projview recalculated");

@@ -75,5 +75,28 @@ namespace Engine7414
                 ImGui::TreePop();
             }
         }
+
+        if (entity.has<CameraComponent>()) {
+            auto& camera = entity.get<CameraComponent>();
+            if (ImGui::TreeNodeEx("camera", ImGuiTreeNodeFlags_DefaultOpen)) {
+                ImGui::Text("Projection: %s", camera.camera->projection_str());
+
+                if (dynamic_cast<Camera2D*>(camera.camera.get())) {
+                    bool& update = camera.camera->__updateProj;
+                    update |= ImGui::SliderFloat("size",   &camera.camera->params.size, 1.0f, 10.0f);
+                    update |= ImGui::SliderFloat("near",   &camera.camera->params.nearClip, -10.0f, -1.0f);
+                    update |= ImGui::SliderFloat("far",    &camera.camera->params.farClip, 1.0f, 10.0f );
+                }
+
+                if (dynamic_cast<Camera3D*>(camera.camera.get())) {
+                    bool& update = camera.camera->__updateProj;
+                    update |= ImGui::SliderFloat("fov",  &camera.camera->params.size, 30.0f, 60.0f);
+                    update |= ImGui::SliderFloat("near", &camera.camera->params.nearClip, 1.0f, 10.0f);
+                    update |= ImGui::SliderFloat("far",  &camera.camera->params.farClip, 100.0f, 1000.0f);
+                }
+
+                ImGui::TreePop();
+            }
+        }
     }
 }

@@ -1,4 +1,5 @@
 #include "core/scene/components.h"
+#include "core/app.h"
 
 namespace Engine7414
 {
@@ -8,13 +9,18 @@ namespace Engine7414
             glm::scale(glm::mat4(1.0f), scale);
     }
 
-    CameraComponent::CameraComponent(float aspect, CameraBase::Type type, bool active, bool controllable) :
-        controller(type),
-        active(active)
+    CameraComponent::CameraComponent(CameraBase::Type type, bool active, float aspect, float fov_or_size, float nearClip, float farClip) :
+        active(active),
+        controller(type)
     {
-        camera = Camera2D::create(-aspect * 1.0f, aspect * 1.0f, -1.0f, 1.0f);
-        if (controllable) {
-            controller.bind(camera.get());
+        aspect = aspect > 0.0f ? aspect : App::getWindow()->AspectRatio();
+        switch (type) {
+            case CameraBase::Type::Orthographic: camera = Camera2D::create(fov_or_size, aspect, nearClip, farClip); break;
+            // case CameraBase::Type::Perspective: camera = Camera3D::create(fov_or_size, aspect, nearClip, farClip); break;
+            default: CORE_ASSERT(false, "");
         }
+        
+        // Temporary stuffs
+        controller.bind(camera.get());
     }
 }

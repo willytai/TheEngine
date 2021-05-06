@@ -30,14 +30,13 @@ namespace Engine7414
 
     struct CameraComponent
     {
-        // TODO remove controller
         Scoped<CameraBase>  camera;
         CameraController    controller;
 
         // default to false to avoid multiple active cameras during initialization
         bool active;
 
-        CameraComponent(float aspect, CameraBase::Type type, bool active = false, bool controllable = false);
+        CameraComponent(CameraBase::Type type, bool active = false, float aspect = -1.0f, float fov_or_size = -1.0f, float nearClip = -1.0f, float farClip = 1.0f);
     };
 
     struct NativeScriptComponent
