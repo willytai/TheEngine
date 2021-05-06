@@ -98,5 +98,14 @@ namespace Engine7414
                 ImGui::TreePop();
             }
         }
+
+        if (entity.has<SpriteRendererComponent>()) {
+            auto& sprite = entity.get<SpriteRendererComponent>();
+            if (ImGui::TreeNodeEx("sprite", ImGuiTreeNodeFlags_DefaultOpen)) {
+                ImGui::ColorEdit4("color", &sprite.color.r);
+
+                ImGui::TreePop();
+            }
+        }
     }
 }

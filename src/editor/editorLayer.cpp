@@ -60,6 +60,9 @@ namespace Engine7414
         _testEntity = _activeScene->createEntity("Colored Square");
         _testEntity.emplace<SpriteRendererComponent>();
 
+        auto en2 = _activeScene->createEntity("second square");
+        en2.emplace<SpriteRendererComponent>();
+
         // camera
         _cameraEntity = _activeScene->createEntity("Scene Camera");
         float aspect = 1280.0f / 960.0f;
@@ -176,14 +179,6 @@ namespace Engine7414
             ImGui::Text( "framerate: %.0f", ImGui::GetIO().Framerate );
             ImGui::Text( "drawCalls: %d", stat.drawCalls );
             ImGui::Text( "quadCount: %d", stat.quadCount );
-            ImGui::Separator();
-            ImGui::Text("Entities");
-            if (_testEntity) {
-                ImGui::Separator();
-                ImGui::Text("%s", _testEntity.get<TagComponent>().name.c_str());
-                ImGui::ColorEdit4("color", &_testEntity.get<SpriteRendererComponent>().color[0]);
-                ImGui::Separator();
-            }
             ImGui::Separator();
             if (ImGui::Checkbox( "minor camera", &minor )) {
                 Renderer2D::setUpdateMatFlag();
