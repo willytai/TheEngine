@@ -18,9 +18,9 @@ namespace Engine7414
     }
 
     void GLFrameBuffer::regenerate() {
-        if ( _rendererID == 0 ) GLCall( glDeleteFramebuffers(1, &_rendererID) );
-        if ( _colorAttachmentID == 0 ) GLCall( glDeleteTextures(1, &_colorAttachmentID) );
-        if ( _renderBufferID == 0 ) GLCall( glDeleteRenderbuffers(1, &_renderBufferID) );
+        if ( _rendererID != 0 ) { GLCall( glDeleteFramebuffers(1, &_rendererID) ); }
+        if ( _colorAttachmentID != 0 ) { GLCall( glDeleteTextures(1, &_colorAttachmentID) ); }
+        if ( _renderBufferID != 0 ) { GLCall( glDeleteRenderbuffers(1, &_renderBufferID) ); }
 
         // frame buffer
         GLCall( glGenFramebuffers(1, &_rendererID) );

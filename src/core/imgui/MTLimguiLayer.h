@@ -13,6 +13,7 @@
 @property (nonatomic, strong) id<CAMetalDrawable> drawable;
 - (instancetype)initWithContext:(GlobalContext*)context;
 - (void)newFrame:(GlobalContext*)context;
+- (void)endEncoding;
 - (void)presentDrawable;
 - (void)commit;
 @end

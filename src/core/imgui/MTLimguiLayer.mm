@@ -10,7 +10,7 @@
 - (instancetype)initWithContext:(GlobalContext*)context {
     if ( (self = [super init]) ) {
         self.renderPassDescriptor = [MTLRenderPassDescriptor new];
-        self.renderPassDescriptor.colorAttachments[0].clearColor = MTLClearColorMake(0.45f, 0.55f, 0.60f, 1.0f);
+        self.renderPassDescriptor.colorAttachments[0].clearColor = MTLClearColorMake(0.45f, 0.55f, 0.60f, 0.0f);
         self.renderPassDescriptor.colorAttachments[0].loadAction = MTLLoadActionClear;
         // self.renderPassDescriptor.colorAttachments[0].storeAction = MTLStoreActionStore;
     }
@@ -29,6 +29,9 @@
     // new buffer and encoder
     _commandBuffer = [context.commandQueue commandBuffer];
     _commandEncoder = [_commandBuffer renderCommandEncoderWithDescriptor:_renderPassDescriptor];
+}
+- (void)endEncoding {
+    [_commandEncoder endEncoding];
 }
 - (void)presentDrawable {
     [_commandBuffer presentDrawable:_drawable];
@@ -49,7 +52,7 @@ namespace Engine7414
     }
 
     void MTLImGuiLayer::begin() {
-        [_data newFrame:MetalContext::getContext()];
+        [_data newFrame:MTLContext::getContext()];
         ImGui_ImplMetal_NewFrame( _data.renderPassDescriptor );
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
@@ -62,7 +65,7 @@ namespace Engine7414
         ImGui::Render();
         ImGui_ImplMetal_RenderDrawData( ImGui::GetDrawData(), _data.commandBuffer, _data.commandEncoder );
 
-        [_data.commandEncoder endEncoding];
+        [_data endEncoding];
         [_data presentDrawable];
         [_data commit];
     }
@@ -93,9 +96,9 @@ namespace Engine7414
         }
 
         ImGui_ImplGlfw_InitForOpenGL( (GLFWwindow*)App::getWindow()->nativeWindow(), true );
-        ImGui_ImplMetal_Init( MetalContext::getContext().nativeDevice );
+        ImGui_ImplMetal_Init( MTLContext::getContext().nativeDevice );
 
-        _data = [[MTLImGuiData alloc] initWithContext:MetalContext::getContext()];
+        _data = [[MTLImGuiData alloc] initWithContext:MTLContext::getContext()];
 
         CORE_INFO( "ImGui Initialized" );
     }

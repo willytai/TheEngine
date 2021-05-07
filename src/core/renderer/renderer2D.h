@@ -19,6 +19,10 @@ namespace Engine7414
         static void init();
         static void shutdown();
 
+        // for test
+        static void beginTest(const glm::vec4& color = {0.0f, 0.0f, 0.0f, 1.0f});
+        static void endTest();
+
         static void beginScene(const TransformComponent& transformComponent, const CameraBase* camera,  const glm::vec4& color = { 0.0f, 0.0f, 0.0f, 1.0f });
         static void endScene();
         static void flush();

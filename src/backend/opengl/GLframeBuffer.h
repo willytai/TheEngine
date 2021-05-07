@@ -15,7 +15,7 @@ namespace Engine7414
         void bind() const override;
         void unbind() const override;
         void resize(const uint32_t& width, const uint32_t& height) override;
-        uint32_t colorAttachmentID() const override { return (uint32_t)_colorAttachmentID; }
+        void* colorAttachmentID() const override { return (void*)(intptr_t)_colorAttachmentID; }
         const FrameBufferSpec& spec() const override { return _spec; }
 
     private:

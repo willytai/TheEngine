@@ -20,7 +20,7 @@ namespace Engine7414
         virtual void bind() const = 0;
         virtual void unbind() const = 0;
         virtual void resize(const uint32_t& width, const uint32_t& height) = 0;
-        virtual uint32_t colorAttachmentID() const = 0;
+        virtual void* colorAttachmentID() const = 0;
         virtual const FrameBufferSpec& spec() const = 0;
 
         static Ref<FrameBuffer> create(const FrameBufferSpec& spec);

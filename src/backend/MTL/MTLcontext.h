@@ -17,11 +17,11 @@ struct GLFWwindow;
 
 namespace Engine7414
 {
-    class MetalContext : public Context
+    class MTLContext : public Context
     {
-        static MetalContext* __instance__;
+        static MTLContext* __instance__;
     public:
-        MetalContext(GLFWwindow* handle);
+        MTLContext(GLFWwindow* handle);
 
         void init() override;
         void swapBuffers() override;

@@ -11,10 +11,10 @@ namespace Engine7414
         for (const auto& file : std::filesystem::directory_iterator( shaderDir ) ) {
             if ( file.is_directory() ) continue;
             auto path = file.path().string();
-            if ( path.find("vertex") != std::string::npos ) {
+            if ( path.find("vertex") != std::string::npos  && file.path().extension() == ".glsl" ) {
                 vShaderPath.swap( path );
             }
-            else if ( path.find("fragment") != std::string::npos ) {
+            else if ( path.find("fragment") != std::string::npos && file.path().extension() == ".glsl" ) {
                 fShaderPath.swap( path );
             }
             else CORE_WARN( "got unrecognized file \'{}\' while loading shader", path );

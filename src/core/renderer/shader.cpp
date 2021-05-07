@@ -26,13 +26,13 @@ namespace Engine7414
 
     Ref<Shader> ShaderDict::load(const std::string& name, const char* shaderPath) {
         auto shader = Shader::create( name, shaderPath );
-        if ( !this->add( name, shader ) ) CORE_ERROR( "shader \'{}\' failed to load" );
+        if ( !this->add( name, shader ) ) CORE_ERROR( "shader \'{}\' failed to load", name );
         return shader;
     }
 
     Ref<Shader> ShaderDict::get(const std::string& name) {
 #ifdef ENGINE_DEBUG
-        CORE_ASSERT( this->exists(name), "shader \'{}\' doesn't exist" );
+        CORE_ASSERT( this->exists(name), "shader \'{}\' doesn't exist", name );
 #endif
         return (*this)[name];
     }
@@ -43,7 +43,7 @@ namespace Engine7414
 
     bool ShaderDict::add(const std::string& name, const Ref<Shader>& shader) {
         auto [_, check] = _shaders.emplace( name, shader );
-        if ( !check) CORE_ERROR( "shader \'{}\' already exists" );
+        if ( !check) CORE_ERROR( "shader \'{}\' already exists", name );
         return check;
     }
 

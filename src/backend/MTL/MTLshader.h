@@ -1,12 +1,13 @@
-#ifndef __MTL_SHADER_H__
-#define __MTL_SHADER_H__
+#ifndef __MTL_SHADER_HPP__
+#define __MTL_SHADER_HPP__
+
+#import "backend/MTL/MetalShader.h"
 
 #include "core/renderer/shader.h"
 #include <glm/glm.hpp>
 
 namespace Engine7414
 {
-
     class MTLShader : public Shader
     {
     public:
@@ -26,7 +27,11 @@ namespace Engine7414
         void setIntArray(const char* name, const int* values, const int& count) override;
 
     private:
+        // TODO
+        // Metal shaders are library based, all the functions should be written in one single file
+        // so making this a static class member is probably better
+        MTLShaderHandle*    _handle;
     };
 
 }
-#endif /* __GL_SHADER_H__ */
+#endif /* __MTL_SHADER_HPP__ */

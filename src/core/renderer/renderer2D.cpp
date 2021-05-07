@@ -71,6 +71,15 @@ namespace Engine7414
         delete __data;
     }
 
+    void Renderer2D::beginTest(const glm::vec4& color) {
+        RenderCommands::clear( color );
+        RenderCommands::begin();
+    }
+
+    void Renderer2D::endTest() {
+        RenderCommands::end();
+    }
+
     void Renderer2D::beginScene(const TransformComponent& transformComponent, const CameraBase* camera, const glm::vec4& color) {
         RenderCommands::clear(color);
         if (__updateProjViewMat__) {

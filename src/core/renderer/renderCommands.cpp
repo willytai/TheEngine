@@ -45,4 +45,12 @@ namespace Engine7414
     void RenderCommands::drawElement(const Ref<VertexArray>& vertexArray, const uint32_t& indexCount) {
         __backend__->drawElement( vertexArray, indexCount );
     }
+
+    void RenderCommands::begin() {
+        __backend__->begin();
+    }
+
+    void RenderCommands::end() {
+        __backend__->end();
+    }
 }

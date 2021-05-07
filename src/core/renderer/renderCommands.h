@@ -17,6 +17,10 @@ namespace Engine7414
         static void clear();
         static void clear(const glm::vec4& color);
         static void drawElement(const Ref<VertexArray>& vertexArray, const uint32_t& indexCount = 0);
+
+        // test
+        static void begin();
+        static void end();
     };
 }
 

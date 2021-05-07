@@ -25,13 +25,13 @@
 
 namespace Engine7414
 {
-    MetalContext* MetalContext::__instance__ = NULL;
+    MTLContext* MTLContext::__instance__ = NULL;
 
-    GlobalContext* MetalContext::getContext() {
+    GlobalContext* MTLContext::getContext() {
         return __instance__->_context;
     }
 
-    MetalContext::MetalContext(GLFWwindow* handle) :
+    MTLContext::MTLContext(GLFWwindow* handle) :
         _handle(handle),
         _context(nil)
     {
@@ -39,7 +39,7 @@ namespace Engine7414
         else __instance__ = this;
     }
 
-    void MetalContext::init() {
+    void MTLContext::init() {
         _context = [[GlobalContext alloc] init];
 
         BACKEND_VERIFY( _context.nativeDevice, "Device Not Found!" );
@@ -53,12 +53,12 @@ namespace Engine7414
         nswin.contentView.wantsLayer = YES;
     }
 
-    void MetalContext::swapBuffers() {
+    void MTLContext::swapBuffers() {
 
     }
 
     // swap interval is not configurable on OS X
-    void MetalContext::swapInterval(int interval) {
+    void MTLContext::swapInterval(int interval) {
 
     }
 }

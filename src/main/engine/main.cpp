@@ -8,10 +8,14 @@ public:
     simpleLayer(const char* name)
         : Layer(name)
     {
+        _frameBuffer = Engine7414::FrameBuffer::create({1280, 960});
     }
 
     void onUpdate(const Engine7414::TimeStep& deltaTime) override {
-        Engine7414::RenderCommands::clear();
+        _frameBuffer->bind();
+        Engine7414::Renderer2D::beginTest(_clearColor);
+        Engine7414::Renderer2D::endTest();
+        _frameBuffer->unbind();
     }
 
     void onImGui() override {
@@ -19,6 +23,10 @@ public:
         ImGui::Text( "hellooooooooooooooooooooooo" );
         ImGui::ColorEdit4( "clear color", &_clearColor[0] );
         ImGui::Text( "frame rate: %.0f", ImGui::GetIO().Framerate);
+        ImGui::End();
+
+        ImGui::Begin( "framebuffer test" );
+        ImGui::Image( _frameBuffer->colorAttachmentID(), ImVec2(128, 96) );
         ImGui::End();
 
         ImGui::ShowDemoWindow();
@@ -29,6 +37,7 @@ public:
 
 private:
     glm::vec4                    _clearColor = {1.0f, 0.0f, 0.0f, 1.0f};
+    Engine7414::Ref<Engine7414::FrameBuffer> _frameBuffer;
 };
 
 

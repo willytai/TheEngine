@@ -100,7 +100,7 @@ namespace Engine7414
     void MacWindow::createContext(const RendererBackend& backend) {
         switch (backend) {
             case RendererBackend::OpenGL: _context = CreateScoped<OpenGLContext>( _glfwWindow ); break;
-            case RendererBackend::Metal:  _context = CreateScoped<MetalContext>( _glfwWindow ); break;
+            case RendererBackend::Metal:  _context = CreateScoped<MTLContext>( _glfwWindow ); break;
             default: CORE_ASSERT( false, "Unsupported Backend" );
         }
         _context->init();
