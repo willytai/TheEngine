@@ -36,6 +36,7 @@ namespace Engine7414
         virtual void* nativeWindow() = 0;
         virtual void* nativeDevice() = 0;
         virtual const char* title() const { return _title.c_str(); }
+        float AspectRatio() const { return (float)getWidth() / (float)getHeight(); }
 
         /* setting functions */
         virtual void setEventCallback(const eventCallbackFn& fn) = 0;

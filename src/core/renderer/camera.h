@@ -20,13 +20,14 @@ namespace Engine7414
     union CameraParam
     {
         struct { float fov;  float aspect; float nearClip; float farClip; };
-        struct { float left; float right;  float bottom;   float top; };
+        struct { float size; float NO_USE_1; float NO_USE_2; float NO_USE_3; };
     };
 
     class CameraBase
     {
+        friend class HierarchyPanel;
     public:
-        enum Type {
+        enum class Type {
             Orthographic,
             Perspective
         };
@@ -37,7 +38,7 @@ namespace Engine7414
         CameraBase();
         virtual ~CameraBase() = default;
 
-        virtual const char* c_str() const = 0;
+        virtual const char* projection_str() const = 0;
 
         virtual void setAspectRatio(const float& aspect) = 0;
         virtual void zoom(const float& level) = 0;
@@ -53,6 +54,11 @@ namespace Engine7414
         // these matrices are guaranteed to be re-calculated at most once in each frame
         mutable bool        __updateProj;
         mutable glm::mat4   __m_projection;
+
+        // cache of the camera's parameters
+        // access won't be granted outside of this class
+        // except for the HierarchyPanel (friended)
+        CameraParam params;
     };
 
     // this is a camera for 3D rendering (perspective projection)
@@ -62,7 +68,7 @@ namespace Engine7414
         Camera(float FovDeg, float aspect, float nearClip = 0.1f, float farClip = 100.0f);
         ~Camera() = default;
 
-        const char* c_str() const override { return "3D camera"; }
+        const char* projection_str() const override { return "Perspective"; }
 
         // void setPosition(const glm::vec4& pos) override;
         // void setPosition(const glm::vec3& pos) override;
@@ -84,32 +90,25 @@ namespace Engine7414
     private:
         glm::vec4   __front;
         Rotation    __rotation;
-
-        // cache of the camera's parameters
-        // access won't be granted outside of this class
-        CameraParam __params;
     };
+    typedef Camera Camera3D;
 
     class Camera2D : public CameraBase
     {
     public:
-        Camera2D(float left, float right, float bottom, float top);
+        Camera2D(float size, float aspect, float nearClip = -1.0f, float farClip = 1.0f);
         ~Camera2D() = default;
 
-        const char* c_str() const override { return "2D camera"; }
+        const char* projection_str() const override { return "Orthographic"; }
         void setAspectRatio(const float& aspect) override;
         void zoom(const float& level) override;
 
-        static Scoped<Camera2D> create(float left, float right, float bottom, float top);
+        static Scoped<Camera2D> create(float size, float aspect, float nearClip, float farClip);
     private:
         void updateProjMatrix() const override;
 
     private:
         float       __rotation;
-        float       __aspect;
-        // cache of the camera's parameters
-        // access won't be granted outside of this class
-        CameraParam __params;
     };
 }
 

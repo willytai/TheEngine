@@ -40,8 +40,8 @@ CPPFLAGS = -g  -std=c++17 $(COMMONFLAGS)
 CFLAGS = -O3 $(COMMONFLAGS)
 CFLAGS = -g  $(COMMONFLAGS)
 
-WFLAGS = -Wall -Wextra -pedantic-errors -Wconversion -Wno-gnu-anonymous-struct -Wno-nested-anon-types -Wformat
-FFLAGS = -framework Metal -framework MetalKit -framework Cocoa -framework IOKit -framework CoreVideo -framework QuartzCore
+WFLAGS = -Wall -Wextra -Wpedantic -Wconversion -Wno-gnu-anonymous-struct -Wno-nested-anon-types -Wformat
+FFLAGS =
 
 top: target
 
@@ -52,10 +52,6 @@ top: target
 %.o: %.c
 	@$(ECHO) "> compiling $< ..."
 	@$(CCC) $(CFLAGS) $(WFLAGS) $(DPNIFLAG) -c -o $@ $<
-
-%.o: %.mm
-	@$(ECHO) "> compiling $< ..."
-	@$(CXX) $(CPPFLAGS) $(WFLAGS) $(DPNIFLAG) -ObjC++ -fobjc-weak -fobjc-arc -c -o $@ $<
 
 .PHONY: depend
 depend: .depend.mak

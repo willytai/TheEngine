@@ -11,13 +11,13 @@ namespace Engine7414
 
     {
         switch (type) {
-            case CameraBase::Orthographic:
+            case CameraBase::Type::Orthographic:
             {
                 onUpdate_func = std::bind(&CameraController::onUpdate2D, this, std::placeholders::_1, std::placeholders::_2);
                 rendererUpdate_func = std::bind(&Renderer2D::setUpdateMatFlag);
                 break;
             }
-            case CameraBase::Perspective:
+            case CameraBase::Type::Perspective:
             {
                 onUpdate_func = std::bind(&CameraController::onUpdate3D, this, std::placeholders::_1, std::placeholders::_2);
                 rendererUpdate_func = std::bind(&Renderer::setUpdateMatFlag);

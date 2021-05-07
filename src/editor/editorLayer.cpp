@@ -58,17 +58,20 @@ namespace Engine7414
         _activeScene = CreateRef<Scene>();
 
         // test entity
-        _testEntity = _activeScene->createEntity("ColoredSquare");
+        _testEntity = _activeScene->createEntity("Colored Square");
         _testEntity.emplace<SpriteRendererComponent>();
+
+        auto en2 = _activeScene->createEntity("second square");
+        en2.emplace<SpriteRendererComponent>();
 
         // camera
         _cameraEntity = _activeScene->createEntity("Scene Camera");
         float aspect = 1280.0f / 960.0f;
-        bool active = true, controllable = true;
-        _cameraEntity.emplace<CameraComponent>(aspect, CameraBase::Orthographic, active, controllable);
+        bool active = true;
+        _cameraEntity.emplace<CameraComponent>(CameraBase::Type::Orthographic, active);
 
         _cameraMinor = _activeScene->createEntity("Minor Camera");
-        _cameraMinor.emplace<CameraComponent>(aspect, CameraBase::Orthographic, !active, controllable);
+        _cameraMinor.emplace<CameraComponent>(CameraBase::Type::Orthographic, !active);
 
         class Controller : public Scriptable
         {
@@ -177,14 +180,6 @@ namespace Engine7414
             ImGui::Text( "framerate: %.0f", ImGui::GetIO().Framerate );
             ImGui::Text( "drawCalls: %d", stat.drawCalls );
             ImGui::Text( "quadCount: %d", stat.quadCount );
-            ImGui::Separator();
-            ImGui::Text("Entities");
-            if (_testEntity) {
-                ImGui::Separator();
-                ImGui::Text("%s", _testEntity.get<TagComponent>().name.c_str());
-                ImGui::ColorEdit4("color", &_testEntity.get<SpriteRendererComponent>().color[0]);
-                ImGui::Separator();
-            }
             ImGui::Separator();
             if (ImGui::Checkbox( "minor camera", &minor )) {
                 Renderer2D::setUpdateMatFlag();
