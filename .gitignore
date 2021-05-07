@@ -2,6 +2,7 @@
 *.mak
 *.ccls
 *.DS_Store
+*.pdf
 check.txt
 *svgs/
 *metadata/
