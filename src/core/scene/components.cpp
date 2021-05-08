@@ -1,12 +1,14 @@
 #include "core/scene/components.h"
 #include "core/app.h"
 
+#include <glm/gtx/quaternion.hpp>
+
 namespace Engine7414
 {
     glm::mat4 TransformComponent::transform() const {
         return glm::translate(glm::mat4(1.0f), translation) *
-            // glm::rotate( glm::mat4(1.0f), ... ) *
-            glm::scale(glm::mat4(1.0f), scale);
+               glm::toMat4(glm::quat({ glm::radians(rotation.x), glm::radians(rotation.y), glm::radians(rotation.z) })) *
+               glm::scale(glm::mat4(1.0f), scale);
     }
 
     CameraComponent::CameraComponent(CameraBase::Type type, bool active, float aspect, float fov_or_size, float nearClip, float farClip) :

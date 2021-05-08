@@ -1,8 +1,8 @@
 #include "core/scene/components.h"
+#include "core/renderer/renderer2D.h"
+#include "core/util/drawUtil.h"
 #include "editor/panel/hierarchyPanel.h"
 #include <imgui/imgui.h>
-
-#include "core/renderer/renderer2D.h"
 
 namespace Engine7414
 {
@@ -72,10 +72,11 @@ namespace Engine7414
 
         if (entity.has<TransformComponent>()) {
             auto& transform = entity.get<TransformComponent>();
+            static auto onValueChange = [](){ Renderer2D::setUpdateMatFlag(); };
             if (ImGui::TreeNodeEx("transform", ImGuiTreeNodeFlags_DefaultOpen)) {
-                if (ImGui::DragFloat3("", &transform.translation.x, 0.5f, -10.0f, 10.0f)) {
-                    Renderer2D::setUpdateMatFlag();
-                }
+                drawVec3Control("translation", transform.translation, onValueChange);
+                drawVec3Control("rotation", transform.rotation, onValueChange);
+                drawVec3Control("scale", transform.scale, onValueChange, 1.0f);
                 ImGui::TreePop();
             }
         }
