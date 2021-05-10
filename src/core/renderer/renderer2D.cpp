@@ -82,12 +82,15 @@ namespace Engine7414
 
     void Renderer2D::beginScene(const TransformComponent& transformComponent, const CameraBase* camera, const glm::vec4& color) {
         RenderCommands::clear(color);
+        RenderCommands::begin();
+
         if (__updateProjViewMat__) {
             __ProjViewMatCache__ = camera->projection() *
                                    glm::inverse(transformComponent.transform());
             __updateProjViewMat__ = false;
             CORE_INFO("projview recalculated");
         }
+
         __data->stats.reset();
         __data->textureShader->bind();
         __data->textureShader->setMat4f("u_ProjViewMat", __ProjViewMatCache__);
@@ -95,6 +98,7 @@ namespace Engine7414
 
     void Renderer2D::endScene() {
         if ( __data->curIndexCount ) Renderer2D::flush();
+        RenderCommands::end();
     }
 
     void Renderer2D::flush() {

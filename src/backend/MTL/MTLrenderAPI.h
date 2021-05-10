@@ -17,10 +17,11 @@ namespace Engine7414
         MTLRenderAPI();
         ~MTLRenderAPI() {}
         void init() const override;
+        void setViewPort(const uint32_t& x, const uint32_t& y, const uint32_t& width, const uint32_t& height) const override;
+
         void clear() const override;
         void setClearColor(const glm::vec4& color) const override;
         void drawElement(const Ref<VertexArray>& vertexArray, const uint32_t& indexCount = 0) const override;
-        void setViewPort(const uint32_t& x, const uint32_t& y, const uint32_t& width, const uint32_t& height) const override;
 
 
         void begin() const override;

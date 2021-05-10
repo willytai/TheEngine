@@ -18,9 +18,8 @@ namespace Engine7414
         virtual void drawElement(const Ref<VertexArray>& vertexArray, const uint32_t& indexCount = 0) const = 0;
         virtual RendererBackend backend() const = 0;
 
-        // test
-        virtual void begin() const {};
-        virtual void end() const {};
+        virtual void begin() const = 0;
+        virtual void end() const = 0;
     };
 }
 

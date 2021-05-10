@@ -198,9 +198,9 @@ namespace Engine7414
         // Viewport Window
         {
             // remove the tab bar of the view port, forces the window to stay docked if its already docked
-            static ImGuiWindowClass window_class;
-            window_class.DockNodeFlagsOverrideSet = ImGuiDockNodeFlags_NoTabBar;
-            ImGui::SetNextWindowClass( &window_class );
+            // static ImGuiWindowClass window_class;
+            // window_class.DockNodeFlagsOverrideSet = ImGuiDockNodeFlags_NoTabBar;
+            // ImGui::SetNextWindowClass( &window_class );
 
             // Info: set to zero padding on viewport window and make it non-collapsable
             static ImGuiWindowFlags flags = ImGuiWindowFlags_NoCollapse;
