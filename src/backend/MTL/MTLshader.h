@@ -1,5 +1,5 @@
-#ifndef __MTL_SHADER_HPP__
-#define __MTL_SHADER_HPP__
+#ifndef __MTL_SHADER_H__
+#define __MTL_SHADER_H__
 
 #import "backend/MTL/MetalShader.h"
 
@@ -34,4 +34,4 @@ namespace Engine7414
     };
 
 }
-#endif /* __MTL_SHADER_HPP__ */
+#endif /* __MTL_SHADER_H__ */

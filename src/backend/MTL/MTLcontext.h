@@ -1,19 +1,11 @@
 #ifndef __MTL_CONTEXT_H__
 #define __MTL_CONTEXT_H__
 
-#import <Metal/Metal.h>
-#import <QuartzCore/QuartzCore.h>
+#import "backend/MTL/MetalContext.h"
 
 #include "core/renderer/context.h"
 
 struct GLFWwindow;
-
-// this class stores all the non-transient objects for metal backend
-@interface GlobalContext : NSObject
-@property (nonatomic, strong) id<MTLDevice> nativeDevice;
-@property (nonatomic, strong) id<MTLCommandQueue> commandQueue;
-@property (nonatomic, strong) CAMetalLayer* swapChain;
-@end
 
 namespace Engine7414
 {

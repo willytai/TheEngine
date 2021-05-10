@@ -1,6 +1,4 @@
-#import "backend/MTL/MTLrenderAPI.h"
-#import "backend/MTL/MTLframeBuffer.h"
-#import "backend/MTL/MTLcontext.h"
+#import "backend/MTL/MetalFrameBuffer.h"
 
 // @implementation MTLFrameBufferKey
 // - (instancetype)initWithHandle:(MTLFrameBufferHandle*)handle {
@@ -25,9 +23,8 @@
 // @end
 
 @implementation MTLFrameBufferHandle
-- (instancetype) initWithDimensionWidth:(uint32_t)width Height:(uint32_t)height {
+- (instancetype) initWithDimensionWidth:(uint32_t)width Height:(uint32_t)height Device:(id<MTLDevice>)device {
     if ( (self = [super init]) ) {
-        auto* device = Engine7414::MTLContext::getContext().nativeDevice;
 
         // -- color attachment format
         _colorAttachmentDiscriptor = [[MTLTextureDescriptor alloc] init];
@@ -64,8 +61,7 @@
     }
     return self;
 }
-- (void) reGenWithDimensionWidth:(uint32_t)width Height:(uint32_t)height {
-    auto* device = Engine7414::MTLContext::getContext().nativeDevice;
+- (void) reGenWithDimensionWidth:(uint32_t)width Height:(uint32_t)height Device:(id<MTLDevice>)device {
     _colorAttachmentDiscriptor.width = width;
     _colorAttachmentDiscriptor.height = height;
     _colorAttachment = [device newTextureWithDescriptor:_colorAttachmentDiscriptor];
@@ -75,47 +71,3 @@
     // _cacheKey = [[MTLFrameBufferKey alloc] initWithHandle:self];
 }
 @end
-
-namespace Engine7414
-{
-    MTLFrameBuffer::MTLFrameBuffer(const FrameBufferSpec& spec) :
-        _handle(nil),
-        _spec(spec)
-    {
-        _handle = [[MTLFrameBufferHandle alloc] initWithDimensionWidth:_spec.width Height:_spec.height];
-    }
-
-    MTLFrameBuffer::~MTLFrameBuffer() {
-    }
-
-    void MTLFrameBuffer::regenerate() {
-        [_handle reGenWithDimensionWidth:_spec.width Height:_spec.height];
-    }
-
-    void MTLFrameBuffer::bind() const {
-        // set the attachment to the discriptor of the renderer
-        auto* renderHandle = MTLRenderAPI::getRenderHandle();
-        renderHandle.renderPassDescriptor.colorAttachments[0].texture = _handle.colorAttachment;
-        renderHandle.renderPassDescriptor.depthAttachment.texture = _handle.depthAttachment;
-        renderHandle.renderPassDescriptor.stencilAttachment.texture = _handle.depthAttachment;
-        renderHandle.rpsCacheKey.colorPixelFormat = _handle.colorAttachment.pixelFormat;
-        renderHandle.rpsCacheKey.depthPixelFormat = _handle.depthAttachment.pixelFormat;
-        renderHandle.rpsCacheKey.stencilPixelFormat = _handle.depthAttachment.pixelFormat;
-
-        // TODO sample count is something that is not yet used
-        renderHandle.rpsCacheKey.sampleCount = 1;
-    }
-
-    void MTLFrameBuffer::unbind() const {
-    }
-
-    void MTLFrameBuffer::resize(const uint32_t& width, const uint32_t& height) {
-        _spec.width = width;
-        _spec.height = height;
-        this->regenerate();
-    }
-
-    void* MTLFrameBuffer::colorAttachmentID() const {
-        return (__bridge void*)_handle.colorAttachment;
-    }
-}

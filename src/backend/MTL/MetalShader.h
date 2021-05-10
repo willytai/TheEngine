@@ -1,5 +1,5 @@
-#ifndef __MTL_SHADER_H__
-#define __MTL_SHADER_H__
+#ifndef __MTL_SHADER_OBJC_H__
+#define __MTL_SHADER_OBJC_H__
 
 #import <Metal/Metal.h>
 
@@ -9,4 +9,4 @@
 - (id<MTLFunction>)getFunctionWithName:(NSString*)name;
 @end
 
-#endif /* __MTL_SHADER_H__ */
+#endif /* __MTL_SHADER_OBJC_H__ */

@@ -1,10 +1,4 @@
-#import "backend/MTL/MTLrenderAPI.h"
-
-#include "core/core.h"
-#include "core/renderer/renderer.h"
-
-#include "core/application/app.h"
-#include "backend/MTL/MTLcontext.h"
+#import "backend/MTL/MetalRenderAPI.h"
 
 @implementation MTLRenderPipelineStateKey
 - (instancetype)init {
@@ -73,7 +67,7 @@
 - (void)setClear {
     _renderPassDescriptor.colorAttachments[0].loadAction = MTLLoadActionClear;
 }
-- (void)begin {
+- (void)beginWithContext:(GlobalContext*)context {
     // new drawable
     // int width, height;
     // glfwGetFramebufferSize( (GLFWwindow*)Engine7414::App::getWindow()->nativeWindow(), &width, &height );
@@ -84,12 +78,11 @@
     // _renderPassDescriptor.colorAttachments[0].texture = _drawable.texture;
 
     // new buffer and encoder
-    GlobalContext* context = Engine7414::MTLContext::getContext();
     _commandBuffer = [context.commandQueue commandBuffer];
     _commandEncoder = [_commandBuffer renderCommandEncoderWithDescriptor:_renderPassDescriptor];
 
     // set the correct pipeline state
-    id<MTLRenderPipelineState> state = [self getRenderPipelineState_];
+    id<MTLRenderPipelineState> state = [self getRenderPipelineStateFromContext_:context];
     [_commandEncoder setRenderPipelineState:state];
 
     // realease the cache key
@@ -100,19 +93,18 @@
     // [_commandBuffer presentDrawable:_drawable];
     [_commandBuffer commit];
 }
-- (id<MTLRenderPipelineState>)getRenderPipelineState_ {
+- (id<MTLRenderPipelineState>)getRenderPipelineStateFromContext_:(GlobalContext*)context {
     assert(self.rpsCacheKey);
     id<MTLRenderPipelineState> state = self.renderPipelineStateCache[self.rpsCacheKey];
 
     if ( state == nil ) {
-        state = [self newRenderPipelineState_];
+        state = [self newRenderPipelineStateFromContext_:context];
         self.renderPipelineStateCache[self.rpsCacheKey] = state;
     }
 
     return state;
 }
-- (id<MTLRenderPipelineState>)newRenderPipelineState_ {
-    auto* context = Engine7414::MTLContext::getContext();
+- (id<MTLRenderPipelineState>)newRenderPipelineStateFromContext_:(GlobalContext*)context {
     MTLRenderPipelineDescriptor* decs = [[MTLRenderPipelineDescriptor alloc] init];
     decs.colorAttachments[0].pixelFormat = self.rpsCacheKey.colorPixelFormat;
     decs.depthAttachmentPixelFormat = self.rpsCacheKey.depthPixelFormat;
@@ -150,45 +142,3 @@
     return state;
 }
 @end
-
-namespace Engine7414
-{
-    MTLRenderAPI* MTLRenderAPI::__instance__ = NULL;
-
-    MTLRenderAPI::MTLRenderAPI() {
-        if ( __instance__ ) {
-            BACKEND_ASSERT( false, "multiple render API not supported" );
-        }
-        _handle = [[MTLRenderHandle alloc] init];
-        __instance__ = this;
-    }
-
-    void MTLRenderAPI::init() const {
-        // TODO
-        // hard coding this for now, don't know the API to retrieve the information at runtime
-        Renderer::setMaxTextSlot( 16 );
-    }
-
-    void MTLRenderAPI::setClearColor(const glm::vec4& color) const {
-        [_handle setClearColorR:color.r G:color.g B:color.b A:color.a];
-    }
-
-    void MTLRenderAPI::clear() const {
-        [_handle setClear];
-    }
-
-    void MTLRenderAPI::begin() const {
-        [_handle begin];
-    }
-
-    void MTLRenderAPI::end() const {
-        [_handle end];
-    }
-
-    void MTLRenderAPI::drawElement(const Ref<VertexArray>& vertexArray, const uint32_t& indexCount) const {
-    }
-
-    void MTLRenderAPI::setViewPort(const uint32_t& x, const uint32_t& y, const uint32_t& width, const uint32_t& height) const {
-    }
-
-}
