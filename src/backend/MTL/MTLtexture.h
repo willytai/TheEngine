@@ -1,6 +1,8 @@
 #ifndef __MTL_TEXTURE_H__
 #define __MTL_TEXTURE_H__
 
+#import "backend/MTL/MetalTexture.h"
+
 #include "core/renderer/texture.h"
 
 namespace Engine7414
@@ -21,7 +23,9 @@ namespace Engine7414
         inline int height() const override { return _height; }
 
     private:
-        uint8_t*        _data;
+        MTLTextureHandle*   _handle;
+
+        uint8_t*        _data; // should be null for most of the time
         int             _width;
         int             _height;
         int             _bpp; // bytes per pixel (EX: 4 channels in png)

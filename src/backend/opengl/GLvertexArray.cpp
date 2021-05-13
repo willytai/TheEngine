@@ -13,8 +13,9 @@ namespace Engine7414
         GLCall( glDeleteVertexArrays( 1, &_rendererID ) );
     }
 
-    void GLVertexArray::addVertexBuffer(const Ref<VertexBuffer>& vertexBuffer) {
+    void GLVertexArray::setVertexBuffer(const Ref<VertexBuffer>& vertexBuffer) {
         BACKEND_ASSERT( vertexBuffer->layout().elements().size(), "vertex buffer has no layout!" );
+        BACKEND_ASSERT( !this->_vertexBuffer, "vertex buffer already set!" );
         GLCall( glBindVertexArray( _rendererID ) );
         vertexBuffer->bind();
 
@@ -26,7 +27,7 @@ namespace Engine7414
             GLCall( glEnableVertexAttribArray( _attrIndex++ ) );
         }
 
-        this->_vertexBuffers.push_back( vertexBuffer );
+        this->_vertexBuffer = vertexBuffer;
     }
 
     void GLVertexArray::setIndexBuffer(const Ref<IndexBuffer>& indexBuffer) {

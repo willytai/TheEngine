@@ -17,36 +17,6 @@ namespace Engine7414
     void Renderer2D::init() {
         __data = new RendererData2D;
 
-        // vertex buffer
-        __data->quadVertexBuffer = VertexBuffer::create(__data->maxVertexCount*sizeof(Vertex2D));
-        __data->quadVertexBuffer->setLayout(
-            {
-                {BufferDataType::Float, 3}, // position
-                {BufferDataType::Float, 4}, // color
-                {BufferDataType::Float, 2}, // texture coordinates
-                {BufferDataType::Float, 1}  // texture samplerID
-            }
-        );
-
-        // index buffer (counter-clockwise indexing)
-        // might be large, doing heap allocation in case of stack overflow
-        // TODO using Ref<> is probably better!
-        uint32_t* indices32UI = new uint32_t[__data->maxIndexCount];
-        for (uint32_t i = 0, offset = 0; i < __data->maxIndexCount; i += 6, offset += 4) {
-            indices32UI[i + 0] = offset + 0;
-            indices32UI[i + 1] = offset + 1;
-            indices32UI[i + 2] = offset + 2;
-
-            indices32UI[i + 3] = offset + 0;
-            indices32UI[i + 4] = offset + 2;
-            indices32UI[i + 5] = offset + 3;
-        }
-
-        // vertex array
-        __data->quadVertexArray = VertexArray::create();
-        __data->quadVertexArray->addVertexBuffer(__data->quadVertexBuffer);
-        __data->quadVertexArray->setIndexBuffer(IndexBufferUI32::create(indices32UI, __data->maxIndexCount));
-
 #ifdef _WIN64
         __data->textureShader = ShaderDict::get().load("C:\\Users\\Willy\\Desktop\\TheEngine\\TheEngine\\resource\\shader\\texture");
 #else
@@ -63,7 +33,6 @@ namespace Engine7414
         __data->textureSlots[0] = Texture2D::create( 1, 1, &white );
 
         // assuming imidiate upload to GPU
-        delete[] indices32UI;
         delete[] samplers;
     }
 
@@ -71,14 +40,21 @@ namespace Engine7414
         delete __data;
     }
 
+    // ----------------------------------- temporary -----------------------------------------
     void Renderer2D::beginTest(const glm::vec4& color) {
         RenderCommands::clear( color );
         RenderCommands::begin();
     }
 
+    void Renderer2D::triangleTest() {
+        Renderer2D::drawQuad( {0.0f, 0.0f}, {0.5f, 0.5f}, {0.0f, 0.0f, 1.0f, 1.0f} );
+        Renderer2D::flush();
+    }
+
     void Renderer2D::endTest() {
         RenderCommands::end();
     }
+    // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ temporary ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     void Renderer2D::beginScene(const TransformComponent& transformComponent, const CameraBase* camera, const glm::vec4& color) {
         RenderCommands::clear(color);

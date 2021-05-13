@@ -9,7 +9,7 @@ namespace Engine7414
     MTLVertexArray::~MTLVertexArray() {
     }
 
-    void MTLVertexArray::addVertexBuffer(const Ref<VertexBuffer>& vertexBuffer) {
+    void MTLVertexArray::setVertexBuffer(const Ref<VertexBuffer>& vertexBuffer) {
     }
 
     void MTLVertexArray::setIndexBuffer(const Ref<IndexBuffer>& indexBuffer) {

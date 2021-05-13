@@ -38,7 +38,7 @@ CPPFLAGS = -g  -std=c++17 $(COMMONFLAGS)
 CFLAGS = -O3 $(COMMONFLAGS)
 CFLAGS = -g  $(COMMONFLAGS)
 
-WFLAGS = -Wall -Wextra -pedantic-errors -Wconversion -Wno-gnu-anonymous-struct -Wno-nested-anon-types -Wformat
+WFLAGS = -Wall -Wno-nullability-completeness -Wextra -pedantic-errors -Wconversion -Wno-gnu-anonymous-struct -Wno-nested-anon-types -Wformat
 FFLAGS = -framework Metal -framework MetalKit -framework Cocoa -framework IOKit -framework CoreVideo -framework QuartzCore
 
 top: target

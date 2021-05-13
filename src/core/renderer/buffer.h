@@ -80,6 +80,7 @@ namespace Engine7414
         virtual void bind() const = 0;
         virtual void unbind() const = 0;
 
+        virtual void* getCPUStorage() const = 0;
         virtual void setData(const void* data, const size_t& size) = 0;
 
         inline void setLayout(const BufferLayout& layout) { _layout = layout; }

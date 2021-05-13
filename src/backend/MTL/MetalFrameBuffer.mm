@@ -35,7 +35,7 @@
         _colorAttachmentDiscriptor.depth = 1;
         _colorAttachmentDiscriptor.mipmapLevelCount = 1;
         _colorAttachmentDiscriptor.usage = MTLTextureUsageRenderTarget;
-        // _colorAttachmentDiscriptor.storageMode = MTLStorageModePrivate; // not sure of this
+        _colorAttachmentDiscriptor.storageMode = MTLStorageModePrivate; // not sure of this (works for now though)
         _colorAttachment = [device newTextureWithDescriptor:_colorAttachmentDiscriptor];
 
         // -- depth/stencil attachment format

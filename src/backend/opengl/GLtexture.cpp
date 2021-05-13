@@ -44,6 +44,7 @@ namespace Engine7414
         GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST));
 
         if (_data) stbi_image_free(_data);
+        _data = NULL;
     }
 
     GLTexture2D::~GLTexture2D() {

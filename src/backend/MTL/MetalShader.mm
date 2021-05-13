@@ -1,6 +1,7 @@
 #import "backend/MTL/MetalShader.h"
 #import "backend/MTL/MTLcontext.h"
 
+#include "backend/MTL/MetalShaderTypes.h"
 #include "core/renderer/shader.h"
 
 using namespace Engine7414;
@@ -12,7 +13,7 @@ using namespace Engine7414;
                                                    withExtension:nil ];
         NSString* shaderSource = [[NSString alloc] initWithContentsOfURL:shaderPath
                                                    encoding:NSUTF8StringEncoding error:nil];
-        auto* context = Engine7414::MTLContext::getContext();
+        auto* context = MTLContext::getContext();
         NSError* error;
         self.library = [context.nativeDevice newLibraryWithSource:shaderSource options:nil error:&error];
         if (self.library == nil) {
@@ -24,6 +25,10 @@ using namespace Engine7414;
                 NSLog(@"function %@ created", name);
             }
         }
+
+        // the buffer for the uniforms
+        self.uniformBuffer = [context.nativeDevice newBufferWithLength:sizeof(Uniforms)
+                                                               options:MTLCPUCacheModeWriteCombined];
     }
     return self;
 }
@@ -31,4 +36,9 @@ using namespace Engine7414;
 - (id<MTLFunction>)getFunctionWithName:(NSString*)name {
     return [_library newFunctionWithName:name];
 }
+
+- (void)setUniformFrom:(void*)src Size:(NSUInteger)size Offset:(NSUInteger)offset {
+    memcpy( (char*)self.uniformBuffer.contents+offset, src, size );
+}
+
 @end

@@ -21,6 +21,7 @@ namespace Engine7414
 
         // for test
         static void beginTest(const glm::vec4& color = {0.0f, 0.0f, 0.0f, 1.0f});
+        static void triangleTest();
         static void endTest();
 
         static void beginScene(const TransformComponent& transformComponent, const CameraBase* camera,  const glm::vec4& color = { 0.0f, 0.0f, 0.0f, 1.0f });

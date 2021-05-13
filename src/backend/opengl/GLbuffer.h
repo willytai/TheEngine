@@ -17,6 +17,7 @@ namespace Engine7414
         void bind() const override;
         void unbind() const override;
 
+        void* getCPUStorage() const override;
         void setData(const void* data, const size_t& size) override;
 
     private:

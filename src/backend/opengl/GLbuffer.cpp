@@ -27,6 +27,12 @@ namespace Engine7414
         GLCall( glBindBuffer( GL_ARRAY_BUFFER, 0 ) );
     }
 
+    void* GLVertexBuffer::getCPUStorage() const {
+        // OpenGL doesn't allocate storage on system memory for sychronization
+        // with the GPU. Manual allocation is required.
+        return NULL;
+    }
+
     void GLVertexBuffer::setData(const void* data, const size_t& size) {
         GLCall(glBindBuffer(GL_ARRAY_BUFFER, _rendererID));
         GLCall(glBufferSubData(GL_ARRAY_BUFFER, 0, size, data));

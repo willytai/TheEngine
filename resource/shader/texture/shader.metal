@@ -1,12 +1,14 @@
 #include <metal_stdlib>
 #include <simd/simd.h>
 
+#include "src/backend/MTL/MetalShaderTypes.h"
+
 using namespace metal;
 
-struct Uniforms
-{
-    float4x4 ProjViewMat;
-};
+// typedef struct
+// {
+//     float4x4 u_ProjViewMat;
+// } Uniforms;
 
 typedef enum {
     PositionIndex = 0,
@@ -26,15 +28,17 @@ typedef struct {
     float4 position [[position]];
     float4 color;
     float2 texCoor;
+    int    texID;
 } VertexOut;
 
 vertex VertexOut vertexMain(VertexIn vIn                [[stage_in]],
                             constant Uniforms& uniforms [[buffer(1)]])
 {
     VertexOut vOut;
-    vOut.position = uniforms.ProjViewMat * float4(vIn.position, 1.0f);
+    vOut.position = uniforms.u_ProjViewMat * float4(vIn.position, 1.0f);
     vOut.color = vIn.color;
     vOut.texCoor = vIn.texCoor;
+    vOut.texID = vIn.texID;
 
     // maybe store samplers object into vOut here?
     return vOut;
@@ -42,8 +46,14 @@ vertex VertexOut vertexMain(VertexIn vIn                [[stage_in]],
 
 // only supports texture id 0 for now
 fragment float4 fragmentMain(VertexOut vIn [[stage_in]],
-                             texture2d<float, access::sample> texture [[texture(0)]])
+                             constant Uniforms& uniforms [[buffer(1)]],
+                             texture2d<float, access::sample> texture_0 [[texture(0)]],
+                             texture2d<float, access::sample> texture_1 [[texture(1)]])
 {
     constexpr sampler nearestSampler(coord::normalized, min_filter::nearest, mag_filter::nearest, mip_filter::none);
-    return texture.sample(nearestSampler, vIn.texCoor) * vIn.color;
+    switch (uniforms.u_Samplers[vIn.texID]) {
+        case 0: return texture_0.sample(nearestSampler, vIn.texCoor) * vIn.color;
+        case 1: return texture_1.sample(nearestSampler, vIn.texCoor) * vIn.color;
+        default: return float4(0.0f);
+    }
 }

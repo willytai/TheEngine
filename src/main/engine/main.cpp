@@ -14,6 +14,7 @@ public:
     void onUpdate(const Engine7414::TimeStep& deltaTime) override {
         _frameBuffer->bind();
         Engine7414::Renderer2D::beginTest(_clearColor);
+        Engine7414::Renderer2D::triangleTest();
         Engine7414::Renderer2D::endTest();
         _frameBuffer->unbind();
     }

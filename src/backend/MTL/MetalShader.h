@@ -5,8 +5,10 @@
 
 @interface MTLShaderHandle : NSObject
 @property (nonatomic, strong) id<MTLLibrary> library;
-- (instancetype)initWithCSourcePath:(nonnull const char*)shaderCSrc;
+@property (nonatomic, strong) id<MTLBuffer> uniformBuffer;
+- (instancetype)initWithCSourcePath:(const char*)shaderCSrc;
 - (id<MTLFunction>)getFunctionWithName:(NSString*)name;
+- (void)setUniformFrom:(void*)src Size:(NSUInteger)size Offset:(NSUInteger)offset;
 @end
 
 #endif /* __MTL_SHADER_OBJC_H__ */

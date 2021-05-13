@@ -16,10 +16,13 @@ namespace Engine7414
 
         void bind() const override;
         void unbind() const override;
-        void addVertexBuffer(const Ref<VertexBuffer>& vertexBuffer) override;
+        void setVertexBuffer(const Ref<VertexBuffer>& vertexBuffer) override;
         void setIndexBuffer(const Ref<IndexBuffer>& indexBuffer) override;
 
     private:
+        // Thoughts
+        // TODO store a vertexDescriptor, when bind is called, maybe hand over the ownerwhip of the descriptor to the renderAPI
+        //      and check if the handle is the same inside the API, if not create a new state
     };
 
 }

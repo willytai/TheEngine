@@ -17,20 +17,22 @@ namespace Engine7414
         void bind() const override;
         void unbind() const override;
 
-        void setUniform1i(const char* name, int value);
-        void setUniform1f(const char* name, float value);
-        void setUniform3f(const char* name, const glm::vec3& vec);
-        void setUniform3f(const char* name, float f0, float f1, float f2);
+        // uniform upload in metal is typeless (just memcpy)
+        // making sure the uniform that's uploaded has the same type would be the user's responsibility
         void setVec4f(const char* name, const glm::vec4& value) override;
         void setMat4f(const char* name, const glm::mat4& value) override;
         void setInt1(const char* name, const int& value) override;
         void setIntArray(const char* name, const int* values, const int& count) override;
 
     private:
-        // TODO
-        // Metal shaders are library based, all the functions should be written in one single file
-        // so making this a static class member is probably better
+        void genUniformPosMap();
+        size_t getUniformPos(const char* name) const;
+
+    private:
         MTLShaderHandle*    _handle;
+
+        // the offset of the uniform in the uniform buffer
+        std::unordered_map<std::string, size_t>     _uniformPosMap;
     };
 
 }
