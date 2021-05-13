@@ -150,7 +150,11 @@ namespace Engine7414
 
         // DockSpace
         ImGuiID dockspace_id = ImGui::GetID("DockSpace");
+        ImGuiStyle& style = ImGui::GetStyle();
+        float temp = style.WindowMinSize.x;
+        style.WindowMinSize.x = 360.0f;
         ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
+        style.WindowMinSize.x = temp;
 
         if (ImGui::BeginMenuBar())
         {
@@ -193,14 +197,14 @@ namespace Engine7414
         // Viewport Window
         {
             // remove the tab bar of the view port, forces the window to stay docked if its already docked
-            static ImGuiWindowClass window_class;
-            window_class.DockNodeFlagsOverrideSet = ImGuiDockNodeFlags_NoTabBar;
-            ImGui::SetNextWindowClass( &window_class );
+            // static ImGuiWindowClass window_class;
+            // window_class.DockNodeFlagsOverrideSet = ImGuiDockNodeFlags_NoTabBar;
+            // ImGui::SetNextWindowClass( &window_class );
 
             // Info: set to zero padding on viewport window and make it non-collapsable
             static ImGuiWindowFlags flags = ImGuiWindowFlags_NoCollapse;
             ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-            ImGui::Begin("View Port", NULL, flags );
+            ImGui::Begin("View Port", NULL, flags);
             ImGui::PopStyleVar();
 
             ViewportSize      = ImGui::GetContentRegionAvail();

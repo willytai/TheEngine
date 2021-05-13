@@ -27,6 +27,7 @@ namespace Engine7414
         void pushOverlay(Layer* layer);
 
         inline static Window* getWindow() { return appInstancePtr->_window.get(); }
+        inline static ImGuiLayer* getImGuiLayer() { return appInstancePtr->_imguiLayer; }
         static void close();
 
     private:

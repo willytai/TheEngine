@@ -5,6 +5,8 @@
 #include "core/scene/scene.h"
 #include "core/scene/entity.h"
 
+#include <queue>
+
 namespace Engine7414
 {
     // friend of 'Scene'
@@ -20,11 +22,15 @@ namespace Engine7414
 
     private:
         void drawEntity(const Entity& entity);
+        void onPropertyWindow();
         void drawProperties(Entity& entity);
 
     private:
         Ref<Scene>  _context;
         Entity      _selectedEntity;
+
+        // for entity deletion
+        std::queue<Entity> _removeEntity;
     };
 }
 

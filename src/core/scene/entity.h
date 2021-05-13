@@ -53,6 +53,17 @@ namespace Engine7414
             return _scene->_registry.replace<T>(_handle, std::forward<Args>(args)...);
         }
 
+        // remove component
+        template<typename T>
+        void remove() {
+            _scene->_registry.remove<T>(_handle);
+        }
+
+        // deletion
+        void destroy() {
+            _scene->_registry.destroy(_handle);
+        }
+
         operator bool() const { return _handle != entt::null; }
 
         // for ImGui (unique indexing)

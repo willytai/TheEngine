@@ -26,8 +26,14 @@ namespace Engine7414
         static void fontZoomOut();
 
     private:
+        void initStyle();
         void onKeyEvents(Event& event);
         void onMouseEvents(Event& event);
+
+    private:
+        friend class DrawUtil;
+        ImFont* boldFont = NULL;
+        ImFont* italicFont = NULL;
     };
 }
 

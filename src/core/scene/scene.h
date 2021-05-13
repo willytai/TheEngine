@@ -43,6 +43,7 @@ namespace Engine7414
 
         // API
         Entity createEntity(const char* name = NULL);
+        float aspectRatio() const { return _sceneWidth / _sceneHeight; }
 
         void onUpdate(const TimeStep& deltaTime, const bool& viewportFocused = true);
         void onResize(const float& width, const float& height);
@@ -50,6 +51,10 @@ namespace Engine7414
 
     private:
         entt::registry _registry;
+
+        // these two are just used for camera component creation
+        float _sceneWidth = 0.0f;
+        float _sceneHeight = 0.0f;
     };
 }
 

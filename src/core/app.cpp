@@ -28,7 +28,7 @@ namespace Engine7414
         CORE_INFO( "Engine Initializing..." );
 
         // default window
-        _window = Window::create({ name ? name : "Engine7414", 1280, 960, backend, true });
+        _window = Window::create({ name ? name : "Engine7414", 1600, 900, backend, true });
         _window->setEventCallback( CORE_BIND_EVENT_FN(App::onEvent) );
 
         // initialize renderer

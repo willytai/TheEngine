@@ -74,6 +74,8 @@ namespace Engine7414
                 camera.controller.onResize(width, height);
             // }
         }
+        _sceneWidth = width;
+        _sceneHeight = height;
     }
 
     void Scene::onEvent(Event& event) {

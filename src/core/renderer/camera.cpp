@@ -15,7 +15,10 @@ namespace Engine7414
     {}
 
     const glm::mat4& CameraBase::projection() const {
-        if (__updateProj) this->updateProjMatrix();
+        if (__updateProj) {
+            this->updateProjMatrix();
+            Renderer2D::setUpdateMatFlag();
+        }
         return __m_projection;
     }
 
@@ -79,7 +82,6 @@ namespace Engine7414
                                            params.aspect,
                                            params.nearClip,
                                            params.farClip );
-        Renderer2D::setUpdateMatFlag();
         __updateProj = false;
     }
 
