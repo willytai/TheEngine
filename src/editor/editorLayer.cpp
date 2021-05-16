@@ -2,6 +2,8 @@
 #include "core/renderer/renderer2D.h"
 #include "core/script/scriptable.h"
 #include "core/input/input.h"
+#include "core/scene/serializer.h"
+#include "core/util/fileDialog.h"
 #include "editor/editorLayer.h"
 #include <imgui/imgui.h>
 #include <imgui/imgui_internal.h>
@@ -56,7 +58,7 @@ namespace Engine7414
 
         // scene
         _activeScene = CreateRef<Scene>();
-
+#if 0
         // test entity
         _testEntity = _activeScene->createEntity("Colored Square");
         _testEntity.emplace<SpriteRendererComponent>();
@@ -80,7 +82,7 @@ namespace Engine7414
                 auto& transform = this->get<TransformComponent>();
                 transform.translation.x += float(rand() % 10 - 5) / 10.0f;
             }
-
+        
             void onUpdate(const TimeStep& deltaTime) {
                 auto& transform = this->get<TransformComponent>();
                 if (Input::keyPressed(Key::W)) {
@@ -103,7 +105,7 @@ namespace Engine7414
         };
         _cameraEntity.emplace<NativeScriptComponent>().bind<Controller>();
         _cameraMinor.emplace<NativeScriptComponent>().bind<Controller>();
-
+#endif
         _hierarchyPanel.setContext( _activeScene );
 
         CORE_INFO( "Editor Layer Initialized" );
@@ -125,9 +127,6 @@ namespace Engine7414
 
         _framebuffer->bind();
         _activeScene->onUpdate( deltaTime, ViewportFocused );
-        // Renderer2D::drawQuad({ 1.0f, 0.0f, 0.1f }, { 0.3f, 0.3f }, _texture);
-        // Renderer2D::drawQuad({ -1.0f, 0.0f }, { 1.0f, 1.0f }, _texture1);
-        // Renderer2D::drawQuad({ 1.0f, 0.0f }, { 0.5f, 1.0f }, _color);
         _framebuffer->unbind();
     }
 
@@ -160,8 +159,12 @@ namespace Engine7414
         {
             if (ImGui::BeginMenu("File"))
             {
-                // Disabling fullscreen would allow the window to be moved to the front of other windows,
-                // which we can't undo at the moment without finer window depth/z control.
+                if (ImGui::MenuItem("New", "Ctrl+N")) this->newScene();
+                ImGui::Separator();
+                if (ImGui::MenuItem("Open ...", "Ctrl+O")) this->loadScene();
+                ImGui::Separator();
+                if (ImGui::MenuItem("Save As ...", "Ctrl+Shift+S")) this->saveScene();
+                ImGui::Separator();
                 if (ImGui::MenuItem("Exit")) App::close();
 
                 ImGui::EndMenu();
@@ -227,7 +230,72 @@ namespace Engine7414
         ImGui::End();
     }
 
+    void EditorLayer::newScene() {
+        _activeScene = Scene::create();
+        _activeScene->onResize(ViewportSize.x, ViewportSize.y);
+        _hierarchyPanel.setContext(_activeScene);
+    }
+
+    void EditorLayer::saveScene() {
+        auto file = FileDialog::fileExplorer(false, "Scene File(*.yaml/yml)\0*.yaml;*.yml\0");
+        if (file.size()) {
+            Serializer serializer(_activeScene);
+            serializer.serialize(file.c_str());
+        }
+    }
+
+    void EditorLayer::loadScene() {
+        auto file = FileDialog::fileExplorer(true, "Scene File(*.yaml/yml)\0*.yaml;*.yml\0");
+        if (file.size()) {
+            _activeScene = Scene::create();
+
+            Serializer serializer(_activeScene);
+            serializer.deserialize(file.c_str());
+
+            _activeScene->onResize(ViewportSize.x, ViewportSize.y);
+            _hierarchyPanel.setContext(_activeScene);
+        }
+    }
+
     void EditorLayer::onEvent(Event& event) {
         _activeScene->onEvent(event);
+
+        EventDispatcher dispatcher(event);
+        dispatcher.dispatch<KeyPressedEvent>(CORE_BIND_EVENT_FN(EditorLayer::onKeyPressed));
+    }
+
+    bool EditorLayer::onKeyPressed(KeyPressedEvent& event) {
+        static Mod_t SHIFT_CTRL_ALT_BITMASK = ModKey::MOD_SHIFT_BIT | ModKey::MOD_CONTROL_BIT | ModKey::MOD_ALT_BIT;
+        
+        if (event.repeat()) return false;
+        
+        auto flags = event.mods() & SHIFT_CTRL_ALT_BITMASK;
+        switch (event.key()) {
+            case Key::S: // TODO
+            {
+                if (flags == ModKey::MOD_CONTROL_BIT) { // only Ctrl is pressed
+                }
+                else if (flags == (ModKey::MOD_CONTROL_BIT | ModKey::MOD_SHIFT_BIT)) { // Ctrl + Shift
+
+                }
+                break;
+            }
+            case Key::O:
+            {
+                if (flags == ModKey::MOD_CONTROL_BIT) { // only Ctrl is pressed
+                    this->loadScene();
+                }
+                break;
+            }
+            case Key::N:
+            {
+                if (flags == ModKey::MOD_CONTROL_BIT) { // only Ctrl is pressed
+                    this->newScene();
+                }
+                break;
+            }
+            default: return false;
+        }
+        return true;
     }
 }

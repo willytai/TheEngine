@@ -164,6 +164,16 @@ namespace Engine7414
         BUTTON_RIGHT   = BUTTON_2,
         BUTTON_MIDDLE  = BUTTON_3
     };
+
+    enum ModKey : Mod_t
+    {
+        MOD_SHIFT_BIT   = 0x0001,
+        MOD_CONTROL_BIT = 0x0002,
+        MOD_ALT_BIT     = 0x0004,
+        MOD_SUPER       = 0x0008,
+        MOD_CAPS_LOCK   = 0x0010,
+        MOD_NUM_LOCK    = 0x0020
+    };
 }
 
 #endif /* __CODES_H__ */

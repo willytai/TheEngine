@@ -3,6 +3,7 @@
 
 #include "core/util/timeStep.h"
 #include "core/event/event.h"
+#include "core/core.h"
 
 #if defined(__clang__)
     #pragma clang diagnostic push
@@ -31,15 +32,14 @@
 
 namespace Engine7414
 {
-    class Entity;
-    class HierarchyPanel;
     class Scene
     {
         friend class Entity;
+        friend class Serializer;
         friend class HierarchyPanel;
     public:
         Scene();
-        ~Scene() = default;
+        ~Scene();
 
         // API
         Entity createEntity(const char* name = NULL);
@@ -48,6 +48,8 @@ namespace Engine7414
         void onUpdate(const TimeStep& deltaTime, const bool& viewportFocused = true);
         void onResize(const float& width, const float& height);
         void onEvent(Event& event);
+
+        static Ref<Scene> create();
 
     private:
         entt::registry _registry;

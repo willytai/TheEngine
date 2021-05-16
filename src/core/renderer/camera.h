@@ -26,6 +26,7 @@ namespace Engine7414
     class CameraBase
     {
         friend class HierarchyPanel;
+        friend class Serializer;
     public:
         enum class Type {
             Orthographic,
@@ -38,6 +39,7 @@ namespace Engine7414
         CameraBase();
         virtual ~CameraBase() = default;
 
+        virtual Type getType() const = 0;
         virtual const char* projection_str() const = 0;
 
         virtual void setAspectRatio(const float& aspect) = 0;
@@ -68,7 +70,8 @@ namespace Engine7414
         Camera(float FovDeg, float aspect, float nearClip = 0.1f, float farClip = 100.0f);
         ~Camera() = default;
 
-        const char* projection_str() const override { return "Perspective"; }
+        Type getType() const override { return Type::Perspective; }
+        virtual const char* projection_str() const { return "persepctive"; }
 
         // void setPosition(const glm::vec4& pos) override;
         // void setPosition(const glm::vec3& pos) override;
@@ -99,7 +102,9 @@ namespace Engine7414
         Camera2D(float size, float aspect, float nearClip = -1.0f, float farClip = 1.0f);
         ~Camera2D() = default;
 
-        const char* projection_str() const override { return "Orthographic"; }
+        Type getType() const override { return Type::Orthographic; }
+        virtual const char* projection_str() const { return "orthographic"; }
+
         void setAspectRatio(const float& aspect) override;
         void zoom(const float& level) override;
 

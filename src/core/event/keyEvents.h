@@ -9,7 +9,7 @@ namespace Engine7414
 {
     class KeyEvent : public Event
     {
-    protected:
+    public:
         KeyEvent(const KeyCode_t& code, const Mod_t& mods)
             : _code(code), _mods(mods) {}
 
@@ -18,6 +18,7 @@ namespace Engine7414
         // modifier bits
         inline Mod_t mods() const { return _mods; }
 
+    protected:
         KeyCode_t _code;
         Mod_t     _mods;
     };

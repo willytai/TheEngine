@@ -12,8 +12,7 @@ namespace Engine7414
     }
 
     CameraComponent::CameraComponent(CameraBase::Type type, bool active, float aspect, float fov_or_size, float nearClip, float farClip) :
-        active(active),
-        controller(type)
+        active(active)
     {
         aspect = aspect > 0.0f ? aspect : App::getWindow()->AspectRatio();
         switch (type) {
@@ -21,8 +20,5 @@ namespace Engine7414
             // case CameraBase::Type::Perspective: camera = Camera3D::create(fov_or_size, aspect, nearClip, farClip); break;
             default: CORE_ASSERT(false, "");
         }
-        
-        // Temporary stuffs
-        controller.bind(camera.get());
     }
 }

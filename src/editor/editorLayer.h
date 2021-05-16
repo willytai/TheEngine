@@ -29,6 +29,14 @@ namespace Engine7414
         void onEvent(Event& event) override;
 
     private:
+        bool onKeyPressed(KeyPressedEvent& event);
+
+    private:
+        void newScene();
+        void saveScene();
+        void loadScene();
+
+    private:
         // ImGui Stuffs
         ImGuiDockNodeFlags  dockspace_flags = ImGuiDockNodeFlags_None;
         ImGuiWindowFlags    window_flags    = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;

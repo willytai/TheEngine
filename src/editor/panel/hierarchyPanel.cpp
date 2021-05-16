@@ -18,6 +18,7 @@ namespace Engine7414
 
     void HierarchyPanel::setContext(const Ref<Scene>& context) {
         _context = context;
+        _selectedEntity = Entity::Null;
     }
 
     void HierarchyPanel::onImGui() {

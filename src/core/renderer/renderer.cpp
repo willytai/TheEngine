@@ -28,6 +28,10 @@ namespace Engine7414
         RenderCommands::setViewPort(0, 0, event.width(), event.height());
     }
 
+    void Renderer::clearBuffer() {
+        RenderCommands::clear();
+    }
+
     void Renderer::beginScene(const Ref<CameraBase>& camera, const glm::vec4& color) {
         RenderCommands::clear( color );
         CORE_ASSERT(false, "{} Not Implemented!", __PRETTY_FUNCTION__);

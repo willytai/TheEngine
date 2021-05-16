@@ -34,6 +34,12 @@ namespace Engine7414
             return _scene->_registry.get<T>(_handle);
         }
 
+        template<typename T, typename... Args>
+        T& getOrEmplaceDefault(Args&&... args) {
+            if (this->has<T>()) return this->get<T>();
+            else return this->emplace<T>(std::forward<Args>(args)...);
+        }
+
         template<typename T>
         bool has() const {
             return _scene->_registry.all_of<T>(_handle);

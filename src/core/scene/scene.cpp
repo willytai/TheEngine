@@ -1,11 +1,19 @@
 #include "core/scene/scene.h"
 #include "core/scene/entity.h"
 #include "core/scene/components.h"
+#include "core/renderer/renderer.h"
 #include "core/renderer/renderer2D.h"
 
 namespace Engine7414
 {
     Scene::Scene() {
+    }
+
+    Scene::~Scene() {
+    }
+
+    Ref<Scene> Scene::create() {
+        return CreateRef<Scene>();
     }
 
     Entity Scene::createEntity(const char* name) {
@@ -54,36 +62,36 @@ namespace Engine7414
         {
             Renderer2D::beginScene(*cameraTransform, (*sceneCamera).camera.get());
             _registry.group<SpriteRendererComponent>(entt::get<TransformComponent>).each(
-                [](auto entity, auto& sprite, auto& transform){
+                [](auto entity, auto& sprite, auto& transform) {
                     Renderer2D::drawQuad(transform.transform(), sprite.color);
                 }
             );
             Renderer2D::endScene();
         }
+        else {
+            Renderer::clearBuffer();
+            Renderer2D::resetStat();
+        }
     }
 
     void Scene::onResize(const float& width, const float& height) {
         // find the active camera and resize
-        // TODO: if its a camera without a controller, it would not be able to resize
-        //       which might be desirable but also might not, fix in the future
         auto view = _registry.view<CameraComponent>();
         for (auto entity : view) {
             auto& camera = view.get<CameraComponent>(entity);
-            // TODO fix this
-            // if (camera.active) {
-                camera.controller.onResize(width, height);
-            // }
+            camera.camera->setAspectRatio(width/height);
         }
         _sceneWidth = width;
         _sceneHeight = height;
     }
 
     void Scene::onEvent(Event& event) {
+        // controller is removed
         auto view = _registry.view<CameraComponent>();
         for (auto entity : view) {
             auto& camera = view.get<CameraComponent>(entity);
             if (camera.active) {
-                camera.controller.onEvent(event);
+                // camera.controller.onEvent(event);
             }
         }
     }

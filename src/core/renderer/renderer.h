@@ -29,6 +29,7 @@ namespace Engine7414
 
         static void onWindowResize(WindowResizeEvent& event);
 
+        static void clearBuffer();
         static void beginScene(const Ref<CameraBase>& camera, const glm::vec4& color = {0.0f, 0.0f, 0.0f, 1.0f});
         static void submit(const Ref<Shader>& shader, const Ref<VertexArray>& vertexArray);
         static void endScene();

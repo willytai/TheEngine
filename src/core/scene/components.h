@@ -32,7 +32,6 @@ namespace Engine7414
     struct CameraComponent
     {
         Scoped<CameraBase>  camera;
-        CameraController    controller;
 
         // default to false to avoid multiple active cameras during initialization
         bool active;
