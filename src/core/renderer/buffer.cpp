@@ -6,10 +6,31 @@
 
 namespace Engine7414
 {
+    std::ostream& operator << (std::ostream& os, const BufferDataType& dtype) {
+        switch (dtype) {
+            case BufferDataType::Float:  os << "Float"; break;
+            case BufferDataType::Int:    os << "Int";   break;
+            case BufferDataType::uInt8:  os << "uInt8"; break;
+            case BufferDataType::uInt16: os << "uInt16"; break;
+            case BufferDataType::uInt32: os << "uInt32"; break;
+            default: os << "Undefined"; break;
+        }
+        return os;
+    }
+
     Ref<VertexBuffer> VertexBuffer::create(size_t size) {
         switch (Renderer::backend()) {
             case RendererBackend::OpenGL: return CreateRef<GLVertexBuffer>(size);
             case RendererBackend::Metal: return CreateRef<MTLVertexBuffer>(size);
+            default: CORE_ASSERT(false, "Unsupported Backend");
+        }
+        return NULL;
+    }
+
+    Ref<VertexBuffer> VertexBuffer::create(size_t size, uint32_t index) {
+        switch (Renderer::backend()) {
+            case RendererBackend::OpenGL: return CreateRef<GLVertexBuffer>(size);
+            case RendererBackend::Metal: return CreateRef<MTLVertexBuffer>(size, index);
             default: CORE_ASSERT(false, "Unsupported Backend");
         }
         return NULL;

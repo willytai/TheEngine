@@ -14,8 +14,10 @@ namespace Engine7414
         UNDEF, Float, Int,
 
         // index buffer type
-        uInt8, uInt32
+        uInt8, uInt16, uInt32
     };
+
+    std::ostream& operator << (std::ostream& os, const BufferDataType& dtype);
 
     /***************************************************
     *                  Buffer Element                  *
@@ -80,6 +82,8 @@ namespace Engine7414
         virtual void bind() const = 0;
         virtual void unbind() const = 0;
 
+        virtual uint32_t getID() const = 0;
+
         virtual void* getCPUStorage() const = 0;
         virtual void setData(const void* data, const size_t& size) = 0;
 
@@ -87,6 +91,7 @@ namespace Engine7414
         inline const BufferLayout& layout() const { return _layout; }
 
         static Ref<VertexBuffer> create(size_t size);
+        static Ref<VertexBuffer> create(size_t size, uint32_t index);
         static Ref<VertexBuffer> create(const void* vertices, size_t size);
 
     private:

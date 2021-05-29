@@ -14,7 +14,10 @@ namespace Engine7414
         __updateProjViewMat__ = true;
     }
 
+    Ref<Texture2D> testTex;
     void Renderer2D::init() {
+        testTex = Texture2D::create("./resource/texture/logo.png");
+        CORE_ASSERT( testTex, "" );
         __data = new RendererData2D;
 
 #ifdef _WIN64
@@ -47,7 +50,8 @@ namespace Engine7414
     }
 
     void Renderer2D::triangleTest() {
-        Renderer2D::drawQuad( {0.0f, 0.0f}, {0.5f, 0.5f}, {0.0f, 0.0f, 1.0f, 1.0f} );
+        Renderer2D::drawQuad( {0.25f, 0.25f}, {0.5f, 0.5f}, {0.0f, 0.0f, 1.0f, 1.0f} );
+        Renderer2D::drawQuad( {-0.25f, -0.25f}, {0.5f, 0.5f}, testTex );
         Renderer2D::flush();
     }
 

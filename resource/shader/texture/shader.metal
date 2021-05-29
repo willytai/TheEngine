@@ -21,7 +21,7 @@ typedef struct {
     float3 position [[attribute(VertexAttribute::PositionIndex)]];
     float4 color    [[attribute(VertexAttribute::ColorIndex)]];
     float2 texCoor  [[attribute(VertexAttribute::texCoorIndex)]];
-    int    texID    [[attribute(VertexAttribute::texIDIndex)]];
+    float  texID    [[attribute(VertexAttribute::texIDIndex)]];
 } VertexIn;
 
 typedef struct {
@@ -35,10 +35,11 @@ vertex VertexOut vertexMain(VertexIn vIn                [[stage_in]],
                             constant Uniforms& uniforms [[buffer(1)]])
 {
     VertexOut vOut;
-    vOut.position = uniforms.u_ProjViewMat * float4(vIn.position, 1.0f);
+    vOut.position = float4(vIn.position, 1.0f);
+    // vOut.position = uniforms.u_ProjViewMat * float4(vIn.position, 1.0f);
     vOut.color = vIn.color;
     vOut.texCoor = vIn.texCoor;
-    vOut.texID = vIn.texID;
+    vOut.texID = (int)vIn.texID;
 
     // maybe store samplers object into vOut here?
     return vOut;

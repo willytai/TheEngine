@@ -57,7 +57,15 @@
         self.renderPipelineStateCache = [NSMutableDictionary dictionary];
         self.commandBuffer = nil;
         self.commandEncoder = nil;
-        self.drawable = nil;
+        // self.drawable = nil;
+
+        // initialize cache
+        // [NOTE] at most 16 textures are allowed
+        self.textureCache = [NSMutableArray arrayWithCapacity:16];
+        for (NSUInteger i = 0; i < 16; ++i) {
+            [self.textureCache addObject:[NSNull null]];
+        }
+        self.shaderUniformBufferCache = nil;
     }
     return self;
 }
@@ -85,6 +93,9 @@
     id<MTLRenderPipelineState> state = [self getRenderPipelineStateFromContext_:context];
     [_commandEncoder setRenderPipelineState:state];
 
+    // bind the static resource
+    [self bindStaticResources_];
+
     // realease the cache key
     // self.rpsCacheKey = nil;
 }
@@ -92,7 +103,71 @@
     [_commandEncoder endEncoding];
     // [_commandBuffer presentDrawable:_drawable];
     [_commandBuffer commit];
+
+    // reset
+    _commandEncoder = nil;
+    _commandBuffer = nil;
 }
+ 
+// [NOTE] textures are visible to the fragment shader for now
+- (void)bindTexture:(id<MTLTexture>)texture toSlot:(NSUInteger)slot {
+    if ( _commandEncoder == nil ) { // binding before render pass starts
+        [_textureCache replaceObjectAtIndex:slot
+                                 withObject:texture];
+    }
+    else {
+        [_commandEncoder setFragmentTexture:texture
+                                    atIndex:slot];
+    }
+}
+
+- (void)bindUniformBuffer:(id<MTLBuffer>)buffer {
+    if ( _commandEncoder == nil ) {
+        _shaderUniformBufferCache = buffer;
+    }
+    else {
+        [_commandEncoder setVertexBuffer:buffer
+                                  offset:0
+                                 atIndex:1];
+        [_commandEncoder setFragmentBuffer:buffer
+                                  offset:0
+                                 atIndex:1];
+    }
+}
+
+- (void)drawIndexed:(id<MTLBuffer>)dataBuffer
+            indices:(id<MTLBuffer>)indexBuffer
+          indexType:(MTLIndexType)indexType
+         indexCount:(NSUInteger)indexCount
+{
+    [_commandEncoder setVertexBuffer:dataBuffer offset:0 atIndex:0];
+    [_commandEncoder drawIndexedPrimitives:MTLPrimitiveTypeTriangle
+                                indexCount:indexCount
+                                 indexType:indexType
+                               indexBuffer:indexBuffer
+                         indexBufferOffset:0];
+}
+
+- (void) bindStaticResources_ {
+    // set texture
+    for (NSUInteger i = 0; i < _textureCache.count; ++i) {
+        if ( _textureCache[i] != [NSNull null] ) {
+            [_commandEncoder setFragmentTexture:_textureCache[i]
+                                        atIndex:i];
+        }
+    }
+
+    // set uniform buffer (force to bind to index 1 for now)
+    if ( _shaderUniformBufferCache != nil ) {
+        [_commandEncoder setVertexBuffer:_shaderUniformBufferCache
+                                  offset:0
+                                 atIndex:1];
+        [_commandEncoder setFragmentBuffer:_shaderUniformBufferCache
+                                  offset:0
+                                 atIndex:1];
+    }
+}
+
 - (id<MTLRenderPipelineState>)getRenderPipelineStateFromContext_:(GlobalContext*)context {
     assert(self.rpsCacheKey);
     id<MTLRenderPipelineState> state = self.renderPipelineStateCache[self.rpsCacheKey];
@@ -104,6 +179,7 @@
 
     return state;
 }
+
 - (id<MTLRenderPipelineState>)newRenderPipelineStateFromContext_:(GlobalContext*)context {
     MTLRenderPipelineDescriptor* decs = [[MTLRenderPipelineDescriptor alloc] init];
     decs.colorAttachments[0].pixelFormat = self.rpsCacheKey.colorPixelFormat;
@@ -124,7 +200,7 @@
     vd.attributes[2].format = MTLVertexFormatFloat2;
     vd.attributes[2].bufferIndex = 0;
     vd.attributes[2].offset = 7 * sizeof(float);
-    vd.attributes[3].format = MTLVertexFormatInt;
+    vd.attributes[3].format = MTLVertexFormatFloat;
     vd.attributes[3].bufferIndex = 0;
     vd.attributes[3].offset = 9 * sizeof(float);
     vd.layouts[0].stride = 9 * sizeof(float) + sizeof(int);

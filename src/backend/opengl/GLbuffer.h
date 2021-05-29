@@ -17,6 +17,8 @@ namespace Engine7414
         void bind() const override;
         void unbind() const override;
 
+        uint32_t getID() const override { return _rendererID; }
+
         void* getCPUStorage() const override;
         void setData(const void* data, const size_t& size) override;
 

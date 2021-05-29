@@ -13,3 +13,12 @@
     [self.buffer didModifyRange:range];
 }
 @end
+
+@implementation MTLIndexBufferHandle
+- (instancetype) initWithBytes:(const void*)data Length:(NSUInteger)length From:(id<MTLDevice>)device {
+    if ( (self = [super init]) ) {
+        self.buffer = [device newBufferWithBytes:data length:length options:MTLResourceStorageModeManaged];
+    }
+    return self;
+}
+@end

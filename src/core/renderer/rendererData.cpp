@@ -23,7 +23,7 @@ namespace Engine7414
         CORE_ASSERT( maxTextureSlots > 0, "maximum texture slots not set before renderer initialization!" );
 
         // vertex buffer
-        quadVertexBuffer = VertexBuffer::create(maxVertexCount*sizeof(Vertex2D));
+        quadVertexBuffer = VertexBuffer::create(maxVertexCount*sizeof(Vertex2D), 0);
         quadVertexBuffer->setLayout(
             {
                 {BufferDataType::Float, 3}, // position

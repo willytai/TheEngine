@@ -62,6 +62,9 @@ namespace Engine7414
         auto* renderHandle = MTLRenderAPI::getRenderHandle();
         renderHandle.rpsCacheKey.vertexFunc = vFunc;
         renderHandle.rpsCacheKey.fragmentFunc = fFunc;
+        [renderHandle bindUniformBuffer:_handle.uniformBuffer];
+        // CORE_ASSERT( false, "need to also bind the uniform buffer to the render encoder (needs an index)"
+        //                     ", if this is statically bounded, cache it inside renderAPI!");
     }
 
     void MTLShader::unbind() const {

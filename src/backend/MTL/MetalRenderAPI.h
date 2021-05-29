@@ -5,6 +5,7 @@
 #import "backend/MTL/MTLcontext.h"
 
 // TODO not sure if strong or weak is better
+//      maybe generating a unique renderPipelineState for each frame buffer makes more sense
 @interface MTLRenderPipelineStateKey : NSObject<NSCopying>
 @property (nonatomic, assign) u_int32_t sampleCount;
 @property (nonatomic, assign) MTLPixelFormat colorPixelFormat;
@@ -22,7 +23,13 @@
 @property (nonatomic, strong) NSMutableDictionary* renderPipelineStateCache;
 @property (nonatomic, strong) id<MTLCommandBuffer> commandBuffer;
 @property (nonatomic, strong) id<MTLRenderCommandEncoder> commandEncoder;
-@property (nonatomic, strong) id<CAMetalDrawable> drawable;
+
+// to enble static binding (binding resources before the render encoder initialize)
+@property (nonatomic, strong) NSMutableArray* textureCache;
+// forcing shader's uniform buffer to bind to index 1 for now
+@property (nonatomic, strong) id<MTLBuffer> shaderUniformBufferCache;
+
+// @property (nonatomic, strong) id<CAMetalDrawable> drawable;
 - (void)setClearColorR:(float)red
                      G:(float)green
                      B:(float)blue
@@ -30,6 +37,18 @@
 - (void)setClear;
 - (void)beginWithContext:(GlobalContext*)context;
 - (void)end;
+
+// TODO bind the sampler with it!
+- (void)bindTexture:(id<MTLTexture>)texture
+             toSlot:(NSUInteger)slot;
+- (void)bindUniformBuffer:(id<MTLBuffer>)buffer;
+
+- (void)drawIndexed:(id<MTLBuffer>)dataBuffer
+            indices:(id<MTLBuffer>)indexBuffer
+          indexType:(MTLIndexType)indexType
+         indexCount:(NSUInteger)indexCount;
+
+- (void) bindStaticResources_;
 - (id<MTLRenderPipelineState>)getRenderPipelineStateFromContext_:(GlobalContext*)context;
 - (id<MTLRenderPipelineState>)newRenderPipelineStateFromContext_:(GlobalContext*)context;
 @end

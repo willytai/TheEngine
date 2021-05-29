@@ -3,6 +3,9 @@
 #include "core/renderer/renderer.h"
 #include "core/core.h"
 
+#import "backend/MTL/MTLdataType.h"
+#import "backend/MTL/MTLbuffer.h"
+
 namespace Engine7414
 {
     MTLRenderAPI* MTLRenderAPI::__instance__ = NULL;
@@ -38,9 +41,17 @@ namespace Engine7414
     }
 
     void MTLRenderAPI::drawElement(const Ref<VertexArray>& vertexArray, const uint32_t& indexCount) const {
+        MTLVertexBuffer*    vb = (MTLVertexBuffer*)vertexArray->getVertexBuffer().get();
+        MTLIndexBufferUI32* ib = (MTLIndexBufferUI32*)vertexArray->getIndexBuffer().get();
+        [_handle drawIndexed:vb->getMetalHandle().buffer
+                     indices:ib->getMetalHandle().buffer
+                   indexType:toMetalIndexType(vertexArray->getIndexBuffer()->type())
+                  indexCount:indexCount];
+        // CORE_ASSERT( false, "not implemented" );
     }
 
     void MTLRenderAPI::setViewPort(const uint32_t& x, const uint32_t& y, const uint32_t& width, const uint32_t& height) const {
+        CORE_ASSERT( false, "not implemented" );
     }
 
 }

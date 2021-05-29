@@ -1,10 +1,11 @@
 #import "backend/MTL/MetalTexture.h"
+#import "backend/MTL/MTLrenderAPI.h"
 #import "backend/MTL/MTLcontext.h"
 
 using namespace Engine7414;
 
 @implementation MTLTextureHandle
-- (instancetype)initWithData:(void*)data Width:(NSUInteger)width Height:(NSUInteger)height Bpp:(NSInteger)bpp{
+- (instancetype)initWithData:(void*)data Width:(NSUInteger)width Height:(NSUInteger)height Bpp:(NSInteger)bpp {
     if ( (self = [super init]) ) {
         MTLTextureDescriptor* td = [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:MTLPixelFormatRGBA8Unorm
                                                                                       width:width
@@ -22,4 +23,10 @@ using namespace Engine7414;
     }
     return self;
 }
+
+- (void)bindToSlot:(NSUInteger)slot {
+    [MTLRenderAPI::getRenderHandle() bindTexture:_texture
+                                          toSlot:slot];
+}
+
 @end

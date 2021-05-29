@@ -5,6 +5,8 @@
 #include "backend/backend.h"
 #include <vector>
 
+#import <backend/MTL/MetalVertexArray.h>
+
 namespace Engine7414
 {
 
@@ -20,6 +22,8 @@ namespace Engine7414
         void setIndexBuffer(const Ref<IndexBuffer>& indexBuffer) override;
 
     private:
+        uint32_t              _attrIndex;
+        MTLVertexArrayHandle* _handle;
         // Thoughts
         // TODO store a vertexDescriptor, when bind is called, maybe hand over the ownerwhip of the descriptor to the renderAPI
         //      and check if the handle is the same inside the API, if not create a new state
