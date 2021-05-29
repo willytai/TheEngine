@@ -14,6 +14,8 @@
 
 #undef IMGUI_DEFINE_MATH_OPERATORS
 
+#include <ImGuizmo/ImGuizmo.h>
+
 namespace Engine7414
 {
     bool                 ImGuiLayer::__blockEvents__ = true;
@@ -37,6 +39,7 @@ namespace Engine7414
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
+        ImGuizmo::BeginFrame();
     }
 
     void ImGuiLayer::end() {

@@ -168,9 +168,8 @@ namespace Engine7414
         }, false);
 
         drawComponent<CameraComponent>("camera", entity, [](auto& camera) {
-            if (camera.active) ImGui::Text("Active");
-            else ImGui::Text("Inactive");
             ImGui::Text("Projection: %s", camera.camera->projection_str());
+            ImGui::Checkbox("Primary", &camera.active);
 
             if (dynamic_cast<Camera2D*>(camera.camera.get())) {
                 bool& update = camera.camera->__updateProj;

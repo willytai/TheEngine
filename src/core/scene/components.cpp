@@ -17,7 +17,7 @@ namespace Engine7414
         aspect = aspect > 0.0f ? aspect : App::getWindow()->AspectRatio();
         switch (type) {
             case CameraBase::Type::Orthographic: camera = Camera2D::create(fov_or_size, aspect, nearClip, farClip); break;
-            // case CameraBase::Type::Perspective: camera = Camera3D::create(fov_or_size, aspect, nearClip, farClip); break;
+            case CameraBase::Type::Perspective: camera = Camera3D::create(fov_or_size, aspect, nearClip, farClip); break;
             default: CORE_ASSERT(false, "");
         }
     }

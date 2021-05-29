@@ -2,7 +2,6 @@
 #define __EDITOR_LAYER_H__
 
 #include "core/layer/layer.h"
-#include "imgui/imgui.h"
 
 #include "core/core.h"
 #include "core/renderer/texture.h"
@@ -13,6 +12,9 @@
 #include "core/scene/components.h"
 #include "editor/panel/hierarchyPanel.h"
 #include <glm/glm.hpp>
+#include <imgui/imgui.h>
+#include <imgui/imgui_internal.h>
+#include <ImGuizmo/ImGuizmo.h>
 
 namespace Engine7414
 {
@@ -34,6 +36,7 @@ namespace Engine7414
     private:
         void newScene();
         void saveScene();
+        void saveNewScene();
         void loadScene();
 
     private:
@@ -45,17 +48,10 @@ namespace Engine7414
         bool                ViewportFocused = false;
         bool                ViewportHovered = false;
 
-        Ref<Texture2D>    _texture;
-        Ref<Texture2D>    _texture1;
-        Ref<FrameBuffer>  _framebuffer;
-
-        Ref<Scene>        _activeScene;
-        Entity            _testEntity;
-        Entity            _cameraEntity;
-        Entity            _cameraMinor;
-        bool              minor = false;
-
-        HierarchyPanel    _hierarchyPanel;
+        ImGuizmo::OPERATION     _gizmoOP = (ImGuizmo::OPERATION)0;
+        Ref<FrameBuffer>        _framebuffer;
+        Ref<Scene>              _activeScene;
+        HierarchyPanel          _hierarchyPanel;
     };
 }
 

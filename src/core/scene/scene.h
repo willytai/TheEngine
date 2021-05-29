@@ -32,6 +32,7 @@
 
 namespace Engine7414
 {
+    class Entity;
     class Scene
     {
         friend class Entity;
@@ -49,6 +50,10 @@ namespace Engine7414
         void onResize(const float& width, const float& height);
         void onEvent(Event& event);
 
+        Entity getActiveCameraEntity();
+        std::string& getFilePath() { return saveFilePath; }
+        void setFilePath(const char* path) { saveFilePath = std::string(path); }
+
         static Ref<Scene> create();
 
     private:
@@ -57,6 +62,8 @@ namespace Engine7414
         // these two are just used for camera component creation
         float _sceneWidth = 0.0f;
         float _sceneHeight = 0.0f;
+
+        std::string saveFilePath = "";
     };
 }
 

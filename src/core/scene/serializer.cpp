@@ -89,6 +89,9 @@ namespace Engine7414 {
 		if (!data["Scene"]) return;
 		CORE_INFO("Loading scene: {}", data["Scene"].as<std::string>());
 
+		// set the file path
+		_scene->saveFilePath = std::string(filepath);
+
 		if (data["Entities"]) {
 			for (const auto& entity : data["Entities"]) {
 				uint32_t id = entity["ID"].as<uint32_t>(); // TODO

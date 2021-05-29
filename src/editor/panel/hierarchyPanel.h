@@ -20,6 +20,8 @@ namespace Engine7414
         void setContext(const Ref<Scene>& context);
         void onImGui();
 
+        Entity getSelectedEntity() const { return _selectedEntity; }
+
     private:
         void drawEntity(const Entity& entity);
         void onPropertyWindow();

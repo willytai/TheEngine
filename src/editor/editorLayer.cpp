@@ -4,9 +4,11 @@
 #include "core/input/input.h"
 #include "core/scene/serializer.h"
 #include "core/util/fileDialog.h"
+#include "core/math/matrixMath.h"
 #include "editor/editorLayer.h"
 #include <imgui/imgui.h>
 #include <imgui/imgui_internal.h>
+#include <ImGuizmo/ImGuizmo.h>
 
 namespace Engine7414
 {
@@ -45,8 +47,8 @@ namespace Engine7414
         _texture = Texture2D::create("./resource/texture/instagram.png");
         _texture1 = Texture2D::create("./resource/texture/logo.png");
 #else
-        _texture = Texture2D::create("C:\\Users\\Willy\\Desktop\\TheEngine\\TheEngine\\resource\\texture\\instagram.png");
-        _texture1 = Texture2D::create("C:\\Users\\Willy\\Desktop\\TheEngine\\TheEngine\\resource\\texture\\logo.png");
+        // _texture = Texture2D::create("C:\\Users\\Willy\\Desktop\\TheEngine\\TheEngine\\resource\\texture\\instagram.png");
+        // _texture1 = Texture2D::create("C:\\Users\\Willy\\Desktop\\TheEngine\\TheEngine\\resource\\texture\\logo.png");
 #endif
 
         FrameBufferSpec spec = { 1280, 960 };
@@ -58,54 +60,6 @@ namespace Engine7414
 
         // scene
         _activeScene = CreateRef<Scene>();
-#if 0
-        // test entity
-        _testEntity = _activeScene->createEntity("Colored Square");
-        _testEntity.emplace<SpriteRendererComponent>();
-
-        auto en2 = _activeScene->createEntity("second square");
-        en2.emplace<SpriteRendererComponent>();
-
-        // camera
-        _cameraEntity = _activeScene->createEntity("Scene Camera");
-        float aspect = 1280.0f / 960.0f;
-        bool active = true;
-        _cameraEntity.emplace<CameraComponent>(CameraBase::Type::Orthographic, active);
-
-        _cameraMinor = _activeScene->createEntity("Minor Camera");
-        _cameraMinor.emplace<CameraComponent>(CameraBase::Type::Orthographic, !active);
-
-        class Controller : public Scriptable
-        {
-            void onConstruct() {
-                Renderer2D::setUpdateMatFlag();
-                auto& transform = this->get<TransformComponent>();
-                transform.translation.x += float(rand() % 10 - 5) / 10.0f;
-            }
-        
-            void onUpdate(const TimeStep& deltaTime) {
-                auto& transform = this->get<TransformComponent>();
-                if (Input::keyPressed(Key::W)) {
-                    Renderer2D::setUpdateMatFlag();
-                    transform.translation.y += 5.0f * deltaTime;
-                }
-                else if (Input::keyPressed(Key::S)) {
-                    Renderer2D::setUpdateMatFlag();
-                    transform.translation.y -= 5.0f * deltaTime;
-                }
-                if (Input::keyPressed(Key::D)) {
-                    Renderer2D::setUpdateMatFlag();
-                    transform.translation.x += 5.0f * deltaTime;
-                }
-                else if (Input::keyPressed(Key::A)) {
-                    Renderer2D::setUpdateMatFlag();
-                    transform.translation.x -= 5.0f * deltaTime;
-                }
-            }
-        };
-        _cameraEntity.emplace<NativeScriptComponent>().bind<Controller>();
-        _cameraMinor.emplace<NativeScriptComponent>().bind<Controller>();
-#endif
         _hierarchyPanel.setContext( _activeScene );
 
         CORE_INFO( "Editor Layer Initialized" );
@@ -163,7 +117,9 @@ namespace Engine7414
                 ImGui::Separator();
                 if (ImGui::MenuItem("Open ...", "Ctrl+O")) this->loadScene();
                 ImGui::Separator();
-                if (ImGui::MenuItem("Save As ...", "Ctrl+Shift+S")) this->saveScene();
+                if (ImGui::MenuItem("Save", "Ctrl+S")) this->saveScene();
+                ImGui::Separator();
+                if (ImGui::MenuItem("Save As ...", "Ctrl+Shift+S")) this->saveNewScene();
                 ImGui::Separator();
                 if (ImGui::MenuItem("Exit")) App::close();
 
@@ -187,13 +143,6 @@ namespace Engine7414
             ImGui::Text( "framerate: %.0f", ImGui::GetIO().Framerate );
             ImGui::Text( "drawCalls: %d", stat.drawCalls );
             ImGui::Text( "quadCount: %d", stat.quadCount );
-            ImGui::Separator();
-            if (ImGui::Checkbox( "minor camera", &minor )) {
-                Renderer2D::setUpdateMatFlag();
-                _cameraEntity.get<CameraComponent>().active = !minor;
-                _cameraMinor.get<CameraComponent>().active = minor;
-            }
-            ImGui::Separator();
             ImGui::End();
         }
 
@@ -215,11 +164,40 @@ namespace Engine7414
             ViewportHovered   = ImGui::IsWindowHovered();
 
             // events should be propagated only when the viewport is focused and hovered!
-            if ( ViewportFocused && ViewportHovered ) ImGuiLayer::setNoBlockEvent();
+            if ( ViewportFocused || ViewportHovered ) ImGuiLayer::setNoBlockEvent();
             else                                      ImGuiLayer::setBlockEvent();
 
             ImGui::Image( (void*)(intptr_t)_framebuffer->colorAttachmentID(),
                           ViewportSize, ImVec2(0, 1), ImVec2(1, 0) );
+
+            // Gizmo
+            Entity selectedEntity = _hierarchyPanel.getSelectedEntity();
+            if (selectedEntity && _gizmoOP) {
+                ImGuizmo::SetOrthographic(false);
+                ImGuizmo::SetDrawlist();
+                ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, ImGui::GetWindowWidth(), ImGui::GetWindowHeight());
+
+                auto cameraEntity = _activeScene->getActiveCameraEntity();
+                const auto& activeCamera = cameraEntity.get<CameraComponent>().camera;
+                const auto& cameraProjection = activeCamera->projection();
+                glm::mat4 cameraView = glm::inverse(cameraEntity.get<TransformComponent>().transform());
+
+                auto& transformComponent = selectedEntity.get<TransformComponent>();
+                glm::mat4 transform = transformComponent.transform();
+                
+                bool snap = Input::keyPressed(Key::LEFT_CONTROL);
+                float snapValue = 0.5f; // for translation and scale
+                if (_gizmoOP == ImGuizmo::OPERATION::ROTATE) snapValue = 45.0f;
+                float snapValues[3] = { snapValue, snapValue, snapValue };
+                ImGuizmo::Manipulate(&cameraView[0][0], &cameraProjection[0][0], _gizmoOP, ImGuizmo::LOCAL,
+                                     &transform[0][0], nullptr, snap ? snapValues : nullptr);
+            
+                if (ImGuizmo::IsUsing()) {
+                    math::decomposeTransform(transform, transformComponent.translation,
+                                                        transformComponent.rotation,
+                                                        transformComponent.scale);
+                }
+            }
 
             ImGui::End();
         }
@@ -237,10 +215,19 @@ namespace Engine7414
     }
 
     void EditorLayer::saveScene() {
+        if (_activeScene->getFilePath().size()) {
+            Serializer serializer(_activeScene);
+            serializer.serialize(_activeScene->getFilePath().c_str());
+        }
+        else this->saveNewScene();
+    }
+
+    void EditorLayer::saveNewScene() {
         auto file = FileDialog::fileExplorer(false, "Scene File(*.yaml/yml)\0*.yaml;*.yml\0");
         if (file.size()) {
             Serializer serializer(_activeScene);
             serializer.serialize(file.c_str());
+            _activeScene->setFilePath(file.c_str());
         }
     }
 
@@ -269,28 +256,57 @@ namespace Engine7414
         
         if (event.repeat()) return false;
         
-        auto flags = event.mods() & SHIFT_CTRL_ALT_BITMASK;
+        auto modFlags = event.mods() & SHIFT_CTRL_ALT_BITMASK;
         switch (event.key()) {
             case Key::S: // TODO
             {
-                if (flags == ModKey::MOD_CONTROL_BIT) { // only Ctrl is pressed
+                if (modFlags == ModKey::MOD_CONTROL_BIT) { // only Ctrl is pressed
+                    this->saveScene();
                 }
-                else if (flags == (ModKey::MOD_CONTROL_BIT | ModKey::MOD_SHIFT_BIT)) { // Ctrl + Shift
-
+                else if (modFlags == (ModKey::MOD_CONTROL_BIT | ModKey::MOD_SHIFT_BIT)) { // Ctrl + Shift
+                    this->saveNewScene();
                 }
                 break;
             }
             case Key::O:
             {
-                if (flags == ModKey::MOD_CONTROL_BIT) { // only Ctrl is pressed
+                if (modFlags == ModKey::MOD_CONTROL_BIT) { // only Ctrl is pressed
                     this->loadScene();
                 }
                 break;
             }
             case Key::N:
             {
-                if (flags == ModKey::MOD_CONTROL_BIT) { // only Ctrl is pressed
+                if (modFlags == ModKey::MOD_CONTROL_BIT) { // only Ctrl is pressed
                     this->newScene();
+                }
+                break;
+            }
+            case Key::Q: // disbale gizmo
+            {
+                if (!modFlags) { // no other key is pressed
+                    _gizmoOP = (ImGuizmo::OPERATION)0;
+                }
+                break;
+            }
+            case Key::W:
+            {
+                if (!modFlags) {
+                    _gizmoOP = ImGuizmo::OPERATION::TRANSLATE;
+                }
+                break;
+            }
+            case Key::E:
+            {
+                if (!modFlags) {
+                    _gizmoOP = ImGuizmo::OPERATION::ROTATE;
+                }
+                break;
+            }
+            case Key::R:
+            {
+                if (!modFlags) {
+                    _gizmoOP = ImGuizmo::OPERATION::SCALE;
                 }
                 break;
             }

@@ -95,4 +95,14 @@ namespace Engine7414
             }
         }
     }
+
+    Entity Scene::getActiveCameraEntity() {
+        auto view = _registry.view<CameraComponent>();
+        for (auto entity : view) {
+            auto& camera = view.get<CameraComponent>(entity);
+            if (camera.active) {
+                return Entity( entity, this );
+            }
+        }
+    }
 }

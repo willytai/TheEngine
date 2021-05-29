@@ -67,32 +67,18 @@ namespace Engine7414
     class Camera : public CameraBase
     {
     public:
-        Camera(float FovDeg, float aspect, float nearClip = 0.1f, float farClip = 100.0f);
+        Camera(float fov, float aspect, float nearClip = 0.1f, float farClip = 100.0f);
         ~Camera() = default;
 
         Type getType() const override { return Type::Perspective; }
         virtual const char* projection_str() const { return "persepctive"; }
 
-        // void setPosition(const glm::vec4& pos) override;
-        // void setPosition(const glm::vec3& pos) override;
         void setAspectRatio(const float& asepct) override;
-
-        void setFOV(float fov);
-        void setYaw(float YawDeg);
-        void setPitch(float PitchDeg);
-
         void zoom(const float& fov) override;
-        // void rotateY(float deltaYawDeg);
-        // void rotateX(float deltaPitchDeg);
 
-        inline const Rotation&  rotation() const { return __rotation; }
-
+        static Scoped<Camera> create(float fov, float aspect, float nearClip, float farClip);
     private:
         void updateProjMatrix() const override;
-
-    private:
-        glm::vec4   __front;
-        Rotation    __rotation;
     };
     typedef Camera Camera3D;
 
@@ -111,9 +97,6 @@ namespace Engine7414
         static Scoped<Camera2D> create(float size, float aspect, float nearClip, float farClip);
     private:
         void updateProjMatrix() const override;
-
-    private:
-        float       __rotation;
     };
 }
 
