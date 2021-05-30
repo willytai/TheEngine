@@ -36,7 +36,6 @@ namespace Engine7414
         size_t size = sizeof(float)*4*4;
         size_t offset = this->getUniformPos(name);
         [_handle setUniformFrom:(void*)&value[0] Size:size Offset:offset];
-        CORE_ASSERT( false, "not sure whether metal is column majored or row majored" );
     }
 
     void MTLShader::setInt1(const char* name, const int& value) {

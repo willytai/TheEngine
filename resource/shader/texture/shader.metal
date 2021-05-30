@@ -36,7 +36,7 @@ vertex VertexOut vertexMain(VertexIn vIn                [[stage_in]],
 {
     VertexOut vOut;
     vOut.position = float4(vIn.position, 1.0f);
-    // vOut.position = uniforms.u_ProjViewMat * float4(vIn.position, 1.0f);
+    vOut.position = uniforms.u_ProjViewMat * float4(vIn.position, 1.0f);
     vOut.color = vIn.color;
     vOut.texCoor = vIn.texCoor;
     vOut.texID = (int)vIn.texID;
