@@ -6,8 +6,9 @@
 #endif
 
 #include "core/core.h"
-#include "glm/glm.hpp"
-#include "glm/gtc/matrix_transform.hpp"
+
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 namespace Engine7414
 {
@@ -41,10 +42,9 @@ namespace Engine7414
 
         virtual Type getType() const = 0;
         virtual const char* projection_str() const = 0;
+        virtual void zoom(const float& level);
 
-        virtual void setAspectRatio(const float& aspect) = 0;
-        virtual void zoom(const float& level) = 0;
-
+        void setAspectRatio(const float& aspect);
         const glm::mat4& projection() const;
 
     private:
@@ -71,9 +71,8 @@ namespace Engine7414
         ~Camera() = default;
 
         Type getType() const override { return Type::Perspective; }
-        virtual const char* projection_str() const { return "persepctive"; }
+        const char* projection_str() const { return "persepctive"; }
 
-        void setAspectRatio(const float& asepct) override;
         void zoom(const float& fov) override;
 
         static Scoped<Camera> create(float fov, float aspect, float nearClip, float farClip);
@@ -89,9 +88,8 @@ namespace Engine7414
         ~Camera2D() = default;
 
         Type getType() const override { return Type::Orthographic; }
-        virtual const char* projection_str() const { return "orthographic"; }
+        const char* projection_str() const { return "orthographic"; }
 
-        void setAspectRatio(const float& aspect) override;
         void zoom(const float& level) override;
 
         static Scoped<Camera2D> create(float size, float aspect, float nearClip, float farClip);

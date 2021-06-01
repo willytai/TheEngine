@@ -74,6 +74,24 @@ namespace Engine7414
         }
     }
 
+    void Scene::onUpdateEditor(const TimeStep& deltaTime, Ref<EditorCamera>& camera) {
+        // start renderering
+        if (camera)
+        {
+            Renderer2D::beginScene(camera);
+            _registry.group<SpriteRendererComponent>(entt::get<TransformComponent>).each(
+                [](auto entity, auto& sprite, auto& transform) {
+                    Renderer2D::drawQuad(transform.transform(), sprite.color);
+                }
+            );
+            Renderer2D::endScene();
+        }
+        else {
+            Renderer::clearBuffer();
+            Renderer2D::resetStat();
+        }
+    }
+
     void Scene::onResize(const float& width, const float& height) {
         // find the active camera and resize
         auto view = _registry.view<CameraComponent>();

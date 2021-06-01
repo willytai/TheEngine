@@ -9,6 +9,7 @@ namespace Engine7414
     {
         bool keyPressedImpl(const KeyCode_t& key) const override;
         bool mouseButtonPressedImpl(const MouseCode_t& button) const override;
+        glm::vec2 mousePosImpl() const override;
     };
 }
 

@@ -23,6 +23,15 @@ namespace Engine7414
         CORE_ASSERT( __activeWindow__ != NULL,
                      "Did you forget to bind the window with the Input class before Input Polling?" );
         auto window = (GLFWwindow*)__activeWindow__->nativeWindow();
-        return glfwGetKey( window, (GLFW_MOUSE_BUTTON_t)button ) != GLFW_RELEASE;
+        return glfwGetMouseButton( window, (GLFW_MOUSE_BUTTON_t)button ) != GLFW_RELEASE;
+    }
+
+    glm::vec2 GLFWInput::mousePosImpl() const {
+        CORE_ASSERT(__activeWindow__ != NULL,
+            "Did you forget to bind the window with the Input class before Input Polling?");
+        double x, y;
+        auto window = (GLFWwindow*)__activeWindow__->nativeWindow();
+        glfwGetCursorPos(window, &x, &y);
+        return glm::vec2{(float)x, (float)y};
     }
 }

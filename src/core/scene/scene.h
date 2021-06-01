@@ -4,6 +4,7 @@
 #include "core/util/timeStep.h"
 #include "core/event/event.h"
 #include "core/core.h"
+#include "editor/editorCamera.h"
 
 #if defined(__clang__)
     #pragma clang diagnostic push
@@ -47,6 +48,7 @@ namespace Engine7414
         float aspectRatio() const { return _sceneWidth / _sceneHeight; }
 
         void onUpdate(const TimeStep& deltaTime, const bool& viewportFocused = true);
+        void onUpdateEditor(const TimeStep& deltaTime, Ref<EditorCamera>& camera);
         void onResize(const float& width, const float& height);
         void onEvent(Event& event);
 

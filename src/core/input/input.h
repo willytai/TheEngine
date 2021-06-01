@@ -5,6 +5,8 @@
 #include "core/window/window.h"
 #include "core/input/codes.h"
 
+#include <glm/glm.hpp>
+
 namespace Engine7414
 {
     class Input
@@ -12,6 +14,7 @@ namespace Engine7414
     public:
         static bool keyPressed(KeyCode_t key) { return __instance__->keyPressedImpl(key); }
         static bool mouseButtonPressed(MouseCode_t button) { return __instance__->mouseButtonPressedImpl(button); }
+        static glm::vec2 mousePos() { return __instance__->mousePosImpl(); }
 
         // bind NULL to unbind
         static void bindWindow(Window* window) { __activeWindow__ = window; }
@@ -19,6 +22,7 @@ namespace Engine7414
     private:
         virtual bool keyPressedImpl(const KeyCode_t& key) const = 0;
         virtual bool mouseButtonPressedImpl(const MouseCode_t& button) const = 0;
+        virtual glm::vec2 mousePosImpl() const = 0;
 
     protected:
         // this holds the raw pointer of the active window (Scoped ptr)

@@ -62,6 +62,9 @@ namespace Engine7414
         _activeScene = CreateRef<Scene>();
         _hierarchyPanel.setContext( _activeScene );
 
+        // editor camera
+        _editorCamera = EditorCamera::create();
+
         CORE_INFO( "Editor Layer Initialized" );
     }
 
@@ -77,10 +80,13 @@ namespace Engine7414
         if ( (uint32_t)ViewportSize.x != fbspec.width || (uint32_t)ViewportSize.y != fbspec.height ) {
             _framebuffer->resize( (uint32_t)ViewportSize.x, (uint32_t)ViewportSize.y );
             _activeScene->onResize(ViewportSize.x, ViewportSize.y);
+            _editorCamera->setViewportSize({ ViewportSize.x, ViewportSize.y });
         }
 
         _framebuffer->bind();
-        _activeScene->onUpdate( deltaTime, ViewportFocused );
+        // _activeScene->onUpdate( deltaTime, ViewportFocused );
+        _editorCamera->onUpdate(deltaTime);
+        _activeScene->onUpdateEditor(deltaTime, _editorCamera);
         _framebuffer->unbind();
     }
 
@@ -177,10 +183,8 @@ namespace Engine7414
                 ImGuizmo::SetDrawlist();
                 ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, ImGui::GetWindowWidth(), ImGui::GetWindowHeight());
 
-                auto cameraEntity = _activeScene->getActiveCameraEntity();
-                const auto& activeCamera = cameraEntity.get<CameraComponent>().camera;
-                const auto& cameraProjection = activeCamera->projection();
-                glm::mat4 cameraView = glm::inverse(cameraEntity.get<TransformComponent>().transform());
+                const auto& cameraView = _editorCamera->getView();
+                const auto& cameraProjection = _editorCamera->getProjection();
 
                 auto& transformComponent = selectedEntity.get<TransformComponent>();
                 glm::mat4 transform = transformComponent.transform();
@@ -246,6 +250,7 @@ namespace Engine7414
 
     void EditorLayer::onEvent(Event& event) {
         _activeScene->onEvent(event);
+        _editorCamera->onEvent(event);
 
         EventDispatcher dispatcher(event);
         dispatcher.dispatch<KeyPressedEvent>(CORE_BIND_EVENT_FN(EditorLayer::onKeyPressed));

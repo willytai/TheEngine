@@ -85,6 +85,14 @@ namespace Engine7414
         __data->textureShader->setMat4f("u_ProjViewMat", __ProjViewMatCache__);
     }
 
+    void Renderer2D::beginScene(Ref<EditorCamera>& camera, const glm::vec4& color) {
+        RenderCommands::clear(color);
+        __data->stats.reset();
+        __data->textureShader->bind();
+        __data->textureShader->setMat4f("u_ProjViewMat", camera->getViewProjection());
+    }
+
+
     void Renderer2D::endScene() {
         if ( __data->curIndexCount ) Renderer2D::flush();
     }

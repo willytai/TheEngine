@@ -2,7 +2,6 @@
 #define __EDITOR_LAYER_H__
 
 #include "core/layer/layer.h"
-
 #include "core/core.h"
 #include "core/renderer/texture.h"
 #include "core/renderer/frameBuffer.h"
@@ -11,6 +10,8 @@
 #include "core/scene/entity.h"
 #include "core/scene/components.h"
 #include "editor/panel/hierarchyPanel.h"
+#include "editor/editorCamera.h"
+
 #include <glm/glm.hpp>
 #include <imgui/imgui.h>
 #include <imgui/imgui_internal.h>
@@ -49,6 +50,7 @@ namespace Engine7414
         bool                ViewportHovered = false;
 
         ImGuizmo::OPERATION     _gizmoOP = (ImGuizmo::OPERATION)0;
+        Ref<EditorCamera>       _editorCamera;
         Ref<FrameBuffer>        _framebuffer;
         Ref<Scene>              _activeScene;
         HierarchyPanel          _hierarchyPanel;

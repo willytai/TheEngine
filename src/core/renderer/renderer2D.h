@@ -6,6 +6,7 @@
 #include "core/renderer/vertexArray.h"
 #include "core/renderer/texture.h"
 #include "core/scene/components.h"
+#include "editor/editorCamera.h"
 
 namespace Engine7414
 {
@@ -19,7 +20,8 @@ namespace Engine7414
         static void init();
         static void shutdown();
 
-        static void beginScene(const TransformComponent& transformComponent, const CameraBase* camera,  const glm::vec4& color = { 0.0f, 0.0f, 0.0f, 1.0f });
+        static void beginScene(const TransformComponent& transformComponent, const CameraBase* camera, const glm::vec4& color = { 0.0f, 0.0f, 0.0f, 1.0f });
+        static void beginScene(Ref<EditorCamera>& camera,  const glm::vec4& color = { 0.0f, 0.0f, 0.0f, 1.0f });
         static void endScene();
         static void flush();
 

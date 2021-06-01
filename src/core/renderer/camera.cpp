@@ -15,6 +15,15 @@ namespace Engine7414
         __m_projection(glm::mat4(1.0f))
     {}
 
+    void CameraBase::zoom(const float& level) {
+        CORE_ASSERT(false, "not implemented");
+    }
+
+    void CameraBase::setAspectRatio(const float& aspect) {
+        __updateProj = true;
+        params.aspect = aspect;
+    }
+
     const glm::mat4& CameraBase::projection() const {
         if (__updateProj) {
             this->updateProjMatrix();
@@ -34,11 +43,6 @@ namespace Engine7414
 
     Camera::Camera(float fov, float aspect, float nearClip, float farClip) {
         params = { fov, aspect, nearClip, farClip };
-    }
-
-    void Camera::setAspectRatio(const float& aspect) {
-        __updateProj = true;
-        params.aspect = aspect;
     }
 
     void Camera::zoom(const float& fov) {
@@ -68,11 +72,6 @@ namespace Engine7414
 
     Camera2D::Camera2D(float size, float aspect, float nearClip, float farClip) {
           params = { size, aspect, nearClip, farClip };
-    }
-
-    void Camera2D::setAspectRatio(const float& aspect) {
-        __updateProj = true;
-        params.aspect = aspect;
     }
 
     void Camera2D::zoom(const float& level) {
