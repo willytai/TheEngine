@@ -20,10 +20,27 @@ namespace Engine7414
 
         const auto& layout = vertexBuffer->layout();
         for (const auto& element : layout.elements()) {
-            GLCall( glVertexAttribPointer( _attrIndex, (GLint)element.count, toOpenGLDataType(element.dtype),
-                                           element.normalized?GL_TRUE:GL_FALSE, (GLsizei)layout.stride(),
-                                           (const void*)(intptr_t)element.offset ) );
-            GLCall( glEnableVertexAttribArray( _attrIndex++ ) );
+            switch (element.dtype) {
+                case BufferDataType::Float:
+                {
+                    GLCall( glVertexAttribPointer( _attrIndex, (GLint)element.count, toOpenGLDataType(element.dtype),
+                                                   element.normalized?GL_TRUE:GL_FALSE, (GLsizei)layout.stride(),
+                                                   (const void*)(intptr_t)element.offset ) );
+                    GLCall( glEnableVertexAttribArray( _attrIndex++ ) );
+                    break;
+                }
+                case BufferDataType::uInt32:
+                case BufferDataType::uInt8:
+                case BufferDataType::Int:
+                {
+                    GLCall( glVertexAttribIPointer(_attrIndex, (GLint)element.count, toOpenGLDataType(element.dtype),
+                                                   (GLsizei)layout.stride(),
+                                                   (const void*)(intptr_t)element.offset));
+                    GLCall( glEnableVertexAttribArray(_attrIndex++));
+                    break;
+                }
+                default: CORE_ERROR("unsupported shader data type"); break;
+            }
         }
 
         this->_vertexBuffers.push_back( vertexBuffer );

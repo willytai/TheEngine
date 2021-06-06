@@ -23,7 +23,7 @@ namespace Engine7414
         const glm::mat4& getView();
         const glm::mat4& getProjection();
 
-        inline void setViewportSize(const glm::vec2& size) { _viewportSize = size; __updateProj = true; }
+        inline void setViewportSize(const glm::vec2& size) { _viewportSize = size; params.aspect = size.x / size.y;  __updateProj = true; }
 
         Type getType() const override { return Type::Perspective; }
         const char* projection_str() const { return "persepctive (Editor Camera)"; }

@@ -15,7 +15,10 @@ namespace Engine7414
         glm::vec3   position;
         glm::vec4   color;
         glm::vec2   texCoor;
-        float       samplerID; // int can't be interpolated by the fragment shader
+        int         samplerID;
+        
+        // for the editor
+        int         entityID;
     };
 
     struct RendererData2D

@@ -1,3 +1,4 @@
+#include "editor/editorLayer.h"
 #include "core/app.h"
 #include "core/renderer/renderer2D.h"
 #include "core/script/scriptable.h"
@@ -5,10 +6,6 @@
 #include "core/scene/serializer.h"
 #include "core/util/fileDialog.h"
 #include "core/math/matrixMath.h"
-#include "editor/editorLayer.h"
-#include <imgui/imgui.h>
-#include <imgui/imgui_internal.h>
-#include <ImGuizmo/ImGuizmo.h>
 
 namespace Engine7414
 {
@@ -51,7 +48,13 @@ namespace Engine7414
         // _texture1 = Texture2D::create("C:\\Users\\Willy\\Desktop\\TheEngine\\TheEngine\\resource\\texture\\logo.png");
 #endif
 
-        FrameBufferSpec spec = { 1280, 960 };
+        // framebuffer construction
+        FrameBufferSpec spec;
+        spec.attachments = {
+            { FrameBufferTextureFormat::RGBA8,   FrameBufferTextureClearAction::CLEAR_AS_COLOR, FrameBufferTextureClearData(0.0f, 0.0f, 0.0f, 1.0f) }, // color attachment
+            { FrameBufferTextureFormat::RED_INT, FrameBufferTextureClearAction::CLEAR_AS_INT,   FrameBufferTextureClearData(-1) },                     // entt ID buffer
+            { FrameBufferTextureFormat::Depth,   FrameBufferTextureClearAction::CLEAR_AS_FLOAT, FrameBufferTextureClearData(0.0f, 0) }                 // depth/stencil buffer
+        };
         _framebuffer = FrameBuffer::create( spec );
 
         // make sure the ViewportSize of the first frame is valid (not (0, 0))
@@ -84,9 +87,22 @@ namespace Engine7414
         }
 
         _framebuffer->bind();
+        // _framebuffer->clearColorAttachment(0);
+        // _framebuffer->clearColorAttachment(1);
         // _activeScene->onUpdate( deltaTime, ViewportFocused );
         _editorCamera->onUpdate(deltaTime);
-        _activeScene->onUpdateEditor(deltaTime, _editorCamera);
+        _activeScene->onUpdateEditor(deltaTime, _editorCamera, _framebuffer);
+
+        // this part requires the framebuffer to be bound
+        if (0 <= _viewportMousePos.x && _viewportMousePos.x <= ViewportSize.x &&
+            0 <= _viewportMousePos.y && _viewportMousePos.y <= ViewportSize.y) {
+            // y-axis flipping for OpenGL
+            _viewportMousePos.y = ViewportSize.y - _viewportMousePos.y;
+            int selectedID;
+            _framebuffer->readPixel((int)_viewportMousePos.x, (int)_viewportMousePos.y, &selectedID, 1);
+            CORE_INFO("selectedID {}", selectedID);
+        }
+
         _framebuffer->unbind();
     }
 
@@ -166,8 +182,8 @@ namespace Engine7414
             ImGui::PopStyleVar();
 
             ViewportSize      = ImGui::GetContentRegionAvail();
-            ViewportFocused   = ImGui::IsWindowFocused();
-            ViewportHovered   = ImGui::IsWindowHovered();
+            bool ViewportFocused   = ImGui::IsWindowFocused();
+            bool ViewportHovered   = ImGui::IsWindowHovered();
 
             // events should be propagated only when the viewport is focused and hovered!
             if ( ViewportFocused || ViewportHovered ) ImGuiLayer::setNoBlockEvent();
@@ -202,6 +218,12 @@ namespace Engine7414
                                                         transformComponent.scale);
                 }
             }
+
+            // store the mouse position in the viewport window coordinates, origins at top left
+            glm::vec2 globalMousePos = ImGui::GetMousePos();
+            glm::vec2 globalWindowPos = ImGui::GetWindowPos();
+            glm::vec2 WindowSize = ImGui::GetWindowSize();
+            _viewportMousePos = globalMousePos - globalWindowPos - WindowSize + (glm::vec2)ViewportSize;
 
             ImGui::End();
         }

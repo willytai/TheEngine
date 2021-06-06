@@ -74,14 +74,15 @@ namespace Engine7414
         }
     }
 
-    void Scene::onUpdateEditor(const TimeStep& deltaTime, Ref<EditorCamera>& camera) {
+    // make sure the framebuffer is bound before passing into this function
+    void Scene::onUpdateEditor(const TimeStep& deltaTime, Ref<EditorCamera>& camera, const Ref<FrameBuffer>& currentFrameBuffer) {
         // start renderering
         if (camera)
         {
-            Renderer2D::beginScene(camera);
+            Renderer2D::beginScene(camera, currentFrameBuffer);
             _registry.group<SpriteRendererComponent>(entt::get<TransformComponent>).each(
                 [](auto entity, auto& sprite, auto& transform) {
-                    Renderer2D::drawQuad(transform.transform(), sprite.color);
+                    Renderer2D::drawQuad(transform.transform(), sprite.color, (int)entity);
                 }
             );
             Renderer2D::endScene();

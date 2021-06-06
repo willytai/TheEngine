@@ -15,18 +15,25 @@ namespace Engine7414
         void bind() const override;
         void unbind() const override;
         void resize(const uint32_t& width, const uint32_t& height) override;
-        uint32_t colorAttachmentID() const override { return (uint32_t)_colorAttachmentID; }
+        uint32_t colorAttachmentID(int index = 0) const override { return (uint32_t)_colorAttachmentsIDs[index]; }
+        void readPixel(int x, int y, void* data, int index = 0) const override;
         const FrameBufferSpec& spec() const override { return _spec; }
+
+        void clear() const override;
+
+    // utility functions
+    public:
+        static void attachColorTexture(GLuint textureID, GLenum internalFormat, uint32_t sample, uint32_t width, uint32_t height, uint32_t index, GLenum accessFormat);
+        static void attachDepthTexture(GLuint textureID, GLenum internalFormat, uint32_t sample, uint32_t width, uint32_t height, GLenum attachmentType);
+        static GLenum getTextureTarget(bool multiSample);
 
     private:
         void regenerate();
 
     private:
-        GLuint _rendererID;
-        GLuint _colorAttachmentID;  // the sample-able color buffer
-        GLuint _renderBufferID;     // for depth/stencil buffer
-
-        FrameBufferSpec _spec;
+        GLuint              _rendererID;
+        GLuint              _depthAttachmentID = 0;
+        std::vector<GLuint> _colorAttachmentsIDs;
     };
 }
 

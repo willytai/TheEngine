@@ -11,6 +11,7 @@
 #include "core/scene/components.h"
 #include "editor/panel/hierarchyPanel.h"
 #include "editor/editorCamera.h"
+#include "core/imgui/imguiClassExtension.h"
 
 #include <glm/glm.hpp>
 #include <imgui/imgui.h>
@@ -44,11 +45,10 @@ namespace Engine7414
         // ImGui Stuffs
         ImGuiDockNodeFlags  dockspace_flags = ImGuiDockNodeFlags_None;
         ImGuiWindowFlags    window_flags    = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
-        ImVec2              ViewportSize    = {0, 0};
+        ImVec2              ViewportSize    = { 0, 0 };
         bool                dockspaceOpen   = false;
-        bool                ViewportFocused = false;
-        bool                ViewportHovered = false;
 
+        glm::vec2               _viewportMousePos = { -1.0f, -1.0f };
         ImGuizmo::OPERATION     _gizmoOP = (ImGuizmo::OPERATION)0;
         Ref<EditorCamera>       _editorCamera;
         Ref<FrameBuffer>        _framebuffer;

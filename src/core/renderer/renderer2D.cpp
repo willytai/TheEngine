@@ -24,7 +24,8 @@ namespace Engine7414
                 {BufferDataType::Float, 3}, // position
                 {BufferDataType::Float, 4}, // color
                 {BufferDataType::Float, 2}, // texture coordinates
-                {BufferDataType::Float, 1}  // texture samplerID
+                {BufferDataType::Int,   1}, // texture samplerID
+                {BufferDataType::Int,   1}  // entity ID
             }
         );
 
@@ -85,8 +86,9 @@ namespace Engine7414
         __data->textureShader->setMat4f("u_ProjViewMat", __ProjViewMatCache__);
     }
 
-    void Renderer2D::beginScene(Ref<EditorCamera>& camera, const glm::vec4& color) {
-        RenderCommands::clear(color);
+    void Renderer2D::beginScene(Ref<EditorCamera>& camera, const Ref<FrameBuffer>& currentFrameBuffer, const glm::vec4& defaultFrameBufferClearColor) {
+        RenderCommands::clear(defaultFrameBufferClearColor);
+        currentFrameBuffer->clear();
         __data->stats.reset();
         __data->textureShader->bind();
         __data->textureShader->setMat4f("u_ProjViewMat", camera->getViewProjection());
@@ -133,14 +135,18 @@ namespace Engine7414
     void Renderer2D::drawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color, const Ref<Texture2D>& texture) {
         auto transform = glm::translate( glm::mat4(1.0f), position ) *
                          glm::scale( glm::mat4(1.0f), glm::vec3(size.x, size.y, 1.0f) );
-        Renderer2D::drawQuad( transform, color, texture );
+        Renderer2D::drawQuad( transform, color, texture, 0 );
     }
 
     void Renderer2D::drawQuad(const glm::mat4& transform, const glm::vec4& color) {
-         Renderer2D::drawQuad( transform, color, __data->textureSlots[0] );
+         Renderer2D::drawQuad( transform, color, __data->textureSlots[0], 0 );
     }
 
-    void Renderer2D::drawQuad(const glm::mat4& transform, const glm::vec4& color, const Ref<Texture2D>& texture) {
+    void Renderer2D::drawQuad(const glm::mat4& transform, const glm::vec4& color, int enttID) {
+        Renderer2D::drawQuad(transform, color, __data->textureSlots[0], enttID);
+    }
+
+    void Renderer2D::drawQuad(const glm::mat4& transform, const glm::vec4& color, const Ref<Texture2D>& texture, const int& enttID) {
         int textureID = -1;
         for (int i = 0; i < __data->curTextureID; ++i) {
             if ( texture.get() == __data->textureSlots[i].get() ) {
@@ -158,7 +164,8 @@ namespace Engine7414
             __data->vertexDataPtr->color     = color;
             __data->vertexDataPtr->texCoor   = __data->textureCoords[i];
             __data->vertexDataPtr->position  = transform * __data->unitQuadVertices[i];
-            __data->vertexDataPtr->samplerID = (float)textureID;
+            __data->vertexDataPtr->samplerID = textureID;
+            __data->vertexDataPtr->entityID  = enttID;
             __data->vertexDataPtr++;
         }
 

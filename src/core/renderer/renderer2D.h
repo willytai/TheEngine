@@ -5,6 +5,7 @@
 #include "core/renderer/shader.h"
 #include "core/renderer/vertexArray.h"
 #include "core/renderer/texture.h"
+#include "core/renderer/framebuffer.h"
 #include "core/scene/components.h"
 #include "editor/editorCamera.h"
 
@@ -21,7 +22,7 @@ namespace Engine7414
         static void shutdown();
 
         static void beginScene(const TransformComponent& transformComponent, const CameraBase* camera, const glm::vec4& color = { 0.0f, 0.0f, 0.0f, 1.0f });
-        static void beginScene(Ref<EditorCamera>& camera,  const glm::vec4& color = { 0.0f, 0.0f, 0.0f, 1.0f });
+        static void beginScene(Ref<EditorCamera>& camera, const Ref<FrameBuffer>& currentFrameBuffer, const glm::vec4& defaultFrameBufferClearColor = { 0.0f, 0.0f, 0.0f, 1.0f });
         static void endScene();
         static void flush();
 
@@ -32,6 +33,7 @@ namespace Engine7414
         static void drawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<Texture2D>& texture);
         static void drawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture);
         static void drawQuad(const glm::mat4& transform, const glm::vec4& color);
+        static void drawQuad(const glm::mat4& transform, const glm::vec4& color, int enttID);
         // static void drawQuad(const glm::mat4& transform, const Ref<Texture2D>& texture);
 
         // TODO drawRotatedQuad!
@@ -47,7 +49,7 @@ namespace Engine7414
 
     private:
         static void drawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color, const Ref<Texture2D>& texture);
-        static void drawQuad(const glm::mat4& transform, const glm::vec4& color, const Ref<Texture2D>& texture);
+        static void drawQuad(const glm::mat4& transform, const glm::vec4& color, const Ref<Texture2D>& texture, const int& enttID);
     };
 }
 

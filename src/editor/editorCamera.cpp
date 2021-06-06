@@ -132,9 +132,9 @@ namespace Engine7414
 
     std::pair<float, float> EditorCamera::dragSpeed() {
         float x = std::min(_viewportSize.x / 1000.0f, 2.4f);
-        float xSpeed = 0.0366f * (x * x) - 0.1778f * x + 0.3021f;
+        float xSpeed = 0.0366f * (x * x) - 0.1778f * x + 0.4021f;
         float y = std::min(_viewportSize.y / 1000.0f, 2.4f);
-        float ySpeed = 0.0366f * (y * y) - 0.1778f * y + 0.3021f;
+        float ySpeed = 0.0366f * (y * y) - 0.1778f * y + 0.4021f;
         return { xSpeed, ySpeed };
     }
 }

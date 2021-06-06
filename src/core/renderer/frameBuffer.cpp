@@ -11,4 +11,24 @@ namespace Engine7414
         }
         return NULL;
     }
+
+    bool FrameBuffer::isDepthFormat(const FrameBufferTextureFormat& format) {
+        switch (format) {
+            case FrameBufferTextureFormat::DEPTH24STENCIL8: return true;
+        }
+        return false;
+    }
+
+    FrameBuffer::FrameBuffer(const FrameBufferSpec& spec) {
+        for (const auto& textureDesc : spec.attachments.attachments) {
+            if (FrameBuffer::isDepthFormat(textureDesc.format)) {
+                _depthAttachmentDesc = textureDesc;
+            }
+            else {
+                _colorAttachmentDescs.push_back(textureDesc);
+            }
+        }
+        _spec = spec;
+    }
+
 }
