@@ -19,6 +19,8 @@ namespace Engine7414
 
         void setContext(const Ref<Scene>& context);
         void onImGui();
+        void selectEntity(const Entity& entity);
+        void deselectEntity() { _selectedEntity = Entity::Null; }
 
         Entity getSelectedEntity() const { return _selectedEntity; }
 

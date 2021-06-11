@@ -15,6 +15,7 @@ namespace Engine7414
     public:
         Entity() = default;
         Entity(entt::entity handle, Scene* scene);
+        Entity(const int& entityID, Scene* scene);
 
         template<typename T, typename... Args>
         T& emplace(Args&&... args) {

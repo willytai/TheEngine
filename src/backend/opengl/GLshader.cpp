@@ -1,12 +1,17 @@
 #include "GLshader.h"
 #include <filesystem>
 
+#include <shaderc/shaderc.hpp>
+
 namespace Engine7414
 {
 
     GLShader::GLShader(const std::string& name, const char* shaderDir)
         : Shader(name)
     {
+        shaderc::Compiler compiler;
+        compiler.IsValid();
+
         std::string vShaderPath, fShaderPath;
         for (const auto& file : std::filesystem::directory_iterator( shaderDir ) ) {
             if ( file.is_directory() ) continue;

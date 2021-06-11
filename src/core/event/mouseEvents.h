@@ -55,15 +55,16 @@ namespace Engine7414
 
     class MouseButtonEvent : public Event
     {
-    protected:
+    public:
         MouseButtonEvent(const MouseCode_t& button, const Mod_t& mods)
             : _button(button), _mods(mods) {}
 
         // mouse button
-        inline MouseCode_t button() const { return _button; }
+        inline virtual MouseCode_t button() const { return _button; }
         // modifier bits
-        inline Mod_t mods() const { return _mods; }
+        inline virtual Mod_t mods() const { return _mods; }
 
+    protected:
         MouseCode_t _button; // the button (left/right/middle)
         Mod_t       _mods;   // modifier bits, indicate some other states
     };

@@ -90,7 +90,7 @@ namespace Engine7414
         // _framebuffer->clearColorAttachment(0);
         // _framebuffer->clearColorAttachment(1);
         // _activeScene->onUpdate( deltaTime, ViewportFocused );
-        _editorCamera->onUpdate(deltaTime);
+        _editorCameraActive = _editorCamera->onUpdate(deltaTime);
         _activeScene->onUpdateEditor(deltaTime, _editorCamera, _framebuffer);
 
         // this part requires the framebuffer to be bound
@@ -100,7 +100,10 @@ namespace Engine7414
             _viewportMousePos.y = ViewportSize.y - _viewportMousePos.y;
             int selectedID;
             _framebuffer->readPixel((int)_viewportMousePos.x, (int)_viewportMousePos.y, &selectedID, 1);
-            CORE_INFO("selectedID {}", selectedID);
+            _hoveredEntity = { selectedID, _activeScene.get() };
+        }
+        else {
+            _hoveredEntity = Entity::Null;
         }
 
         _framebuffer->unbind();
@@ -181,14 +184,12 @@ namespace Engine7414
             ImGui::Begin("View Port", NULL, flags);
             ImGui::PopStyleVar();
 
-            ViewportSize      = ImGui::GetContentRegionAvail();
-            bool ViewportFocused   = ImGui::IsWindowFocused();
-            bool ViewportHovered   = ImGui::IsWindowHovered();
+            // viewport stats
+            ViewportSize    = ImGui::GetContentRegionAvail();
+            ViewportFocused = ImGui::IsWindowFocused();
+            ViewportHovered = ImGui::IsWindowHovered();
 
-            // events should be propagated only when the viewport is focused and hovered!
-            if ( ViewportFocused || ViewportHovered ) ImGuiLayer::setNoBlockEvent();
-            else                                      ImGuiLayer::setBlockEvent();
-
+            // draw framebuffer's color attachment
             ImGui::Image( (void*)(intptr_t)_framebuffer->colorAttachmentID(),
                           ViewportSize, ImVec2(0, 1), ImVec2(1, 0) );
 
@@ -218,6 +219,13 @@ namespace Engine7414
                                                         transformComponent.scale);
                 }
             }
+            
+            // events should be propagated only when the viewport is focused/hovered and ImGuizmo is not active!
+            bool gizmoActive = ImGuizmo::IsOver();
+            bool propagateEvent = !gizmoActive && (ViewportFocused || ViewportHovered);
+            CORE_INFO("gizmoactive {} propagate {}", gizmoActive, propagateEvent);
+            if ( propagateEvent ) ImGuiLayer::setNoBlockEvent();
+            else                  ImGuiLayer::setBlockEvent();
 
             // store the mouse position in the viewport window coordinates, origins at top left
             glm::vec2 globalMousePos = ImGui::GetMousePos();
@@ -256,7 +264,7 @@ namespace Engine7414
             _activeScene->setFilePath(file.c_str());
         }
     }
-
+     
     void EditorLayer::loadScene() {
         auto file = FileDialog::fileExplorer(true, "Scene File(*.yaml/yml)\0*.yaml;*.yml\0");
         if (file.size()) {
@@ -276,6 +284,7 @@ namespace Engine7414
 
         EventDispatcher dispatcher(event);
         dispatcher.dispatch<KeyPressedEvent>(CORE_BIND_EVENT_FN(EditorLayer::onKeyPressed));
+        dispatcher.dispatch<MouseButtonPressedEvent>(CORE_BIND_EVENT_FN(EditorLayer::onMouseButtonPressed));
     }
 
     bool EditorLayer::onKeyPressed(KeyPressedEvent& event) {
@@ -340,5 +349,14 @@ namespace Engine7414
             default: return false;
         }
         return true;
+    }
+
+    bool EditorLayer::onMouseButtonPressed(MouseButtonPressedEvent& event) {
+        // select entity
+        if (ViewportHovered && !_editorCameraActive && event.button() == Mouse::BUTTON_LEFT) {
+            _hierarchyPanel.selectEntity(_hoveredEntity);
+        }
+
+        return false;
     }
 }

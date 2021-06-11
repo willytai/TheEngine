@@ -8,17 +8,21 @@ namespace Engine7414
 {
     HierarchyPanel::HierarchyPanel() {
         _context.reset();
-        _selectedEntity = Entity{ entt::null, NULL };
+        _selectedEntity = Entity::Null;
     }
 
     HierarchyPanel::HierarchyPanel(const Ref<Scene>& context) {
         this->setContext(context);
-        _selectedEntity = Entity{ entt::null, NULL };
+        _selectedEntity = Entity::Null;
     }
 
     void HierarchyPanel::setContext(const Ref<Scene>& context) {
         _context = context;
         _selectedEntity = Entity::Null;
+    }
+
+    void HierarchyPanel::selectEntity(const Entity& entity) {
+        _selectedEntity = entity;
     }
 
     void HierarchyPanel::onImGui() {

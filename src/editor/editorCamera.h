@@ -16,7 +16,8 @@ namespace Engine7414
         EditorCamera(float fov, float aspect, float nearClip = 0.1f, float farClip = 100.0f);
         ~EditorCamera() = default;
         
-        void onUpdate(const TimeStep& deltaTime);
+        // returns true if camera is activated, i.e. ALT is pressed
+        bool onUpdate(const TimeStep& deltaTime);
         void onEvent(Event& event);
 
         const glm::mat4& getViewProjection();

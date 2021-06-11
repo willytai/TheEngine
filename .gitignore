@@ -3,12 +3,14 @@
 *.ccls
 *.DS_Store
 *.pdf
+*.vcxproj*
 check.txt
 *svgs/
 *metadata/
 
 bin/
 lib/
+x64/
 
 tags
 opengltest

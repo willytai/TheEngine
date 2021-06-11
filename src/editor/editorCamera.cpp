@@ -18,8 +18,10 @@ namespace Engine7414
         params = { fov, aspect, nearClip, farClip };
     }
 
-    void EditorCamera::onUpdate(const TimeStep& deltaTime) {
+    bool EditorCamera::onUpdate(const TimeStep& deltaTime) {
+        bool ret = false;
         if (Input::keyPressed(Key::LEFT_ALT)) {
+            ret = true;
             glm::vec2 newMousePos = Input::mousePos();
             glm::vec2 deltaMouse = (newMousePos - _initMousePos) * 0.003f;
             _initMousePos = newMousePos;
@@ -28,6 +30,7 @@ namespace Engine7414
             else if (Input::mouseButtonPressed(Mouse::BUTTON_LEFT)) this->mouseRotate(deltaMouse);
             else if (Input::mouseButtonPressed(Mouse::BUTTON_RIGHT)) this->mouseZoom(deltaMouse.y);
         }
+        return ret;
     }
 
     void EditorCamera::onEvent(Event& event) {
