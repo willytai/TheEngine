@@ -69,7 +69,7 @@ namespace Engine7414
             Renderer2D::endScene();
         }
         else {
-            Renderer::clearBuffer();
+            RenderCommands::clear();
             Renderer2D::resetStat();
         }
     }
@@ -79,17 +79,16 @@ namespace Engine7414
         // start renderering
         if (camera)
         {
-            Renderer2D::beginScene(camera, currentFrameBuffer);
+            Renderer::beginScene(camera, currentFrameBuffer);
+            // Renderer2D::beginScene(camera, currentFrameBuffer);
             _registry.group<SpriteRendererComponent>(entt::get<TransformComponent>).each(
                 [](auto entity, auto& sprite, auto& transform) {
-                    Renderer2D::drawQuad(transform.transform(), sprite.color, (int)entity);
+                    Renderer::drawCube(transform.transform(), sprite.color, (int)entity);
+                    // Renderer2D::drawQuad(transform.transform(), sprite.color, (int)entity);
                 }
             );
-            Renderer2D::endScene();
-        }
-        else {
-            Renderer::clearBuffer();
-            Renderer2D::resetStat();
+            Renderer::endScene();
+            // Renderer2D::endScene();
         }
     }
 

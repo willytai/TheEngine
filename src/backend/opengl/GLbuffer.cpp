@@ -2,7 +2,9 @@
 
 namespace Engine7414
 {
-
+    /**************************************************
+    *                  Vertex Buffer                  *
+    **************************************************/
     GLVertexBuffer::GLVertexBuffer(size_t size) {
         GLCall( glGenBuffers( 1, &_rendererID ) );
         GLCall( glBindBuffer( GL_ARRAY_BUFFER, _rendererID ) );
@@ -32,6 +34,33 @@ namespace Engine7414
         GLCall(glBufferSubData(GL_ARRAY_BUFFER, 0, size, data));
     }
 
+    /***************************************************
+    *                 Uniform Buffer                   *
+    ***************************************************/
+    void GLUniformBuffer::init(uint32_t binding) {
+        // not sure whether GL_STATIC_DRAW or GL_DYNAMIC_DRAW is better
+        GLCall(glGenBuffers(1, &_rendererID));
+        GLCall(glBindBuffer(GL_UNIFORM_BUFFER, _rendererID));
+        GLCall(glBufferData(GL_UNIFORM_BUFFER, _size, nullptr, GL_STATIC_DRAW));
+        GLCall(glBindBufferBase(GL_UNIFORM_BUFFER, binding, _rendererID));
+    }
+
+    void GLUniformBuffer::bind() const {
+        GLCall(glBindBuffer(GL_UNIFORM_BUFFER, _rendererID));
+    }
+
+    void GLUniformBuffer::setData(size_t offset, size_t size, const void* data) const {
+        GLCall(glBufferSubData(GL_UNIFORM_BUFFER, offset, size, data));
+    }
+
+    GLUniformBuffer::~GLUniformBuffer() {
+        CORE_ASSERT(_rendererID != 0, "");
+        GLCall(glDeleteBuffers(1, &_rendererID));
+    }
+
+    /***************************************************
+    *                  Index Buffer                    *
+    ***************************************************/
 #define GLIndexBufferClassImpl( baseName, type) \
     GL##baseName::GL##baseName(const type* data, uint32_t count) { \
         GLCall( glGenBuffers( 1, &_rendererID ) ); \

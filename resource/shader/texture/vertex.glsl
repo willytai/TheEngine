@@ -1,22 +1,32 @@
-#version 410 core
+#version 460 core
 
-layout(location = 0) in vec3  position;
-layout(location = 1) in vec4  color;
-layout(location = 2) in vec2  texCoor;
-layout(location = 3) in int   samplerID;
-layout(location = 4) in int   entityID;
+layout (location = 0) in vec3 position;
+layout (location = 1) in vec4 color;
+layout (location = 2) in vec2 texCoor;
+layout (location = 3) in int  samplerID;
+layout (location = 4) in int  entityID;
 
-uniform mat4 u_ProjViewMat;
+layout (std140, binding = 0) uniform GlobalMatrix
+{
+    mat4 ProjViewMat;
+} Camera;
 
-out vec2  v_texCoor;
-out vec4  v_color;
-flat out int v_samplerID;
-flat out int v_entityID;
+struct vertexOut
+{
+    vec2 texCoor;
+    vec4 color;
+};
+
+layout (location = 0) out vertexOut vOut;
+layout (location = 3) out flat int v_samplerID;
+layout (location = 4) out flat int v_entityID;
 
 void main() {
-    gl_Position = u_ProjViewMat * vec4(position, 1.0f);
+    gl_Position = Camera.ProjViewMat * vec4(position, 1.0f);
+    
+    vOut.texCoor = texCoor;
+    vOut.color = color;
+
     v_samplerID = samplerID;
-    v_texCoor = texCoor;
-    v_color = color;
     v_entityID = entityID;
 }

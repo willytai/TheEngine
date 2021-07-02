@@ -24,7 +24,7 @@ namespace Engine7414
         if (!__glfwInitialized__) {
             if (glfwInit()) {
                 glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-                glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
+                glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
                 glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
                 glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
                 glfwSetErrorCallback(GLFWErrorCallback);
@@ -49,7 +49,7 @@ namespace Engine7414
         this->createContext(props.rendererBackend);
 
         if (props.vsync) this->enableVSync();
-        else               this->disbaleVSync();
+        else             this->disbaleVSync();
 
         CORE_INFO("window \'{}\' successfully created ({}, {})", props.title, props.width, props.height);
 

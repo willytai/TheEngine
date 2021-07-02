@@ -8,8 +8,8 @@ namespace Engine7414
 {
     void GLRenderAPI::init() const {
         // z-buffer
-        // glEnable( GL_DEPTH_TEST );
-        CORE_INFO( "\tz-buffer: Disabled (default)" );
+        glEnable( GL_DEPTH_TEST );
+        CORE_INFO( "\tz-buffer: Enabled (default)" );
 
         // blending
         glEnable( GL_BLEND );

@@ -154,7 +154,7 @@ namespace Engine7414
         if (_depthAttachmentDesc.format != FrameBufferTextureFormat::UNDEF &&
             _depthAttachmentDesc.clearAction != FrameBufferTextureClearAction::DONT_CARE) {
             switch (_depthAttachmentDesc.format) {
-                case FrameBufferTextureFormat::DEPTH24STENCIL8: GLCall(glClearBufferfi(GL_DEPTH_STENCIL, 0, _depthAttachmentDesc.clearData.fi.f, _depthAttachmentDesc.clearData.fi.i)); break;
+            case FrameBufferTextureFormat::DEPTH24STENCIL8: GLCall(glClearBufferfi(GL_DEPTH_STENCIL, 0, _depthAttachmentDesc.clearData.fi.f, _depthAttachmentDesc.clearData.fi.i)); break;
                 default: CORE_ERROR("fuck");
             }
         }

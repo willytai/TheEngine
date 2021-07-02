@@ -68,7 +68,7 @@ namespace Engine7414
     };
     // -------------------------------------------------
 
-    /***************************************************
+    /**************************************************
     *                  Vertex Buffer                  *
     ***************************************************/
     class VertexBuffer
@@ -94,7 +94,29 @@ namespace Engine7414
     // -------------------------------------------------
 
     /***************************************************
-    *                Index Buffer Base                *
+    *               Uniform Buffer Base                *
+    ***************************************************/
+    class UniformBuffer
+    {
+    public:
+        virtual ~UniformBuffer() = default;
+
+        size_t size() const { return _size; }
+        void registerUniformSize(size_t size) { _size += size; }
+
+        virtual void bind() const = 0;
+
+        virtual void init(uint32_t binding) = 0;
+        virtual void setData(size_t offset, size_t size, const void* data) const = 0;
+
+        static Ref<UniformBuffer> create();
+    protected:
+        size_t  _size = 0;
+    };
+    // -------------------------------------------------
+
+    /***************************************************
+    *                Index Buffer Base                 *
     ***************************************************/
     class IndexBuffer
     {

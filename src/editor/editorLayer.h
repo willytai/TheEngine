@@ -11,6 +11,7 @@
 #include "core/scene/entity.h"
 #include "core/scene/components.h"
 #include "editor/panel/hierarchyPanel.h"
+#include "editor/panel/fileExplorerPanel.h"
 #include "editor/editorCamera.h"
 #include "core/imgui/imguiClassExtension.h"
 
@@ -62,6 +63,8 @@ namespace Engine7414
         HierarchyPanel      _hierarchyPanel;
 
         Entity              _hoveredEntity = Entity::Null;
+    
+        FileExplorerPanel   _fileExplorerPanel;
     };
 }
 

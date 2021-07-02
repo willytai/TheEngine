@@ -36,8 +36,22 @@ namespace Engine7414
         GLuint compileShader(GLenum type, std::string& source, const char* filepath);
         GLint  getLocation(const char* name);
 
+        void compileOrGetSPRIV(GLenum type, const char* filepath);
+        void reflect(GLenum type, const std::vector<uint32_t>& spirvBinary);
+        void createShaderProgram();
+
+    private:
+        static const char* cacheDirectory();
+        static const char* cachedFileExtension(GLenum type);
+        static void readRawText(const char* filepath, std::string& result);
+        static void compilationStat(GLuint shader, GLenum type);
+
     private:
         GLuint  _rendererID;
+
+        // spirv binary
+        std::vector<uint32_t> _vertexSPIRV;
+        std::vector<uint32_t> _fragmentSPIRV;
 
         // location cache
         std::unordered_map<std::string_view, GLint> _uniformLocationCache;

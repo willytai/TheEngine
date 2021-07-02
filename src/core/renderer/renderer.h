@@ -5,38 +5,57 @@
 #include "core/renderer/buffer.h"
 #include "core/renderer/shader.h"
 #include "core/renderer/renderCommands.h"
-#include "core/renderer/camera.h"
+#include "core/renderer/frameBuffer.h"
+#include "core/renderer/rendererData.h"
 #include "core/event/event.h"
 #include "backend/backend.h"
-#include "core/renderer/renderer2D.h"
+#include "editor/editorCamera.h"
+
 
 namespace Engine7414
 {
     class Renderer
     {
+        // all global uniforms
+        enum GUniform
+        {
+            G_UNIFORM_PROJ_VIEW_MAT = 0, // the view projection matrix
+            G_UNIFORM_CAMERA_POS = 1,    // the position of the camera
+        };
+        static std::vector<UniformHandle>   _globalUniformHandle;
+        
         struct sceneData {
             glm::mat4 ProjViewMat;
         };
         static sceneData __data__;
         static bool __updateProjViewMat__;
+
     public:
         static void setUpdateMatFlag();
-
-        static void setMaxTextSlot(const int& maxSlot);
 
         static void init(RendererBackend backend);
         static void shutdown();
 
-        static void onWindowResize(WindowResizeEvent& event);
-
-        static void clearBuffer();
-        static void beginScene(const Ref<CameraBase>& camera, const glm::vec4& color = {0.0f, 0.0f, 0.0f, 1.0f});
-        static void submit(const Ref<Shader>& shader, const Ref<VertexArray>& vertexArray);
+        static void beginScene(Ref<EditorCamera>& camera, const Ref<FrameBuffer>& currentFrameBuffer);
         static void endScene();
+        static void flush();
 
-        static ShaderDict& getShaderDict() { return ShaderDict::get(); }
+        static RendererData::statistics stat();
 
+    public:
+        // cube
+        static void drawCube(const glm::mat4& transform, const glm::vec4& color);
+        static void drawCube(const glm::mat4& transform, const glm::vec4& color, int enttID);
+
+    public:
+        static void setMaxTextSlot(const int& maxSlot);
+    
+    public:
+        static ShaderLibrary& getShaderDict() { return ShaderLibrary::get(); }
         static RendererBackend backend() { return RenderCommands::getBackend(); }
+
+    private:
+        static void registerGlobalUniform();
     };
 }
 

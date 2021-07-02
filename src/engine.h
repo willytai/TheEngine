@@ -14,6 +14,8 @@
 #include "core/renderer/camera.h"
 #include "core/renderer/cameraController.h"
 #include "core/renderer/frameBuffer.h"
+#include "core/renderer/renderer.h"
+#include "core/renderer/renderer2D.h"
 
 #include "core/scene/scene.h"
 #include "core/scene/entity.h"

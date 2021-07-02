@@ -46,6 +46,7 @@ project "TheEngine"
 		"%{extIncludeDir.stb}",
 		"%{extIncludeDir.yaml_cpp}",
 		"%{extIncludeDir.shaderc}",
+		"%{extIncludeDir.spirv_cross}",
 	}
 
 	removefiles {

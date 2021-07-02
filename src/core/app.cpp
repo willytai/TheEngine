@@ -47,6 +47,9 @@ namespace Engine7414
         while ( _shouldRun ) {
             TimeStep deltaTime = _stopWatch.deltaTime();
 
+            // clear default render pass
+            RenderCommands::clear();
+
             if ( !_minimized ) {
                 for (auto* layer : _layerStack) {
                     layer->onUpdate( deltaTime );
@@ -99,7 +102,7 @@ namespace Engine7414
             return (_minimized = true);
         }
         _minimized = false;
-        Renderer::onWindowResize(event);
+        RenderCommands::setViewPort(0, 0, event.width(), event.height());
         return false;
     }
 

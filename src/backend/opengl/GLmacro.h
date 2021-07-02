@@ -1,9 +1,9 @@
 #ifndef __GL_MACRO_H__
 #define __GL_MACRO_H__
 
+#include <glad/glad.h>
 #include "backend/backend.h"
 #include "core/util/log.h"
-#include <glad/glad.h>
 
 #ifdef ENGINE_DEBUG
     #define GL_ASSERT(x) \

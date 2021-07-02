@@ -22,9 +22,9 @@ namespace Engine7414
 
     enum class FrameBufferTextureClearAction
     {
-        CLEAR_AS_COLOR,
-        CLEAR_AS_FLOAT,
-        CLEAR_AS_INT,
+        CLEAR_AS_COLOR, // used for color attachments
+        CLEAR_AS_FLOAT, // used for depth/stencil
+        CLEAR_AS_INT,   // used for framebuffer thats stores data as int
         DONT_CARE
     };
 
@@ -39,6 +39,9 @@ namespace Engine7414
         struct { float f; int i; }                     fi;
         int                                            int1;
         float                                          float1;
+    
+        const static FrameBufferTextureClearData DEFAULT_CLEAR_DEPTH;
+        const static FrameBufferTextureClearData DEFAULT_CLEAR_COLOR;
     };
 
     struct FrameBufferTextureDiscriptor

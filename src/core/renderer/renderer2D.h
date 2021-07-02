@@ -13,6 +13,13 @@ namespace Engine7414
 {
     class Renderer2D
     {
+        // all global uniforms
+        enum GUniform
+        {
+            G_UNIFORM_PROJ_VIEW_MAT = 0 // the view projection matrix
+        };
+        static std::vector<UniformHandle>   _globalUniformHandle;
+
         static glm::mat4 __ProjViewMatCache__;
         static bool __updateProjViewMat__;
     public:
@@ -50,6 +57,9 @@ namespace Engine7414
     private:
         static void drawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color, const Ref<Texture2D>& texture);
         static void drawQuad(const glm::mat4& transform, const glm::vec4& color, const Ref<Texture2D>& texture, const int& enttID);
+    
+    private:
+        static void registerGlobalUniform();
     };
 }
 

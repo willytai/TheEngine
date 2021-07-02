@@ -1,32 +1,38 @@
-#version 410 core
+#version 460 core
 
-in  vec2  v_texCoor;
-in  vec4  v_color;
-flat in int v_samplerID;
-flat in int v_entityID;
 layout(location = 0) out vec4 color;
 layout(location = 1) out int  entityID;
 
-uniform sampler2D u_Samplers[32];
+struct vertexOut
+{
+    vec2 texCoor;
+    vec4 color;
+};
+
+layout (location = 0) in vertexOut vIn;
+layout (location = 3) in flat int v_samplerID;
+layout (location = 4) in flat int v_entityID;
+
+layout (binding = 0) uniform sampler2D u_Samplers[32];
 
 void main() {
     switch (v_samplerID) {
-        case 0 : color = texture(u_Samplers[0], v_texCoor) * v_color; break;
-        case 1 : color = texture(u_Samplers[1], v_texCoor) * v_color; break;
-        case 2 : color = texture(u_Samplers[2], v_texCoor) * v_color; break;
-        case 3 : color = texture(u_Samplers[3], v_texCoor) * v_color; break;
-        case 4 : color = texture(u_Samplers[4], v_texCoor) * v_color; break;
-        case 5 : color = texture(u_Samplers[5], v_texCoor) * v_color; break;
-        case 6 : color = texture(u_Samplers[6], v_texCoor) * v_color; break;
-        case 7 : color = texture(u_Samplers[7], v_texCoor) * v_color; break;
-        case 8 : color = texture(u_Samplers[8], v_texCoor) * v_color; break;
-        case 9 : color = texture(u_Samplers[9], v_texCoor) * v_color; break;
-        case 10: color = texture(u_Samplers[10], v_texCoor) * v_color; break;
-        case 11: color = texture(u_Samplers[11], v_texCoor) * v_color; break;
-        case 12: color = texture(u_Samplers[12], v_texCoor) * v_color; break;
-        case 13: color = texture(u_Samplers[13], v_texCoor) * v_color; break;
-        case 14: color = texture(u_Samplers[14], v_texCoor) * v_color; break;
-        case 15: color = texture(u_Samplers[15], v_texCoor) * v_color; break;
+        case 0 : color = texture(u_Samplers[0],  vIn.texCoor) * vIn.color; break;
+        case 1 : color = texture(u_Samplers[1],  vIn.texCoor) * vIn.color; break;
+        case 2 : color = texture(u_Samplers[2],  vIn.texCoor) * vIn.color; break;
+        case 3 : color = texture(u_Samplers[3],  vIn.texCoor) * vIn.color; break;
+        case 4 : color = texture(u_Samplers[4],  vIn.texCoor) * vIn.color; break;
+        case 5 : color = texture(u_Samplers[5],  vIn.texCoor) * vIn.color; break;
+        case 6 : color = texture(u_Samplers[6],  vIn.texCoor) * vIn.color; break;
+        case 7 : color = texture(u_Samplers[7],  vIn.texCoor) * vIn.color; break;
+        case 8 : color = texture(u_Samplers[8],  vIn.texCoor) * vIn.color; break;
+        case 9 : color = texture(u_Samplers[9],  vIn.texCoor) * vIn.color; break;
+        case 10: color = texture(u_Samplers[10], vIn.texCoor) * vIn.color; break;
+        case 11: color = texture(u_Samplers[11], vIn.texCoor) * vIn.color; break;
+        case 12: color = texture(u_Samplers[12], vIn.texCoor) * vIn.color; break;
+        case 13: color = texture(u_Samplers[13], vIn.texCoor) * vIn.color; break;
+        case 14: color = texture(u_Samplers[14], vIn.texCoor) * vIn.color; break;
+        case 15: color = texture(u_Samplers[15], vIn.texCoor) * vIn.color; break;
         // case 16: color = texture(u_Samplers[16], v_texCoor) * v_color; break;
         // case 17: color = texture(u_Samplers[17], v_texCoor) * v_color; break;
         // case 18: color = texture(u_Samplers[18], v_texCoor) * v_color; break;
@@ -48,6 +54,5 @@ void main() {
     // this is not supported on OS X
     // case 4 : color = texture(u_Samplers[v_samplerID], v_texCoor) * v_color;
 
-    entityID = 50;
     entityID = v_entityID;
 }

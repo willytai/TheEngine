@@ -23,6 +23,7 @@ namespace Engine7414
         const glm::mat4& getViewProjection();
         const glm::mat4& getView();
         const glm::mat4& getProjection();
+        const glm::vec3& getPosition() { return _position; }
 
         inline void setViewportSize(const glm::vec2& size) { _viewportSize = size; params.aspect = size.x / size.y;  __updateProj = true; }
 

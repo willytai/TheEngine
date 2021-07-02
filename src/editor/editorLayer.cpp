@@ -6,6 +6,7 @@
 #include "core/scene/serializer.h"
 #include "core/util/fileDialog.h"
 #include "core/math/matrixMath.h"
+#include "core/renderer/renderer.h"
 
 namespace Engine7414
 {
@@ -51,9 +52,9 @@ namespace Engine7414
         // framebuffer construction
         FrameBufferSpec spec;
         spec.attachments = {
-            { FrameBufferTextureFormat::RGBA8,   FrameBufferTextureClearAction::CLEAR_AS_COLOR, FrameBufferTextureClearData(0.0f, 0.0f, 0.0f, 1.0f) }, // color attachment
-            { FrameBufferTextureFormat::RED_INT, FrameBufferTextureClearAction::CLEAR_AS_INT,   FrameBufferTextureClearData(-1) },                     // entt ID buffer
-            { FrameBufferTextureFormat::Depth,   FrameBufferTextureClearAction::CLEAR_AS_FLOAT, FrameBufferTextureClearData(0.0f, 0) }                 // depth/stencil buffer
+            { FrameBufferTextureFormat::RGBA8,   FrameBufferTextureClearAction::CLEAR_AS_COLOR, FrameBufferTextureClearData::DEFAULT_CLEAR_COLOR }, // color attachment
+            { FrameBufferTextureFormat::RED_INT, FrameBufferTextureClearAction::CLEAR_AS_INT,   FrameBufferTextureClearData(-1) },                  // entt ID buffer
+            { FrameBufferTextureFormat::Depth,   FrameBufferTextureClearAction::CLEAR_AS_FLOAT, FrameBufferTextureClearData::DEFAULT_CLEAR_DEPTH }  // depth/stencil buffer
         };
         _framebuffer = FrameBuffer::create( spec );
 
@@ -64,6 +65,7 @@ namespace Engine7414
         // scene
         _activeScene = CreateRef<Scene>();
         _hierarchyPanel.setContext( _activeScene );
+        _fileExplorerPanel.refreshDirectory();
 
         // editor camera
         _editorCamera = EditorCamera::create();
@@ -86,7 +88,6 @@ namespace Engine7414
             _editorCamera->setViewportSize({ ViewportSize.x, ViewportSize.y });
         }
 
-        _framebuffer->bind();
         // _framebuffer->clearColorAttachment(0);
         // _framebuffer->clearColorAttachment(1);
         // _activeScene->onUpdate( deltaTime, ViewportFocused );
@@ -159,15 +160,13 @@ namespace Engine7414
             ImGui::EndMenuBar();
         }
 
-        _hierarchyPanel.onImGui();
-
         // test window
         {
-            auto stat = Renderer2D::stat();
+            auto stat = Renderer::stat();
             ImGui::Begin("Test");
             ImGui::Text( "framerate: %.0f", ImGui::GetIO().Framerate );
             ImGui::Text( "drawCalls: %d", stat.drawCalls );
-            ImGui::Text( "quadCount: %d", stat.quadCount );
+            ImGui::Text( "vertices:  %d", stat.vertices );
             ImGui::End();
         }
 
@@ -223,7 +222,7 @@ namespace Engine7414
             // events should be propagated only when the viewport is focused/hovered and ImGuizmo is not active!
             bool gizmoActive = ImGuizmo::IsOver();
             bool propagateEvent = !gizmoActive && (ViewportFocused || ViewportHovered);
-            CORE_INFO("gizmoactive {} propagate {}", gizmoActive, propagateEvent);
+            // CORE_INFO("gizmoactive {} propagate {}", gizmoActive, propagateEvent);
             if ( propagateEvent ) ImGuiLayer::setNoBlockEvent();
             else                  ImGuiLayer::setBlockEvent();
 
@@ -237,6 +236,9 @@ namespace Engine7414
         }
 
         // ImGui::ShowDemoWindow();
+
+        _hierarchyPanel.onImGui();
+        _fileExplorerPanel.onImGui();
 
         // end dockspace
         ImGui::End();

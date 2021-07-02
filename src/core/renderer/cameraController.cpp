@@ -1,5 +1,6 @@
 #include "core/renderer/cameraController.h"
 #include "core/renderer/renderer.h"
+#include "core/renderer/renderer2D.h"
 #include "core/input/input.h"
 
 namespace Engine7414

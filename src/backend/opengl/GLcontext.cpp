@@ -64,6 +64,8 @@ namespace Engine7414
             case GL_DEBUG_SEVERITY_LOW:          BACKEND_ERROR( "Severity: low" ); break;
             case GL_DEBUG_SEVERITY_NOTIFICATION: BACKEND_ERROR( "Severity: notification" ); break;
         }
+
+        BACKEND_ASSERT(false, "");
     }
     #if defined(__clang__)
         #pragma clang diagnostic pop
@@ -97,8 +99,8 @@ namespace Engine7414
             BACKEND_WARN( "Engine7414 does not guarantee full functionality for OpenGL version lower than 4.1 on your OS, program might crash!" );
         }
 #else
-        if ( GLVersion.major < 4 || GLVersion.minor < 5 ) {
-            BACKEND_WARN( "Engine7414 does not guarantee full functionality for OpenGL version lower than 4.5 on your OS, program might crash!" );
+        if ( GLVersion.major < 4 || GLVersion.minor < 6 ) {
+            BACKEND_WARN( "Engine7414 does not guarantee full functionality for OpenGL version lower than 4.6 on your OS, program might crash!" );
         }
 #endif
 

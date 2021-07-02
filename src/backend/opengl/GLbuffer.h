@@ -6,7 +6,6 @@
 
 namespace Engine7414
 {
-
     class GLVertexBuffer : public VertexBuffer
     {
     public:
@@ -21,6 +20,21 @@ namespace Engine7414
 
     private:
         GLuint  _rendererID;
+    };
+
+    class GLUniformBuffer : public UniformBuffer
+    {
+    public:
+        GLUniformBuffer() = default;
+        ~GLUniformBuffer();
+        
+        void bind() const override;
+
+        void init(uint32_t binding) override;
+        void setData(size_t offset, size_t size, const void* data) const override;
+
+    private:
+        GLuint  _rendererID = 0;
     };
 
 #define GLIndexBufferClass( baseName, type) \

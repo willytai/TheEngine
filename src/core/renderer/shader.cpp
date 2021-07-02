@@ -12,7 +12,7 @@ namespace Engine7414
         return NULL;
     }
 
-    Ref<Shader> ShaderDict::load(const char* shaderPath) {
+    Ref<Shader> ShaderLibrary::load(const char* shaderPath) {
         // set name
         // a shader in ./resource/shader/texture will be named as 'texture'
         std::string_view sview( shaderPath );
@@ -22,30 +22,59 @@ namespace Engine7414
         return this->load( std::string( sview.substr(pos) ), shaderPath );
     }
 
-    Ref<Shader> ShaderDict::load(const std::string& name, const char* shaderPath) {
+    Ref<Shader> ShaderLibrary::load(const std::string& name, const char* shaderPath) {
         auto shader = Shader::create( name, shaderPath );
         if ( !this->add( name, shader ) ) CORE_ERROR( "shader \'{}\' failed to load" );
         return shader;
     }
 
-    Ref<Shader> ShaderDict::get(const std::string& name) {
+    Ref<Shader> ShaderLibrary::get(const std::string& name) {
 #ifdef ENGINE_DEBUG
         CORE_ASSERT( this->exists(name), "shader \'{}\' doesn't exist" );
 #endif
         return (*this)[name];
     }
 
-    Ref<Shader> ShaderDict::operator[](const std::string& name) {
+    Ref<Shader> ShaderLibrary::operator[](const std::string& name) {
         return _shaders[name];
     }
 
-    bool ShaderDict::add(const std::string& name, const Ref<Shader>& shader) {
+    bool ShaderLibrary::add(const std::string& name, const Ref<Shader>& shader) {
         auto [_, check] = _shaders.emplace( name, shader );
         if ( !check) CORE_ERROR( "shader \'{}\' already exists" );
         return check;
     }
 
-    bool ShaderDict::exists(const std::string& name) {
+    bool ShaderLibrary::exists(const std::string& name) {
         return _shaders.find( name ) != _shaders.end();
+    }
+
+    void ShaderLibrary::uploadUniforms(const std::vector<UniformHandle>& uniformHandles) {
+        for (const auto& handle : uniformHandles) {
+            CORE_ASSERT(handle.buffer == _globalUniformBuffer[handle.bindingIndex].get(), "");
+            _globalUniformBuffer[handle.bindingIndex]->bind();
+            _globalUniformBuffer[handle.bindingIndex]->setData(handle.offset, handle.size, handle.data);
+        }
+    }
+
+    void ShaderLibrary::registerUniform(UniformHandle& handle) {
+        if (_globalUniformBuffer.size() < handle.bindingIndex + 1) {
+            _globalUniformBuffer.resize(handle.bindingIndex + 1);
+        }
+        if (!_globalUniformBuffer[handle.bindingIndex]) {
+            _globalUniformBuffer[handle.bindingIndex] = UniformBuffer::create();
+        }
+
+        // register a space in the dedicated uniform buffer for this uniform
+        CORE_ASSERT(_globalUniformBuffer[handle.bindingIndex]->size() == handle.offset, "");
+        _globalUniformBuffer[handle.bindingIndex]->registerUniformSize(handle.size);
+        handle.buffer = _globalUniformBuffer[handle.bindingIndex].get();
+    }
+
+    void ShaderLibrary::submitUniforms() {
+        for (uint32_t index = 0; index < _globalUniformBuffer.size(); ++index) {
+            auto& buffer = _globalUniformBuffer[index];
+            if (buffer) buffer->init(index);
+        }
     }
 }

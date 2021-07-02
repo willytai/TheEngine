@@ -1,11 +1,15 @@
 #include "core/renderer/renderer.h"
 #include "core/renderer/renderer2D.h"
 #include "core/renderer/renderCommands.h"
-#include "core/renderer/rendererData.h"
+#include "core/renderer/rendererData2D.h"
+
+#include <glm/gtc/type_ptr.hpp>
 
 namespace Engine7414
 {
     static RendererData2D* __data; // allocating on the heap for life time control
+
+    std::vector<UniformHandle> Renderer2D::_globalUniformHandle;
 
     glm::mat4 Renderer2D::__ProjViewMatCache__;
     bool Renderer2D::__updateProjViewMat__ = true;
@@ -49,23 +53,42 @@ namespace Engine7414
         __data->quadVertexArray->setIndexBuffer(IndexBufferUI32::create(indices32UI, __data->maxIndexCount));
 
 #ifdef _WIN64
-        __data->textureShader = ShaderDict::get().load("C:\\Users\\Willy\\Desktop\\TheEngine\\TheEngine\\resource\\shader\\texture");
+        __data->textureShader = ShaderLibrary::get().load("C:\\Users\\Willy\\Desktop\\TheEngine\\TheEngine\\resource\\shader\\texture");
 #else
-        __data->textureShader = ShaderDict::get().load("./resource/shader/texture");
+        __data->textureShader = ShaderLibrary::get().load("./resource/shader/texture");
 #endif
-        int* samplers = new int[(uint32_t)__data->maxTextureSlots];
-        for (int i = 0; i < __data->maxTextureSlots; ++i) {
-            samplers[i] = i;
-        }
-        __data->textureShader->bind();
-        __data->textureShader->setIntArray("u_Samplers", samplers, __data->maxTextureSlots );
+        // int* samplers = new int[(uint32_t)__data->maxTextureSlots];
+        // for (int i = 0; i < __data->maxTextureSlots; ++i) {
+        //     samplers[i] = i;
+        // }
+        // __data->textureShader->bind();
+        //__data->textureShader->setIntArray("u_Samplers", samplers, __data->maxTextureSlots );
 
         uint32_t white = 0xffffffff;
         __data->textureSlots[0] = Texture2D::create( 1, 1, &white );
 
         // assuming imidiate upload to GPU
         delete[] indices32UI;
-        delete[] samplers;
+        // delete[] samplers;
+
+        Renderer2D::registerGlobalUniform();
+    }
+
+    void Renderer2D::registerGlobalUniform() {
+        // the view projection matrix, binding point: 0, uniform block: Camera
+        if (_globalUniformHandle.size() < G_UNIFORM_PROJ_VIEW_MAT + 1) {
+            _globalUniformHandle.resize(G_UNIFORM_PROJ_VIEW_MAT + 1);
+            auto& handle = _globalUniformHandle[G_UNIFORM_PROJ_VIEW_MAT];
+            handle.name = "Camera::ProjViewMat";
+            handle.bindingIndex = 0;
+            handle.offset = 0;
+            handle.size = sizeof(glm::mat4);
+        }
+
+        // register and submit
+        for (auto& handle : _globalUniformHandle)
+            ShaderLibrary::registerGlobalUniform(handle);
+        ShaderLibrary::submitGlobalUniforms();
     }
 
     void Renderer2D::shutdown() {
@@ -74,24 +97,40 @@ namespace Engine7414
 
     void Renderer2D::beginScene(const TransformComponent& transformComponent, const CameraBase* camera, const glm::vec4& color) {
         RenderCommands::clear(color);
+
+        // set global uniform: view projection matrix
         auto& cameraProjection = camera->projection();
         if (__updateProjViewMat__) {
             __ProjViewMatCache__ = cameraProjection *
                                    glm::inverse(transformComponent.transform());
             __updateProjViewMat__ = false;
+
             CORE_INFO("projview recalculated");
+            // link the data
+            _globalUniformHandle[G_UNIFORM_PROJ_VIEW_MAT].data = &__ProjViewMatCache__[0];
         }
+
+        ShaderLibrary::uploadGlobalUniforms(_globalUniformHandle);
+        
         __data->stats.reset();
-        __data->textureShader->bind();
-        __data->textureShader->setMat4f("u_ProjViewMat", __ProjViewMatCache__);
+        // __data->textureShader->bind();
+        // __data->textureShader->setMat4f("u_ProjViewMat", __ProjViewMatCache__);
     }
 
     void Renderer2D::beginScene(Ref<EditorCamera>& camera, const Ref<FrameBuffer>& currentFrameBuffer, const glm::vec4& defaultFrameBufferClearColor) {
         RenderCommands::clear(defaultFrameBufferClearColor);
         currentFrameBuffer->clear();
         __data->stats.reset();
-        __data->textureShader->bind();
-        __data->textureShader->setMat4f("u_ProjViewMat", camera->getViewProjection());
+
+        // link the data
+        // NOTE: the data has to stay fixed, otherwise this breaks
+        _globalUniformHandle[G_UNIFORM_PROJ_VIEW_MAT].data = glm::value_ptr(camera->getViewProjection());
+
+        // upload to GPU
+        ShaderLibrary::uploadGlobalUniforms(_globalUniformHandle);
+
+        // __data->textureShader->bind();
+        // __data->textureShader->setMat4f("u_ProjViewMat", camera->getViewProjection());
     }
 
 
@@ -104,6 +143,8 @@ namespace Engine7414
         for (int slot = 0; slot < __data->curTextureID; ++slot) {
             __data->textureSlots[slot]->bind( (uint32_t)slot );
         }
+        // bind shader
+        __data->textureShader->bind();
         // upload data
         __data->quadVertexBuffer->setData(__data->vertexData,
                                           (size_t)(__data->vertexDataPtr - __data->vertexData) * sizeof(Vertex2D));
