@@ -1,8 +1,12 @@
 #include "core/core.h"
 #include "core/renderer/buffer.h"
 #include "core/renderer/renderer.h"
+
+#ifdef __APPLE__
+#import "backend/MTL/MTLbuffer.h"
+#else
 #include "backend/OpenGL/GLbuffer.h"
-#include "backend/MTL/MTLbuffer.h"
+#endif
 
 namespace Engine7414
 {
@@ -20,7 +24,15 @@ namespace Engine7414
 
     Ref<VertexBuffer> VertexBuffer::create(size_t size) {
         switch (Renderer::backend()) {
-            case RendererBackend::OpenGL: return CreateRef<GLVertexBuffer>(size);
+            case RendererBackend::OpenGL:
+            {
+            #ifdef __APPLE__
+                CORE_WARN( "OpenGL not supported on OS X, forcing Metal backend" );
+                [[clang::fallthrough]];
+            #else
+                return CreateRef<GLVertexBuffer>(size);
+            #endif
+            }
             case RendererBackend::Metal: return CreateRef<MTLVertexBuffer>(size);
             default: CORE_ASSERT(false, "Unsupported Backend");
         }
@@ -29,7 +41,15 @@ namespace Engine7414
 
     Ref<VertexBuffer> VertexBuffer::create(size_t size, uint32_t index) {
         switch (Renderer::backend()) {
-            case RendererBackend::OpenGL: return CreateRef<GLVertexBuffer>(size);
+            case RendererBackend::OpenGL:
+            {
+            #ifdef __APPLE__
+                CORE_WARN( "OpenGL not supported on OS X, forcing Metal backend" );
+                [[clang::fallthrough]];
+            #else
+                return CreateRef<GLVertexBuffer>(size);
+            #endif
+            }
             case RendererBackend::Metal: return CreateRef<MTLVertexBuffer>(size, index);
             default: CORE_ASSERT(false, "Unsupported Backend");
         }
@@ -38,8 +58,16 @@ namespace Engine7414
 
     Ref<VertexBuffer> VertexBuffer::create(const void* vertices, size_t size) {
         switch (Renderer::backend()) {
-            case RendererBackend::OpenGL : return CreateRef<GLVertexBuffer>( vertices, size );
-            case RendererBackend::Metal : return CreateRef<MTLVertexBuffer>( vertices, size );
+            case RendererBackend::OpenGL:
+            {
+            #ifdef __APPLE__
+                CORE_WARN( "OpenGL not supported on OS X, forcing Metal backend" );
+                [[clang::fallthrough]];
+            #else
+                return CreateRef<GLVertexBuffer>( vertices, size );
+            #endif
+            }
+            case RendererBackend::Metal: return CreateRef<MTLVertexBuffer>( vertices, size );
             default: CORE_ASSERT( false, "Unsupported Backend" );
         }
         return NULL;
@@ -55,6 +83,19 @@ namespace Engine7414
         return NULL; \
     }
 
+#define IndexBufferBaseClassImplApple( ClassName, Type ) \
+    Ref<ClassName> ClassName::create(const Type* indices, uint32_t count) { \
+        if (Renderer::backend() != RendererBackend::Metal) { \
+            CORE_WARN( "OpenGL not supported on OS X, forcing Metal backend" ); \
+        } \
+        return CreateRef<MTL##ClassName>( indices, count ); \
+    }
+
+#ifdef __APPLE__
+    IndexBufferBaseClassImplApple( IndexBufferUI8,  uint8_t )
+    IndexBufferBaseClassImplApple( IndexBufferUI32, uint32_t )
+#else
     IndexBufferBaseClassImpl( IndexBufferUI8,  uint8_t )
     IndexBufferBaseClassImpl( IndexBufferUI32, uint32_t )
+#endif
 }

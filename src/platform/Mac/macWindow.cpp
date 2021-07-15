@@ -2,10 +2,10 @@
 #include "core/event/event.h"
 #include "core/input/input.h"
 #include "core/util/log.h"
-#include "backend/OpenGL/GLcontext.h"
-#include "backend/MTL/MTLcontext.h"
 #include "platform/Mac/macWindow.h"
 #include "glad/glad.h"
+
+#import "backend/MTL/MTLcontext.h"
 
 namespace Engine7414
 {
@@ -99,7 +99,11 @@ namespace Engine7414
 
     void MacWindow::createContext(const RendererBackend& backend) {
         switch (backend) {
-            case RendererBackend::OpenGL: _context = CreateScoped<OpenGLContext>( _glfwWindow ); break;
+            case RendererBackend::OpenGL:
+            {
+                CORE_WARN( "OpenGL not supported on OS X, forcing Metal backend" );
+                [[clang::fallthrough]];
+            }
             case RendererBackend::Metal:  _context = CreateScoped<MTLContext>( _glfwWindow ); break;
             default: CORE_ASSERT( false, "Unsupported Backend" );
         }

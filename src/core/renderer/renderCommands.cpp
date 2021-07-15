@@ -1,6 +1,10 @@
 #include "core/renderer/renderCommands.h"
+
+#ifdef __APPLE__
+#import "backend/MTL/MTLrenderAPI.h"
+#else
 #include "backend/OpenGL/GLrenderAPI.h"
-#include "backend/MTL/MTLrenderAPI.h"
+#endif
 
 namespace Engine7414
 {
@@ -10,9 +14,14 @@ namespace Engine7414
         switch (backend) {
             case RendererBackend::OpenGL:
             {
+            #ifdef __APPLE__
+                CORE_WARN( "OpenGL not supported on OS X, forcing Metal backend" );
+                [[clang::fallthrough]];
+            #else
                 __backend__.reset( new GLRenderAPI );
                 CORE_INFO( "\tBackend:  OpenGL" );
                 break;
+            #endif
             }
             case RendererBackend::Metal:
             {

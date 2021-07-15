@@ -9,12 +9,14 @@ using namespace Engine7414;
 @implementation MTLShaderHandle
 - (instancetype)initWithCSourcePath:(nonnull const char*)shaderCSrc {
     if ( (self = [super init]) ) {
-        NSURL* shaderPath = [[NSBundle mainBundle] URLForResource:[NSString stringWithUTF8String:shaderCSrc]
-                                                   withExtension:nil ];
-        NSString* shaderSource = [[NSString alloc] initWithContentsOfURL:shaderPath
-                                                   encoding:NSUTF8StringEncoding error:nil];
-        auto* context = MTLContext::getContext();
+        NSString* shaderPath = [NSString stringWithCString:shaderCSrc encoding:NSASCIIStringEncoding];
         NSError* error;
+        NSString* shaderSource = [[NSString alloc] initWithContentsOfFile:shaderPath
+                                                   encoding:NSUTF8StringEncoding error:&error];
+        if (shaderSource == nil) {
+            NSLog(@"Error: shader source loading unsuccessful: %@, path: %@", error, shaderPath);
+        }
+        auto* context = MTLContext::getContext();
         self.library = [context.nativeDevice newLibraryWithSource:shaderSource options:nil error:&error];
         if (self.library == nil) {
             NSLog(@"Error: failed to create Metal library: %@", error);

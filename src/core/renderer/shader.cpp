@@ -1,13 +1,25 @@
 #include "core/renderer/shader.h"
 #include "core/renderer/renderer.h"
+
+#ifdef __APPLE__
+#import "backend/MTL/MTLshader.h"
+#else
 #include "backend/OpenGL/GLshader.h"
-#include "backend/MTL/MTLshader.h"
+#endif
 
 namespace Engine7414
 {
     Ref<Shader> Shader::create(const std::string& name, const char* shaderPath) {
         switch (Renderer::backend()) {
-            case RendererBackend::OpenGL: return CreateRef<GLShader>( name, shaderPath );
+            case RendererBackend::OpenGL:
+            {
+            #ifdef __APPLE__
+                CORE_WARN( "OpenGL not supported on OS X, forcing Metal backend" );
+                [[clang::fallthrough]];
+            #else
+                return CreateRef<GLShader>( name, shaderPath );
+            #endif
+            }
             case RendererBackend::Metal: return CreateRef<MTLShader>( name, shaderPath );
             default: CORE_ASSERT( false, "Unsupported Backend" );
         }

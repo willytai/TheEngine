@@ -20,6 +20,7 @@ namespace Engine7414
             else CORE_WARN( "got unrecognized file \'{}\' while loading shader", path );
         }
 
+        CORE_INFO("readinng from shader path: {}", shaderPath.c_str());
         _handle = [[MTLShaderHandle alloc] initWithCSourcePath:shaderPath.c_str()];
 
         this->genUniformPosMap();
