@@ -102,7 +102,7 @@ namespace Engine7414
         virtual ~UniformBuffer() = default;
 
         size_t size() const { return _size; }
-        void registerUniformSize(size_t size) { _size += size; }
+        void registerUniformSize(size_t offset, size_t size) { _size = std::max(_size, offset + size); }
 
         virtual void bind() const = 0;
 

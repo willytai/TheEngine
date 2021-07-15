@@ -61,6 +61,13 @@ namespace Engine7414
             }
             _removeEntity.pop();
         }
+
+        // scene configuration
+        ImGui::Begin("Scene");
+        ImGui::DragFloat("ambient", &_context->_ambientStrength, 0.02f, 0.0f, 1.0f);
+        ImGui::DragFloat("specular", &_context->_specularStrength, 0.1f, 0.0f, 1.0f);
+        ImGui::DragInt("shininess", &_context->_shininess, 2.0f, 1, 256);
+        ImGui::End();
     }
 
     void HierarchyPanel::onPropertyWindow() {
@@ -192,6 +199,11 @@ namespace Engine7414
 
         drawComponent<SpriteRendererComponent>("sprite", entity, [](auto& sprite) {
             ImGui::ColorEdit4("color", &sprite.color.r);
+        });
+
+        drawComponent<DirectionalLightComponent>("directional_light", entity, [](auto& light) {
+            ImGui::ColorEdit3("color", glm::value_ptr(light.lightColor));
+            DrawUtil::drawVec3Control("direction", light.lightDirection);
         });
     }
 }

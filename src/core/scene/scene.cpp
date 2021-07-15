@@ -7,6 +7,11 @@
 namespace Engine7414
 {
     Scene::Scene() {
+        // default directinal light
+        auto handle = _registry.create();
+        _registry.emplace<TagComponent>(handle, "Directional Light");
+        _registry.emplace<DirectionalLightComponent>(handle);
+        _directionalLightEntity = handle;
     }
 
     Scene::~Scene() {
@@ -79,7 +84,7 @@ namespace Engine7414
         // start renderering
         if (camera)
         {
-            Renderer::beginScene(camera, currentFrameBuffer);
+            Renderer::beginScene(this, camera, currentFrameBuffer);
             // Renderer2D::beginScene(camera, currentFrameBuffer);
             _registry.group<SpriteRendererComponent>(entt::get<TransformComponent>).each(
                 [](auto entity, auto& sprite, auto& transform) {
@@ -122,5 +127,9 @@ namespace Engine7414
                 return Entity( entity, this );
             }
         }
+    }
+
+    Entity Scene::getDirectionalLightEntity() {
+        return { _directionalLightEntity, this };
     }
 }

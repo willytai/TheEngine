@@ -40,6 +40,7 @@ namespace Engine7414
         friend class Entity;
         friend class Serializer;
         friend class HierarchyPanel;
+        friend class Renderer;
     public:
         Scene();
         ~Scene();
@@ -54,6 +55,7 @@ namespace Engine7414
         void onEvent(Event& event);
 
         Entity getActiveCameraEntity();
+        Entity getDirectionalLightEntity();
         std::string& getFilePath() { return saveFilePath; }
         void setFilePath(const char* path) { saveFilePath = std::string(path); }
 
@@ -61,6 +63,12 @@ namespace Engine7414
 
     private:
         entt::registry _registry;
+
+        // -- lighting stuffs --
+        entt::entity _directionalLightEntity;
+        float  _ambientStrength = 0.1f;
+        float  _specularStrength = 0.5;
+        int    _shininess = 1;
 
         // these two are just used for camera component creation
         float _sceneWidth = 0.0f;

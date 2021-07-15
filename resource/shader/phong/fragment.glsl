@@ -1,37 +1,54 @@
 #version 460 core
 
+layout (std140, binding = 0) uniform CameraUniform
+{
+    mat4 ProjViewMat;
+    vec3 ViewPos;
+} Camera;
+
+layout (std140, binding = 1) uniform DirectionalLightUniform
+{
+    vec3 Direction;
+    vec3 Color;
+
+} DirectionalLight;
+
+layout (std140, binding = 2) uniform SceneUniform
+{
+    float AmbientStrength; // within [0.0 1.0]
+
+    // should be unique per material in the future
+    float SpecularStrength; // within [0.0 1.0]
+    int   Shininess; // within [1 inf]
+} Scene;
+
+
+
 layout (location = 0) out vec4 color;
 layout (location = 1) out int  entityID;
 
 struct VertexIn
 {
     vec4 color;
-    vec4 fragPos;
+    vec3 fragPos;
 };
 
 layout (location = 0) in VertexIn v_in;
 layout (location = 4) in flat vec3 v_normal;
 layout (location = 6) in flat int v_entityID;
 
-// uniform int u_shininess;
-// uniform float u_specularStrength;
-// uniform vec4 u_lightPos;
-// uniform vec3 u_ambient;
-// uniform vec3 u_objColor;
-// uniform vec3 u_lightColor;
-
 void main() {
-    vec3 lightDirection = normalize(vec3(1.0f, 1.0f, 1.0f));
-    vec3 lightColor = vec3(0.8f, 0.8f, 0.8f);
-    vec3 diffuse = max(dot(v_normal, lightDirection), 0.0f) * lightColor;
-    vec3 ambient = vec3(0.2f, 0.2f, 0.2f);
+    vec3 norm = normalize(v_normal);
+    vec3 lightDirection = normalize(DirectionalLight.Direction);
+    vec3 viewDirection = normalize(Camera.ViewPos - v_in.fragPos);
 
-    // vec4 lightDir = normalize(u_lightPos - v_fragPos);
-    // vec3 diffuse = max(dot(v_normal, lightDir.xyz), 0.0f) * u_lightColor;
-    // float spec = max(dot(normalize(v_viewPos-v_fragPos).xyz, reflect(-lightDir.xyz, v_normal)), 0.0f);
-    // vec3 specular = u_specularStrength * u_lightColor * pow(spec, u_shininess);
-    // color = vec4((u_ambient+diffuse+specular)*u_objColor, 1.0f);
+    vec3 ambient = Scene.AmbientStrength * DirectionalLight.Color;
 
-    color = vec4((ambient + diffuse) * v_in.color.xyz, v_in.color.w);
+    vec3 diffuse = max(dot(norm, lightDirection), 0.0f) * DirectionalLight.Color;
+
+    float spec = pow(max(dot(viewDirection, reflect(-lightDirection, norm)), 0.0f), Scene.Shininess);
+    vec3 specular = Scene.SpecularStrength * spec * DirectionalLight.Color;
+
+    color = vec4((ambient + diffuse + specular) * v_in.color.xyz, v_in.color.w);
     entityID = v_entityID;
 }

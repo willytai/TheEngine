@@ -48,7 +48,7 @@ namespace Engine7414
         delete __data;
     }
 
-    void Renderer::beginScene(Ref<EditorCamera>& camera, const Ref<FrameBuffer>& currentFrameBuffer) {
+    void Renderer::beginScene(Scene* scene, Ref<EditorCamera>& camera, const Ref<FrameBuffer>& currentFrameBuffer) {
         currentFrameBuffer->bind();
         currentFrameBuffer->clear();
         __data->reset();
@@ -58,6 +58,17 @@ namespace Engine7414
         //       getPostion() doesn't check, don't change the order of retrieving these values
         _globalUniformHandle[G_UNIFORM_PROJ_VIEW_MAT].data = glm::value_ptr(camera->getViewProjection());
         _globalUniformHandle[G_UNIFORM_CAMERA_POS].data = glm::value_ptr(camera->getPosition());
+
+        _globalUniformHandle[G_UNIFORM_SCENE_AMBIENT].data = &scene->_ambientStrength;
+        _globalUniformHandle[G_UNIFORM_DIR_LIGHT_SPECULAR].data = &scene->_specularStrength;
+        _globalUniformHandle[G_UNIFORM_DIR_LIGHT_SHININESS].data = &scene->_shininess;
+
+        auto directionalLightEntity = scene->getDirectionalLightEntity();
+        if (directionalLightEntity) {
+            auto comp = directionalLightEntity.get<DirectionalLightComponent>();
+            _globalUniformHandle[G_UNIFORM_DIR_LIGHT_DIR].data = glm::value_ptr(comp.lightDirection);
+            _globalUniformHandle[G_UNIFORM_DIR_LIGHT_COLOR].data = glm::value_ptr(comp.lightColor);
+        }
 
         // upload to GPU
         ShaderLibrary::uploadGlobalUniforms(_globalUniformHandle);
@@ -81,11 +92,10 @@ namespace Engine7414
     }
 
     void Renderer::drawCube(const glm::mat4& transform, const glm::vec4& color, int enttID) {
-        for (uint32_t i = 0; i < __data->unitCubeVerticesWithNormals.size(); ++i) {
-            const auto& cubeVertexTemplate = __data->unitCubeVerticesWithNormals[i];
+        for (const auto& [position, normal] : __data->unitCubeVerticesWithNormals) {
             __data->vertexDataPtr->color = color;
-            __data->vertexDataPtr->position = transform * glm::vec4(cubeVertexTemplate.position, 1.0f);
-            __data->vertexDataPtr->normal = transform * glm::vec4(cubeVertexTemplate.normal, 1.0f);
+            __data->vertexDataPtr->position = transform * glm::vec4(position, 1.0f);
+            __data->vertexDataPtr->normal = glm::mat3(glm::transpose(glm::inverse(transform))) * normal;
             __data->vertexDataPtr->entityID = enttID;
             __data->vertexDataPtr++;
         }
@@ -99,13 +109,35 @@ namespace Engine7414
     }
 
     // just a template for quering the member size/offset for global uniforms
-    struct GlobalUniform
+    struct CameraUniform
     {
         glm::mat4 ProjViewMat;
-        glm::vec3 Position;
+        glm::vec3 ViewPos;
 
     private:
-        GlobalUniform();
+        CameraUniform();
+    };
+
+    // this padding stuff is fucked up
+    struct DirectionalLightUniform
+    {
+        glm::vec3 Direction;
+        float padding0;
+        glm::vec3 Color;
+
+
+    private:
+        DirectionalLightUniform();
+    };
+
+    struct SceneUniform
+    {
+        float AmbientStrength;
+        float SpecularStrength;
+        int   Shininess;
+
+    private:
+        SceneUniform();
     };
 
     #define GenerateHandle(uniform, bindingPoint, uOffset, uSize, uName) \
@@ -118,12 +150,19 @@ namespace Engine7414
             handle.bindingIndex = bindingPoint; \
             handle.offset = uOffset; \
             handle.size = uSize; \
+            CORE_INFO("offset of {} is {}", uName, uOffset); \
         }
 
     void Renderer::registerGlobalUniform() {
         // the view projection matrix, binding point: 0, uniform block: Camera
-        GenerateHandle(G_UNIFORM_PROJ_VIEW_MAT, 0, offsetof(GlobalUniform, ProjViewMat), sizeof(GlobalUniform::ProjViewMat), "Camera::ProjViewMat");
-        GenerateHandle(G_UNIFORM_CAMERA_POS,    0, offsetof(GlobalUniform, Position),    sizeof(GlobalUniform::Position),    "Camera::Position");
+        GenerateHandle(G_UNIFORM_PROJ_VIEW_MAT, 0, offsetof(CameraUniform, ProjViewMat), sizeof(CameraUniform::ProjViewMat), "Camera::ProjViewMat");
+        GenerateHandle(G_UNIFORM_CAMERA_POS,    0, offsetof(CameraUniform, ViewPos), sizeof(CameraUniform::ViewPos), "Camera::ViewPos");
+        
+        GenerateHandle(G_UNIFORM_DIR_LIGHT_DIR,       1, offsetof(DirectionalLightUniform, Direction), sizeof(DirectionalLightUniform::Direction), "DirLight::Direction");
+        GenerateHandle(G_UNIFORM_DIR_LIGHT_COLOR,     1, offsetof(DirectionalLightUniform, Color),     sizeof(DirectionalLightUniform::Color),     "DirLight::Color");
+        GenerateHandle(G_UNIFORM_SCENE_AMBIENT,       2, offsetof(SceneUniform, AmbientStrength),      sizeof(SceneUniform::AmbientStrength),      "Scene::Ambient");
+        GenerateHandle(G_UNIFORM_DIR_LIGHT_SPECULAR,  2, offsetof(SceneUniform, SpecularStrength),     sizeof(SceneUniform::SpecularStrength),     "Scene::SpecularStrength");
+        GenerateHandle(G_UNIFORM_DIR_LIGHT_SHININESS, 2, offsetof(SceneUniform, Shininess),            sizeof(SceneUniform::Shininess),            "Scene::Shininess");
 
         // register and submit
         for (auto& handle : _globalUniformHandle)

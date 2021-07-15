@@ -194,7 +194,7 @@ namespace Engine7414
 
             // Gizmo
             Entity selectedEntity = _hierarchyPanel.getSelectedEntity();
-            if (selectedEntity && _gizmoOP) {
+            if (selectedEntity && _gizmoOP && selectedEntity.has<TransformComponent>()) {
                 ImGuizmo::SetOrthographic(false);
                 ImGuizmo::SetDrawlist();
                 ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, ImGui::GetWindowWidth(), ImGui::GetWindowHeight());

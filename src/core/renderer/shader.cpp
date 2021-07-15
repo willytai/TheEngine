@@ -66,8 +66,8 @@ namespace Engine7414
         }
 
         // register a space in the dedicated uniform buffer for this uniform
-        CORE_ASSERT(_globalUniformBuffer[handle.bindingIndex]->size() == handle.offset, "");
-        _globalUniformBuffer[handle.bindingIndex]->registerUniformSize(handle.size);
+        // CORE_ASSERT(_globalUniformBuffer[handle.bindingIndex]->size() == handle.offset, "{} != {}", _globalUniformBuffer[handle.bindingIndex]->size(), handle.offset);
+        _globalUniformBuffer[handle.bindingIndex]->registerUniformSize(handle.offset, handle.size);
         handle.buffer = _globalUniformBuffer[handle.bindingIndex].get();
     }
 

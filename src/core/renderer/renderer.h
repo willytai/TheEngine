@@ -7,6 +7,7 @@
 #include "core/renderer/renderCommands.h"
 #include "core/renderer/frameBuffer.h"
 #include "core/renderer/rendererData.h"
+#include "core/scene/scene.h"
 #include "core/event/event.h"
 #include "backend/backend.h"
 #include "editor/editorCamera.h"
@@ -21,6 +22,13 @@ namespace Engine7414
         {
             G_UNIFORM_PROJ_VIEW_MAT = 0, // the view projection matrix
             G_UNIFORM_CAMERA_POS = 1,    // the position of the camera
+
+            G_UNIFORM_DIR_LIGHT_DIR = 2,
+            G_UNIFORM_DIR_LIGHT_COLOR = 3,
+
+            G_UNIFORM_SCENE_AMBIENT = 4,
+            G_UNIFORM_DIR_LIGHT_SPECULAR = 5,
+            G_UNIFORM_DIR_LIGHT_SHININESS = 6,
         };
         static std::vector<UniformHandle>   _globalUniformHandle;
         
@@ -36,7 +44,7 @@ namespace Engine7414
         static void init(RendererBackend backend);
         static void shutdown();
 
-        static void beginScene(Ref<EditorCamera>& camera, const Ref<FrameBuffer>& currentFrameBuffer);
+        static void beginScene(Scene* scene, Ref<EditorCamera>& camera, const Ref<FrameBuffer>& currentFrameBuffer);
         static void endScene();
         static void flush();
 

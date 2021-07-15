@@ -7,6 +7,7 @@
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 namespace Engine7414
 {
@@ -51,6 +52,12 @@ namespace Engine7414
             constructFn = [&](Scriptable*& instance){ instance = new T(); };
             destroyFn   = [&](Scriptable*& instance){ delete (T*)instance; instance = NULL; };
         }
+    };
+
+    struct DirectionalLightComponent
+    {
+        glm::vec3   lightDirection = { 0.0f, 1.0f, -0.5f };
+        glm::vec3   lightColor = { 1.0f, 1.0f, 1.0f };
     };
 }
 
